@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>矢状面・前額面・水平面｜3D解説</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-0:#05070d;--bg-1:#0a0e1a;--bg-3:#13253a;--bg-4:#1a3049;--line:#1e3555;
+  --gold:#f6c90e;--fg:#f8fafc;--fg-body:#e2e8f0;--fg-sub:#94a3b8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg-0);font-family:'Noto Sans JP',sans-serif;color:var(--fg-body);-webkit-font-smoothing:antialiased}
+.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(120% 120% at 50% 0%,#0a1220 0%,#05070d 70%)}
+.frame{container-type:inline-size;width:min(96vw,calc((100vh - 40px)*16/9));aspect-ratio:16/9;background:var(--bg-1);border-radius:14px;overflow:hidden;display:grid;grid-template-columns:37% 63%;position:relative}
+.side{padding:3.6% 2.6% 2.6% 3.6%;display:flex;flex-direction:column;min-width:0;min-height:0}
+.eyebrow{font-size:.85cqw;letter-spacing:.3em;color:var(--gold);font-weight:700}
+h1{font-size:2cqw;font-weight:900;color:var(--fg);line-height:1.25;margin-top:.4em}
+.tabs{display:flex;gap:.5cqw;margin-top:1.2cqw;flex-wrap:wrap}
+.tab{font:inherit;font-weight:700;font-size:1.12cqw;color:var(--fg-sub);background:var(--bg-3);border:0;border-radius:.6cqw;padding:.55cqw .95cqw;cursor:pointer}
+.tab[aria-pressed="true"]{background:var(--gold);color:#0a0e1a}
+.subs{display:flex;gap:.45cqw;margin-top:.7cqw;flex-wrap:wrap;min-height:2.3cqw}
+.sub{font:inherit;font-weight:700;font-size:1cqw;color:var(--fg-body);background:transparent;border:.12cqw solid var(--line);border-radius:999px;padding:.35cqw .85cqw;cursor:pointer}
+.sub[aria-pressed="true"]{background:var(--pc,var(--gold));border-color:var(--pc,var(--gold));color:#0a0e1a}
+.card{background:var(--bg-3);border-radius:.9cqw;padding:1.6cqw 1.8cqw;margin-top:.9cqw;position:relative;flex:1;min-height:0;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;right:0;height:.35cqw;background:var(--pc,var(--gold))}
+.card .en{font-size:.85cqw;letter-spacing:.2em;font-weight:900;color:var(--pc,var(--gold))}
+.card h2{font-size:2.3cqw;font-weight:900;color:var(--fg);margin:.1em 0 .25em}
+.card p{font-size:1.14cqw;line-height:1.7;color:var(--fg-body)}
+.card dl{margin-top:.6cqw;font-size:1.05cqw;line-height:1.6}
+.card dt{color:var(--pc,var(--gold));font-weight:900;margin-top:.5em}
+.card dd{color:var(--fg-body)}
+.stagebox{position:relative;min-width:0}
+canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none}
+canvas:active{cursor:grabbing}
+.cams{position:absolute;right:2.4cqw;top:2cqw;display:flex;gap:.4cqw;align-items:center}
+.cams span{font-size:.9cqw;color:var(--fg-sub);margin-right:.4cqw;font-weight:700}
+.cams button,.ctrl button{font:inherit;font-size:1cqw;font-weight:700;color:var(--fg);background:var(--bg-4);border:0;border-radius:999px;padding:.5cqw 1.05cqw;cursor:pointer}
+.cams button[aria-pressed="true"]{background:var(--fg);color:#0a0e1a}
+.cams button:hover,.ctrl button:hover{background:var(--line)}
+.cams button[aria-pressed="true"]:hover{background:var(--fg)}
+.hint{position:absolute;left:2.4cqw;bottom:2cqw;font-size:.9cqw;color:var(--fg-sub)}
+.ctrl{position:absolute;right:2.4cqw;bottom:2cqw;display:flex;gap:.4cqw}
+@media (max-width:700px){
+  .frame{aspect-ratio:auto;grid-template-columns:1fr;width:96vw}
+  .stagebox{height:70vw}
+  .eyebrow{font-size:10px}h1{font-size:22px}.tab{font-size:13px;padding:7px 12px;border-radius:8px}.sub{font-size:12px;padding:5px 11px}
+  .card{padding:16px}.card .en{font-size:10px}.card h2{font-size:24px}.card p{font-size:13px}.card dl{font-size:12px}
+  .cams button,.ctrl button{font-size:11px;padding:6px 12px}.cams span,.hint{font-size:10px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="frame">
+  <div class="side">
+    <span class="eyebrow">PLANES OF MOTION</span>
+    <h1>動きは、3つの面で捉えます</h1>
+    <div class="tabs" role="group" aria-label="面の選択">
+      <button class="tab" data-m="sag" aria-pressed="true">矢状面</button>
+      <button class="tab" data-m="fro" aria-pressed="false">前額面</button>
+      <button class="tab" data-m="tra" aria-pressed="false">水平面</button>
+      <button class="tab" data-m="all" aria-pressed="false">すべて順に</button>
+    </div>
+    <div class="subs" id="subs"></div>
+    <div class="card" id="card"></div>
+  </div>
+  <div class="stagebox">
+    <canvas id="cv" aria-label="3つの面と人体の3D図"></canvas>
+    <div class="cams" id="cams"><span>カメラ</span>
+      <button data-c="obl" aria-pressed="true">斜め</button>
+      <button data-c="front" aria-pressed="false">正面</button>
+      <button data-c="side" aria-pressed="false">横</button>
+      <button data-c="top" aria-pressed="false">真上</button>
+    </div>
+    <div class="hint">ドラッグで自由に回せます</div>
+    <div class="ctrl"><button id="pause">一時停止</button></div>
+  </div>
+</div>
+</div>
+<script>
+(function(){
+// ---------- 解説データ ----------
+var PLANE={sag:{col:'#f6c90e',rgb:'246,201,14',en:'SAGITTAL PLANE',name:'矢状面',lab:'矢状面'},
+           fro:{col:'#7dd3fc',rgb:'125,211,252',en:'FRONTAL PLANE',name:'前額面',lab:'前額面'},
+           tra:{col:'#f8fafc',rgb:'248,250,252',en:'TRANSVERSE PLANE',name:'水平面',lab:'水平面'}};
+var SUBS={
+  sag:[
+    {id:'trunk',name:'体幹の屈伸',cam:'side',lead:'体を左右に分ける面です。前に倒す（屈曲）、後ろに反らす（伸展）動きがここで起こります。',
+     items:[['見方','横から見ると、胸郭と骨盤が一緒に前後へ傾くのがわかります。'],['投球','ステップや体重移動、前傾など、体の前後の動きです。']]},
+    {id:'squat',name:'フロントスクワット',cam:'side',lead:'足首・膝・股関節が同時に曲がり、胴体を立てたまま沈みます。バーは肩の前に乗ります。',
+     items:[['ポイント','胴体の傾きを小さく保ち、肋骨を開かずにしゃがみます。'],['見方','横から見ると、お尻が下がっても胸が前に倒れ込みません。']]},
+    {id:'dl',name:'デッドリフト',cam:'side',lead:'膝は軽く曲げ、お尻を後ろへ引いて上体を倒す「股関節ヒンジ」です。バーは体に沿って上下します。',
+     items:[['ポイント','背骨は長く保ったまま、股関節だけが折れ曲がります。'],['見方','横から見ると、お尻が後ろに動き、胸が前に倒れます。※バーの高さは簡略化しています。']]}],
+  fro:[
+    {id:'bend',name:'側屈',cam:'front',lead:'体を前後に分ける面です。横に倒す（側屈）、脚を横へ開く（外転）動きがここで起こります。',
+     items:[['種目','バーが左右に傾かないよう、体幹で抗います（アンチラテラルフレクション）。'],['投球','コイリングの側屈。背骨を潰さず長いまま倒して、回旋の溜めをつくります。']]},
+    {id:'hip',name:'ヒップロック（骨盤挙上）',cam:'front',lead:'軸足の股関節に体重を乗せて骨盤を固定し、反対側の骨盤を持ち上げます（骨盤挙上）。',
+     items:[['見方','正面から見ると、骨盤のラインが傾き、体重を乗せた側へ寄っていきます。'],['ポイント','胸郭は骨盤の真上に保ち、肋骨は開かずに骨盤だけを動かします。']]}],
+  tra:[
+    {id:'rot',name:'回旋（腕を開く）',cam:'top',lead:'体を上下に分ける面です。腕を横に開いたまま、胸郭が骨盤の上で回ります。',
+     items:[['見方','真上から見ると、両腕の先が円を描きます。骨盤は動かず、胸郭だけが回ります。'],['投球','回旋の出力。股関節と胸椎の可動性で回します。']]}]
+};
+var COMBOS=[['sag','trunk'],['sag','squat'],['sag','dl'],['fro','bend'],['fro','hip'],['tra','rot']];
+var CAMS={obl:{yaw:-.62,pitch:.28},front:{yaw:0,pitch:.04},side:{yaw:-Math.PI/2,pitch:.04},top:{yaw:-.15,pitch:1.5}};
+
+var mode='sag', sub={sag:'trunk',fro:'bend',tra:'rot'}, playing=true, t=0, last=0;
+var camName='obl', yaw=CAMS.obl.yaw, pitch=CAMS.obl.pitch, tyaw=yaw, tpitch=pitch, camLock=false, dragging=false, lx=0, ly=0;
+var cv=document.getElementById('cv'), g=cv.getContext('2d'), W=0,H=0,dpr=1;
+
+function curCombo(){
+  if(mode==='all'){var k=Math.floor(t/(2*Math.PI*1.5))%6;return COMBOS[k];}
+  return [mode,sub[mode]];
+}
+function subInfo(k,id){return SUBS[k].filter(function(x){return x.id===id})[0]}
+
+// ---------- UI ----------
+var shownKey='';
+function setCam(n,fromUser){
+  camName=n;tyaw=CAMS[n].yaw;tpitch=CAMS[n].pitch;
+  document.querySelectorAll('#cams button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.c===n?'true':'false')});
+  if(fromUser)camLock=true;
+}
+function renderUI(){
+  var c=curCombo(), k=c[0], id=c[1], key=mode+'|'+k+'|'+id;
+  if(key===shownKey)return; shownKey=key;
+  var P=PLANE[k], S=subInfo(k,id);
+  var subs=document.getElementById('subs'), card=document.getElementById('card');
+  card.style.setProperty('--pc',P.col);subs.style.setProperty('--pc',P.col);
+  subs.innerHTML='';
+  if(SUBS[k].length>1){SUBS[k].forEach(function(s){
+    var b=document.createElement('button');b.className='sub';b.textContent=s.name;
+    b.setAttribute('aria-pressed',s.id===id?'true':'false');
+    b.onclick=function(){mode=k;sub[k]=s.id;t=0;camLock=false;syncTabs();shownKey='';renderUI();autoCam()};
+    subs.appendChild(b)})}
+  card.innerHTML='<span class="en">'+P.en+(SUBS[k].length>1?' ／ '+S.name:'')+'</span><h2>'+P.name+'</h2><p>'+S.lead+'</p><dl>'+S.items.map(function(x){return '<dt>'+x[0]+'</dt><dd>'+x[1]+'</dd>'}).join('')+'</dl>';
+}
+function autoCam(){ if(camLock)return; var c=curCombo();setCam(subInfo(c[0],c[1]).cam,false); }
+function syncTabs(){document.querySelectorAll('.tab').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.m===mode?'true':'false')})}
+document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){mode=b.dataset.m;t=0;camLock=false;syncTabs();shownKey='';renderUI();autoCam()}});
+document.querySelectorAll('#cams button').forEach(function(b){b.onclick=function(){setCam(b.dataset.c,true)}});
+document.getElementById('pause').onclick=function(){playing=!playing;this.textContent=playing?'一時停止':'再生'};
+
+function fit(){var r=cv.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0)}
+window.addEventListener('resize',fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(cv);
+cv.addEventListener('pointerdown',function(e){dragging=true;lx=e.clientX;ly=e.clientY;camLock=true;document.querySelectorAll('#cams button').forEach(function(b){b.setAttribute('aria-pressed','false')});cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',function(e){if(!dragging)return;yaw+=(e.clientX-lx)*.008;pitch=Math.max(-.6,Math.min(1.55,pitch+(e.clientY-ly)*.006));tyaw=yaw;tpitch=pitch;lx=e.clientX;ly=e.clientY});
+cv.addEventListener('pointerup',function(){dragging=false});
+cv.addEventListener('pointercancel',function(){dragging=false});
+
+// ---------- 3D ----------
+function rx(p,a){var c=Math.cos(a),s=Math.sin(a);return [p[0],p[1]*c-p[2]*s,p[1]*s+p[2]*c]}
+function rz(p,a){var c=Math.cos(a),s=Math.sin(a);return [p[0]*c-p[1]*s,p[0]*s+p[1]*c,p[2]]}
+function ry(p,a){var c=Math.cos(a),s=Math.sin(a);return [p[0]*c+p[2]*s,p[1],-p[0]*s+p[2]*c]}
+function add(a,b){return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]}
+function mid(a,b){return [(a[0]+b[0])/2,(a[1]+b[1])/2,(a[2]+b[2])/2]}
+var S0,CX,CY,D=5;
+function proj(p){var q=ry(p,yaw);q=rx(q,-pitch);var k=D/(D-q[2]);return [CX+q[0]*S0*k,CY-q[1]*S0*k,q[2],k]}
+
+// 姿勢計算：s は -1..1。x+ = 人物の左、x- = 人物の右、z+ = 前
+function pose(k,id,s){
+  var ankY=-1.04, lam=0,beta=0,rho=0, phi=0,th=0, shift=0,tilt=0, liftN=0,liftP=0, arms='hang', u=(s+1)/2;
+  if(k==='sag'&&id==='trunk'){lam=s*.62}
+  if(k==='sag'&&id==='squat'){phi=u*.5;th=u*1.38;lam=u*.38;arms='rack'}
+  if(k==='sag'&&id==='dl'){phi=u*.45;th=u*1.15;lam=u*.95;arms='bar'}
+  if(k==='fro'&&id==='bend'){beta=s*.42}
+  if(k==='fro'&&id==='hip'){shift=.11*s;tilt=-.24*s;liftN=.13*Math.max(0,s);liftP=.13*Math.max(0,-s)}
+  if(k==='tra'){rho=s*.8;arms='tee'}
+  var kY=ankY+.52*Math.cos(phi), kZ=.52*Math.sin(phi);
+  var hY=kY+.52*Math.cos(th), hZ=kZ-.52*Math.sin(th);
+  var pel=[shift,hY,hZ];
+  var J={pelvis:pel};
+  var hn=add(pel,rz([-.14,0,0],tilt)), hp=add(pel,rz([.14,0,0],tilt));
+  J.hipL=hn;J.hipR=hp;
+  J.ankL=[-.16,ankY+liftN,0];J.ankR=[.16,ankY+liftP,0];
+  if(k==='fro'&&id==='hip'){
+    J.kneeL=add(mid(hn,J.ankL),[0,0,liftN*.9+.02]);J.kneeR=add(mid(hp,J.ankR),[0,0,liftP*.9+.02]);
+  }else{
+    J.kneeL=[-.15,kY,kZ+.01];J.kneeR=[.15,kY,kZ+.01];
+  }
+  J.footL=add(J.ankL,[0,-.02,.17]);J.footR=add(J.ankR,[0,-.02,.17]);
+  function U(p){return add(pel,rx(rz(ry(p,rho),beta),lam))}
+  J.chest=U([0,.5,0]);J.neck=U([0,.82,0]);J.head=U([0,1.0,0]);
+  J.shL=U([-.27,.76,0]);J.shR=U([.27,.76,0]);
+  var bar=null;
+  if(arms==='hang'){J.elL=U([-.33,.46,.03]);J.elR=U([.33,.46,.03]);J.haL=U([-.34,.2,.08]);J.haR=U([.34,.2,.08])}
+  else if(arms==='tee'){J.elL=U([-.6,.76,0]);J.elR=U([.6,.76,0]);J.haL=U([-.95,.76,0]);J.haR=U([.95,.76,0])}
+  else if(arms==='rack'){
+    J.elL=U([-.31,.8,.3]);J.elR=U([.31,.8,.3]);J.haL=U([-.2,.84,.15]);J.haR=U([.2,.84,.15]);
+    bar={c:U([0,.84,.17]),r:.15};
+  }else{
+    var yb=.10-.72*u;
+    J.haL=[-.3,yb,.12];J.haR=[.3,yb,.12];
+    J.elL=add(mid(J.shL,J.haL),[-.05,0,-.03]);J.elR=add(mid(J.shR,J.haR),[.05,0,-.03]);
+    bar={c:[0,yb,.12],r:.2};
+  }
+  J.bar=bar;
+  return J;
+}
+function trails(k,id){
+  var names={'sag/trunk':['head'],'sag/squat':['pelvis'],'sag/dl':['pelvis'],'fro/bend':['head'],'fro/hip':['hipL','hipR'],'tra/rot':['haL','haR']}[k+'/'+id];
+  var res=names.map(function(){return []});
+  for(var i=0;i<=40;i++){var s=-1+2*i/40,J=pose(k,id,s);names.forEach(function(n,j){res[j].push(J[n])})}
+  return res;
+}
+
+function planeQuad(k){
+  var a=1.15,top=1.25,bot=-1.2;
+  if(k==='sag')return [[0,bot,-a],[0,bot,a],[0,top,a],[0,top,-a]];
+  if(k==='fro')return [[-a,bot,0],[a,bot,0],[a,top,0],[-a,top,0]];
+  return [[-a,.76,-a],[a,.76,-a],[a,.76,a],[-a,.76,a]];
+}
+function labelPos(k){return k==='sag'?[0,1.3,.95]:k==='fro'?[-1.0,1.3,0]:[1.0,.76,1.0]}
+function drawPlane(k,active){
+  var P=PLANE[k],q=planeQuad(k).map(proj);
+  g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<4;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
+  g.fillStyle='rgba('+P.rgb+','+(active?.18:.05)+')';g.fill();
+  g.lineWidth=active?3:1.5;g.strokeStyle='rgba('+P.rgb+','+(active?1:.3)+')';g.stroke();
+  var lp=proj(labelPos(k));
+  g.font='900 '+Math.max(11,W*.019)+'px "Noto Sans JP",sans-serif';g.fillStyle='rgba('+P.rgb+','+(active?1:.5)+')';g.textAlign='center';g.fillText(P.lab,lp[0],lp[1]);
+}
+function line(a,b,w,col){g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineWidth=w;g.strokeStyle=col;g.lineCap='round';g.stroke()}
+function disc(c,r,col){
+  var pts=[];for(var i=0;i<28;i++){var a=i/28*Math.PI*2;pts.push(proj([c[0],c[1]+r*Math.cos(a),c[2]+r*Math.sin(a)]))}
+  g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();
+  g.fillStyle='#0a0e1a';g.fill();g.lineWidth=3;g.strokeStyle=col;g.stroke();
+}
+
+function dirText(k,id,s,ds){
+  if(k==='sag'&&id==='trunk')return s>0?'屈曲（前へ倒す）':'伸展（後ろへ反らす）';
+  if(k==='sag'&&id==='squat')return ds>0?'しゃがむ':'立ち上がる';
+  if(k==='sag'&&id==='dl')return ds>0?'お尻を引いて上体を倒す（ヒンジ）':'股関節を伸ばして立つ';
+  if(k==='fro'&&id==='bend')return s>0?'右へ側屈':'左へ側屈';
+  if(k==='fro'&&id==='hip')return s>0?'左足に体重・右の骨盤が挙がる':'右足に体重・左の骨盤が挙がる';
+  return s>0?'左へ回旋':'右へ回旋';
+}
+
+function frame(ts){
+  if(!last)last=ts;var dt=Math.min(.05,(ts-last)/1000);last=ts;
+  if(playing)t+=dt*1.5;
+  if(!dragging){yaw+=(tyaw-yaw)*Math.min(1,dt*6);pitch+=(tpitch-pitch)*Math.min(1,dt*6)}
+  var cb=curCombo(),k=cb[0],id=cb[1];renderUI();if(mode==='all')autoCam();
+  var s=Math.sin(t),ds=Math.cos(t);
+  var J=pose(k,id,s),P=PLANE[k];
+  g.clearRect(0,0,W,H);
+  S0=Math.min(W,H)*.30;CX=W*.5;CY=H*.52+S0*.05;
+  ['sag','fro','tra'].forEach(function(p){if(p!==k)drawPlane(p,false)});
+
+  var Q={};for(var n in J){if(n!=='bar')Q[n]=proj(J[n])}
+  var sc=S0/160,col='#e2e8f0',acc=P.col;
+  var fc=[];for(var i=0;i<=40;i++){var th=i/40*Math.PI*2;fc.push(proj([Math.cos(th)*.6,-1.07,Math.sin(th)*.6]))}
+  g.beginPath();fc.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.strokeStyle='rgba(148,163,184,.45)';g.lineWidth=1.5;g.stroke();
+  g.setLineDash([2,9]);g.lineWidth=4;g.strokeStyle=acc;g.lineCap='round';
+  trails(k,id).forEach(function(tr){g.beginPath();tr.forEach(function(p,i){var q=proj(p);i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])});g.stroke()});
+  g.setLineDash([]);
+  [['hipL','kneeL','ankL','footL'],['hipR','kneeR','ankR','footR']].forEach(function(c){for(var i=0;i<3;i++)line(Q[c[i]],Q[c[i+1]],14*sc*Q[c[i]][3],col)});
+  var hipMode=(k==='fro'&&id==='hip');
+  line(Q.hipL,Q.hipR,(hipMode?20:14)*sc,hipMode?acc:col);
+  line(Q.pelvis,Q.chest,22*sc*Q.pelvis[3],col);
+  line(Q.chest,Q.neck,16*sc,col);
+  line(Q.shL,Q.shR,16*sc,col);
+  line(Q.neck,Q.head,12*sc,col);
+  [['shL','elL','haL'],['shR','elR','haR']].forEach(function(c){line(Q[c[0]],Q[c[1]],11*sc,col);line(Q[c[1]],Q[c[2]],10*sc,col)});
+  if(J.bar){
+    var b=J.bar.c,r=J.bar.r;
+    line(proj([b[0]-.62,b[1],b[2]]),proj([b[0]+.62,b[1],b[2]]),7*sc,'#f6c90e');
+    disc([b[0]-.5,b[1],b[2]],r,'#f6c90e');disc([b[0]+.5,b[1],b[2]],r,'#f6c90e');
+  }
+  g.beginPath();g.arc(Q.head[0],Q.head[1],22*sc*Q.head[3],0,Math.PI*2);g.fillStyle='#0a0e1a';g.fill();g.lineWidth=5*sc+2;g.strokeStyle=col;g.stroke();
+  [Q.chest,Q.pelvis].forEach(function(p){g.beginPath();g.arc(p[0],p[1],7*sc*p[3]+2,0,Math.PI*2);g.fillStyle=acc;g.fill()});
+  if(k==='tra'){[Q.haL,Q.haR].forEach(function(p){g.beginPath();g.arc(p[0],p[1],5*sc+2,0,Math.PI*2);g.fillStyle=acc;g.fill()})}
+  drawPlane(k,true);
+  g.font='900 '+Math.max(13,W*.026)+'px "Noto Sans JP",sans-serif';g.textAlign='left';g.fillStyle=acc;
+  g.fillText(dirText(k,id,s,ds),W*.04,H*.1);
+  requestAnimationFrame(frame);
+}
+fit();syncTabs();renderUI();requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

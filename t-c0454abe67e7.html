@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>フロントスクワット｜3D解説</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg-0:#05070d;--bg-1:#0a0e1a;--bg-3:#13253a;--bg-4:#1a3049;--line:#1e3555;--gold:#f6c90e;--ng:#f87171;--fg:#f8fafc;--fg-body:#e2e8f0;--fg-sub:#94a3b8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg-0);font-family:'Noto Sans JP',sans-serif;color:var(--fg-body);-webkit-font-smoothing:antialiased}
+.wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(120% 120% at 50% 0%,#0a1220 0%,#05070d 70%)}
+.frame{container-type:inline-size;width:min(96vw,calc((100vh - 40px)*16/9));aspect-ratio:16/9;background:var(--bg-1);border-radius:14px;overflow:hidden;display:grid;grid-template-columns:37% 63%;position:relative}
+.side{padding:3.6% 2.6% 2.6% 3.6%;display:flex;flex-direction:column;min-width:0;min-height:0}
+.eyebrow{font-size:.85cqw;letter-spacing:.3em;color:var(--gold);font-weight:700}
+h1{font-size:2cqw;font-weight:900;color:var(--fg);line-height:1.25;margin-top:.4em}
+.row{display:flex;gap:.45cqw;margin-top:1cqw;flex-wrap:wrap}
+.chip{font:inherit;font-weight:700;font-size:1.02cqw;color:var(--fg-body);background:transparent;border:.12cqw solid var(--line);border-radius:999px;padding:.4cqw .9cqw;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--pc,var(--gold));border-color:var(--pc,var(--gold));color:#0a0e1a}
+.card{background:var(--bg-3);border-radius:.9cqw;padding:1.5cqw 1.8cqw;margin-top:.9cqw;position:relative;flex:1;min-height:0;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;right:0;height:.35cqw;background:var(--pc,var(--gold))}
+.card .en{font-size:.85cqw;letter-spacing:.2em;font-weight:900;color:var(--pc,var(--gold))}
+.card h2{font-size:2cqw;font-weight:900;color:var(--fg);margin:.1em 0 .3em;line-height:1.3}
+.card p{font-size:1.12cqw;line-height:1.7}
+.card ul{list-style:none;margin-top:.6cqw}
+.card li{font-size:1.05cqw;line-height:1.6;padding-left:1.1cqw;position:relative;margin-bottom:.35cqw}
+.card li::before{content:"";position:absolute;left:0;top:.55em;width:.5cqw;height:.5cqw;border-radius:.1cqw;background:var(--pc,var(--gold))}
+.slider{margin-top:.8cqw;display:flex;align-items:center;gap:.8cqw;font-size:1cqw;color:var(--fg-sub);font-weight:700}
+.slider input{flex:1;accent-color:var(--gold)}
+.stagebox{position:relative;min-width:0}
+canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none}
+canvas:active{cursor:grabbing}
+.cams{position:absolute;right:2.4cqw;top:2cqw;display:flex;gap:.4cqw;align-items:center}
+.cams span{font-size:.9cqw;color:var(--fg-sub);margin-right:.4cqw;font-weight:700}
+.cams button,.ctrl button{font:inherit;font-size:1cqw;font-weight:700;color:var(--fg);background:var(--bg-4);border:0;border-radius:999px;padding:.5cqw 1.05cqw;cursor:pointer}
+.cams button[aria-pressed="true"]{background:var(--fg);color:#0a0e1a}
+.hint{position:absolute;left:2.4cqw;bottom:2cqw;font-size:.9cqw;color:var(--fg-sub)}
+.ctrl{position:absolute;right:2.4cqw;bottom:2cqw;display:flex;gap:.4cqw}
+@media (max-width:700px){
+  .frame{aspect-ratio:auto;grid-template-columns:1fr;width:96vw}.stagebox{height:78vw}
+  .eyebrow{font-size:10px}h1{font-size:22px}.chip{font-size:12px;padding:6px 11px}
+  .card{padding:16px}.card .en{font-size:10px}.card h2{font-size:20px}.card p{font-size:13px}.card li{font-size:12.5px}.slider{font-size:12px}
+  .cams button,.ctrl button{font-size:11px;padding:6px 12px}.cams span,.hint{font-size:10px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="frame">
+  <div class="side">
+    <span class="eyebrow">FRONT SQUAT</span>
+    <h1>胴体を立てたまま、しゃがみます</h1>
+    <div class="row" id="forms" role="group" aria-label="フォームの選択"></div>
+    <div class="card" id="card"></div>
+    <div class="slider"><span>動き</span><input type="range" id="seek" min="0" max="100" value="0" aria-label="動きの位置"><span id="seekl">立位</span></div>
+  </div>
+  <div class="stagebox">
+    <canvas id="cv" aria-label="フロントスクワットの3D図"></canvas>
+    <div class="cams" id="cams"><span>カメラ</span>
+      <button data-c="obl" aria-pressed="false">斜め</button>
+      <button data-c="side" aria-pressed="true">横</button>
+      <button data-c="front" aria-pressed="false">正面</button>
+    </div>
+    <div class="hint">ドラッグで自由に回せます</div>
+    <div class="ctrl"><button id="pause">一時停止</button></div>
+  </div>
+</div>
+</div>
+<script>
+(function(){
+var FORMS={
+ ok:{name:'正しいフォーム',col:'#f6c90e',cam:'side',head:'胴体を立て、バーは足の中心の真上を通ります。',
+   pts:['胴体の傾きが小さい（約17°）','肘が高く、バーが肩の前に乗る','膝がつま先と同じ向きに開く','バーの軌道が足の中心の真上を垂直に動く']},
+ lean:{name:'NG：前傾',col:'#f87171',cam:'side',head:'胴体が前に倒れ、バーが足の中心より前へ流れます。',
+   pts:['バーが前に出て、腰に負担がかかる','足裏全体で踏めず、前足部に体重が逃げる','対策：肘を上げて胸を立て、肋骨を下げる','対策：股関節と膝を同時に曲げ始める']},
+ knee:{name:'NG：ニーイン',col:'#f87171',cam:'front',head:'しゃがむほど膝が内に入ります。正面から確認します。',
+   pts:['膝が内に入ると、膝と股関節に負担がかかる','正面カメラで、膝と足の向きを見比べる','対策：足裏で床を外へ押し、大臀筋を使う','対策：足の3点（母指球・小指球・踵）で踏む']},
+ elbow:{name:'NG：肘が落ちる',col:'#f87171',cam:'side',head:'肘が下がると、バーが前へ転がり落ちそうになります。',
+   pts:['肘が下がると背中が丸まりやすい','バーが肩から前にずれていく','対策：肘で前を指し、肘を高く保つ','対策：胸を張り、バーを首の付け根に乗せる']}
+};
+var FORDER=['ok','lean','knee','elbow'];
+var CAMS={obl:{yaw:-.62,pitch:.28},front:{yaw:0,pitch:.04},side:{yaw:-Math.PI/2,pitch:.04}};
+var form='ok', playing=true, t=0, last=0, manual=null;
+var yaw=CAMS.side.yaw,pitch=CAMS.side.pitch,tyaw=yaw,tpitch=pitch,camLock=false,dragging=false,lx=0,ly=0;
+var cv=document.getElementById('cv'),g=cv.getContext('2d'),W=0,H=0,dpr=1;
+
+function setCam(n,user){tyaw=CAMS[n].yaw;tpitch=CAMS[n].pitch;
+  document.querySelectorAll('#cams button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.c===n?'true':'false')});if(user)camLock=true}
+function renderForms(){
+  var el=document.getElementById('forms');el.innerHTML='';
+  FORDER.forEach(function(k){var f=FORMS[k],b=document.createElement('button');b.className='chip';b.textContent=f.name;
+    b.style.setProperty('--pc',f.col);b.setAttribute('aria-pressed',k===form?'true':'false');
+    b.onclick=function(){form=k;camLock=false;renderForms();renderCard();setCam(f.cam,false)};el.appendChild(b)});
+}
+function renderCard(){var f=FORMS[form],c=document.getElementById('card');c.style.setProperty('--pc',f.col);
+  c.innerHTML='<span class="en">'+(form==='ok'?'CHECK POINTS':'COMMON MISTAKE')+'</span><h2>'+f.name+'</h2><p>'+f.head+'</p><ul>'+f.pts.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>'}
+document.querySelectorAll('#cams button').forEach(function(b){b.onclick=function(){setCam(b.dataset.c,true)}});
+document.getElementById('pause').onclick=function(){playing=!playing;this.textContent=playing?'一時停止':'再生';if(playing)manual=null};
+var seek=document.getElementById('seek');
+seek.oninput=function(){playing=false;document.getElementById('pause').textContent='再生';manual=seek.value/100};
+function fit(){var r=cv.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0)}
+window.addEventListener('resize',fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(cv);
+cv.addEventListener('pointerdown',function(e){dragging=true;lx=e.clientX;ly=e.clientY;camLock=true;document.querySelectorAll('#cams button').forEach(function(b){b.setAttribute('aria-pressed','false')});cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',function(e){if(!dragging)return;yaw+=(e.clientX-lx)*.008;pitch=Math.max(-.6,Math.min(1.55,pitch+(e.clientY-ly)*.006));tyaw=yaw;tpitch=pitch;lx=e.clientX;ly=e.clientY});
+cv.addEventListener('pointerup',function(){dragging=false});cv.addEventListener('pointercancel',function(){dragging=false});
+
+function rx(p,a){var c=Math.cos(a),s=Math.sin(a);return [p[0],p[1]*c-p[2]*s,p[1]*s+p[2]*c]}
+function ry(p,a){var c=Math.cos(a),s=Math.sin(a);return [p[0]*c+p[2]*s,p[1],-p[0]*s+p[2]*c]}
+function add(a,b){return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]}
+var S0,CX,CY,D=5;
+function proj(p){var q=ry(p,yaw);q=rx(q,-pitch);var k=D/(D-q[2]);return [CX+q[0]*S0*k,CY-q[1]*S0*k,q[2],k]}
+
+// u: 0=立位 1=ボトム
+function pose(f,u){
+  var ankY=-1.04, phi=.42*u, th=1.5*u, lam=.30*u, kin=0, elbowDrop=0;
+  if(f==='lean'){th=1.58*u;lam=.88*u;phi=.38*u}
+  if(f==='knee'){kin=.62*u}
+  if(f==='elbow'){elbowDrop=u;lam=.42*u}
+  var kY=ankY+.52*Math.cos(phi),kZ=.52*Math.sin(phi);
+  var hY=kY+.52*Math.cos(th),hZ=kZ-.52*Math.sin(th);
+  var pel=[0,hY,hZ],J={pelvis:pel};
+  J.hipL=add(pel,[-.14,0,0]);J.hipR=add(pel,[.14,0,0]);
+  J.ankL=[-.16,ankY,0];J.ankR=[.16,ankY,0];
+  var kx=.16*(1-kin);
+  J.kneeL=[-kx,kY,kZ+.01];J.kneeR=[kx,kY,kZ+.01];
+  J.footL=add(J.ankL,[-.05,-.02,.17]);J.footR=add(J.ankR,[.05,-.02,.17]);
+  function U(p){return add(pel,rx(p,lam))}
+  J.chest=U([0,.5,0]);J.neck=U([0,.82,0]);J.head=U([0,1.0,0]);
+  J.shL=U([-.27,.76,0]);J.shR=U([.27,.76,0]);
+  var ey=.8-.34*elbowDrop, ez=.3-.12*elbowDrop;
+  J.elL=U([-.31,ey,ez]);J.elR=U([.31,ey,ez]);
+  J.haL=U([-.2,.84,.1]);J.haR=U([.2,.84,.1]);
+  J.bar=U([0,.84,.12]);
+  J.lam=lam;
+  return J;
+}
+var MIDFOOT=.085;
+function barTrail(f){var r=[];for(var i=0;i<=30;i++){r.push(pose(f,i/30).bar)}return r}
+
+function drawPlane(){
+  var a=1.15,q=[[0,-1.2,-a],[0,-1.2,a],[0,1.25,a],[0,1.25,-a]].map(proj);
+  g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<4;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
+  g.fillStyle='rgba(246,201,14,.08)';g.fill();g.lineWidth=2;g.strokeStyle='rgba(246,201,14,.55)';g.stroke();
+}
+function line(a,b,w,col){g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineWidth=w;g.strokeStyle=col;g.lineCap='round';g.stroke()}
+function disc(c,r,col){var pts=[];for(var i=0;i<28;i++){var a=i/28*Math.PI*2;pts.push(proj([c[0],c[1]+r*Math.cos(a),c[2]+r*Math.sin(a)]))}
+  g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();g.fillStyle='#0a0e1a';g.fill();g.lineWidth=3;g.strokeStyle=col;g.stroke()}
+
+function frame(ts){
+  if(!last)last=ts;var dt=Math.min(.05,(ts-last)/1000);last=ts;
+  if(playing)t+=dt*1.3;
+  if(!dragging){yaw+=(tyaw-yaw)*Math.min(1,dt*6);pitch+=(tpitch-pitch)*Math.min(1,dt*6)}
+  var u=manual!==null?manual:(1-Math.cos(t))/2;
+  if(manual===null){seek.value=Math.round(u*100)}
+  document.getElementById('seekl').textContent=u<.08?'立位':u>.92?'ボトム':(Math.sin(t)>0&&playing?'下降':playing?'上昇':'途中');
+  var f=FORMS[form],J=pose(form,u),bad=form!=='ok';
+  var acc=f.col,col='#e2e8f0';
+  g.clearRect(0,0,W,H);
+  S0=Math.min(W,H)*.30;CX=W*.5;CY=H*.52+S0*.05;
+  drawPlane();
+  var Q={};for(var n in J){if(typeof J[n]==='object')Q[n]=proj(J[n])}
+  var sc=S0/160;
+  // 床と足の中心ライン
+  var fc=[];for(var i=0;i<=40;i++){var th=i/40*Math.PI*2;fc.push(proj([Math.cos(th)*.6,-1.07,Math.sin(th)*.6]))}
+  g.beginPath();fc.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.strokeStyle='rgba(148,163,184,.45)';g.lineWidth=1.5;g.stroke();
+  g.setLineDash([10,8]);line(proj([0,-1.07,MIDFOOT]),proj([0,1.25,MIDFOOT]),2.5,'rgba(248,250,252,.6)');g.setLineDash([]);
+  // バーの軌跡
+  g.setLineDash([2,8]);g.lineWidth=4;g.strokeStyle=acc;g.lineCap='round';g.beginPath();
+  barTrail(form).forEach(function(p,i){var q=proj(p);i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])});g.stroke();g.setLineDash([]);
+  // 脚
+  [['hipL','kneeL','ankL','footL'],['hipR','kneeR','ankR','footR']].forEach(function(c){for(var i=0;i<3;i++)line(Q[c[i]],Q[c[i+1]],14*sc*Q[c[i]][3],col)});
+  if(form==='knee'){[Q.kneeL,Q.kneeR].forEach(function(p){g.beginPath();g.arc(p[0],p[1],8*sc+2,0,Math.PI*2);g.fillStyle=acc;g.fill()})}
+  line(Q.hipL,Q.hipR,14*sc,col);
+  line(Q.pelvis,Q.chest,22*sc*Q.pelvis[3],col);line(Q.chest,Q.neck,16*sc,col);line(Q.shL,Q.shR,16*sc,col);line(Q.neck,Q.head,12*sc,col);
+  [['shL','elL','haL'],['shR','elR','haR']].forEach(function(c){line(Q[c[0]],Q[c[1]],11*sc,form==='elbow'?acc:col);line(Q[c[1]],Q[c[2]],10*sc,form==='elbow'?acc:col)});
+  // バー
+  var b=J.bar;line(proj([b[0]-.62,b[1],b[2]]),proj([b[0]+.62,b[1],b[2]]),7*sc,'#f6c90e');
+  disc([b[0]-.5,b[1],b[2]],.15,'#f6c90e');disc([b[0]+.5,b[1],b[2]],.15,'#f6c90e');
+  g.beginPath();g.arc(Q.head[0],Q.head[1],22*sc*Q.head[3],0,Math.PI*2);g.fillStyle='#0a0e1a';g.fill();g.lineWidth=5*sc+2;g.strokeStyle=col;g.stroke();
+  [Q.chest,Q.pelvis].forEach(function(p){g.beginPath();g.arc(p[0],p[1],7*sc*p[3]+2,0,Math.PI*2);g.fillStyle=acc;g.fill()});
+  // 数値
+  var lean=Math.round(J.lam*180/Math.PI), gap=Math.round((b[2]-MIDFOOT)*82);
+  var leanBad=lean>26, gapBad=Math.abs(gap)>8;
+  var fs=Math.max(12,W*.022);g.font='900 '+fs+'px "Noto Sans JP",sans-serif';g.textAlign='left';
+  g.fillStyle=leanBad?'#f87171':'#f6c90e';g.fillText('胴体の傾き　'+lean+'°',W*.04,H*.09);
+  g.fillStyle=gapBad?'#f87171':'#f6c90e';g.fillText('バーのズレ　'+(gap>0?'前へ ':gap<0?'後ろへ ':'')+Math.abs(gap)+'cm',W*.04,H*.09+fs*1.5);
+  g.font='700 '+Math.max(10,W*.015)+'px "Noto Sans JP",sans-serif';g.fillStyle='rgba(248,250,252,.75)';
+  var mp=proj([0,1.25,MIDFOOT]);g.textAlign='center';g.fillText('足の中心',mp[0],mp[1]-8);
+  requestAnimationFrame(frame);
+}
+fit();renderForms();renderCard();setCam('side',false);requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
