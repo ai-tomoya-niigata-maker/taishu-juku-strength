@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>デッドリフト｜動く図</title>
+<title>デッドリフト（RDL）｜動く図</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -52,14 +52,14 @@ svg text{font-family:'Noto Sans JP',sans-serif}
 </head>
 <body>
 <div class="page">
-  <span class="eyebrow">LIFT 01 ｜ DEADLIFT</span>
-  <h1>デッドリフトは、肋骨を下げたまま床から引きます</h1>
+  <span class="eyebrow">LIFT 01 ｜ DEADLIFT (RDL)</span>
+  <h1>RDLは、お尻を後ろへ引いて、頭を前へ伸ばします</h1>
   <div class="tags"><span class="tag">LOWER PULL</span><span class="tag o">矢状面</span><span class="tag o">両側性</span></div>
 
   <div class="main">
     <div class="fig">
-      <div class="phase" id="phase">構え</div>
-      <svg viewBox="0 0 620 640" role="img" aria-label="デッドリフトの動きを横から見た図">
+      <div class="phase" id="phase">立つ</div>
+      <svg viewBox="0 0 620 640" role="img" aria-label="RDL型デッドリフトの動きを横から見た図">
         <!-- 床 -->
         <path d="M20 562H600" stroke="#94a3b8" stroke-width="3"/>
         <!-- バーの通り道（足の中心の真上） -->
@@ -73,7 +73,7 @@ svg text{font-family:'Noto Sans JP',sans-serif}
         <path id="arm" fill="none" stroke="#f8fafc" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
         <circle id="head" r="26" fill="#13253a" stroke="#f8fafc" stroke-width="7"/>
         <!-- バーベル -->
-        <circle id="plate" r="40" fill="rgba(246,201,14,.12)" stroke="#f6c90e" stroke-width="8"/>
+        <circle id="plate" r="34" fill="rgba(246,201,14,.12)" stroke="#f6c90e" stroke-width="8"/>
         <circle id="hub" r="8" fill="#f6c90e"/>
         <!-- 関節 -->
         <circle id="jk" r="7" fill="#f6c90e"/>
@@ -82,6 +82,7 @@ svg text{font-family:'Noto Sans JP',sans-serif}
         <path id="ribs" stroke="#f6c90e" stroke-width="5" stroke-linecap="round"/>
         <text id="ribl" font-size="16" font-weight="700" fill="#f6c90e" text-anchor="end">肋骨は下げたまま</text>
         <text id="spinel" font-size="16" font-weight="700" fill="#7dd3fc" text-anchor="end">背骨は長いまま</text>
+        <text id="hipl" font-size="16" font-weight="700" fill="#f6c90e" text-anchor="end">お尻を後ろへ</text>
         <!-- 動きの矢印 -->
         <g id="arrow" fill="none" stroke="#f6c90e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
           <path id="arrp"/>
@@ -90,22 +91,20 @@ svg text{font-family:'Noto Sans JP',sans-serif}
       <div class="read">
         <div>膝の角度<b id="rk">180°</b></div>
         <div>胴体の傾き<b id="rt">0°</b></div>
-        <div>引き上げの進み<b id="rd">0%</b></div>
+        <div>倒し込みの深さ<b id="rd">0%</b></div>
       </div>
       <div class="ctrl">
         <button id="play" aria-pressed="true">一時停止</button>
         <button id="slow" aria-pressed="false">スロー</button>
-        <input id="scrub" type="range" min="0" max="100" value="0" aria-label="引き上げの進み">
+        <input id="scrub" type="range" min="0" max="100" value="0" aria-label="倒し込みの深さ">
       </div>
     </div>
 
     <div class="side">
-      <div class="rowcard"><h2>構え</h2><p>バーは足の中心の真上です。股関節を引き、背中を平らに保ちます。</p></div>
-      <div class="rowcard"><h2>動作</h2><p>床を押しながら、股関節を前へ送って立ちます。バーは体に沿わせます。</p></div>
-      <div class="rowcard"><h2>チェック</h2><p>肋骨が開かず、背骨が長いままか。腰を反らせて終わっていないか。</p></div>
-      <div class="kgbox"><span class="no">10回挙上の目安</span>
-        <div class="row"><div class="kg">112.5kg<small>130km/h</small></div><div class="kg">147.5kg<small>140km/h</small></div></div>
-      </div>
+      <div class="rowcard"><h2>構え</h2><p>立った姿勢で、バーを太ももの前で持ちます。膝は軽く曲げて、動かしません。</p></div>
+      <div class="rowcard"><h2>動作</h2><p>お尻を後ろへ引き、胴体を前へ倒します。頭は背骨の延長で、前へ伸ばします。バーは脚に沿わせて、すねの上まで下ろします。戻りは床を押して、股関節を前へ送ります。</p></div>
+      <div class="rowcard"><h2>チェック</h2><p>背骨が長いままか。肋骨が開いていないか。膝が曲がり込んで、スクワットになっていないか。</p></div>
+      
     </div>
   </div>
   <div class="credit">体修塾BCA ｜ 代表　大林智也</div>
@@ -113,25 +112,25 @@ svg text{font-family:'Noto Sans JP',sans-serif}
 <script>
 (function(){
   var $=function(id){return document.getElementById(id)};
-  var A=[225,545],L1=109,L2=131,TH=161,AL=262,BX=258,T0=54*Math.PI/180,H0=[160,350],H1=[228,305.5];
+  var A=[225,545],L1=109,L2=131,TH=161,AL=200,BX=258;
   var el={leg:$('leg'),torso:$('torso'),arm:$('arm'),head:$('head'),plate:$('plate'),hub:$('hub'),foot:$('foot'),
-    jk:$('jk'),jh:$('jh'),ribs:$('ribs'),ribl:$('ribl'),spinel:$('spinel'),gline:$('gline'),glabel:$('glabel'),
-    arrp:$('arrp'),arrow:$('arrow'),phase:$('phase'),rk:$('rk'),rt:$('rt'),rd:$('rd'),scrub:$('scrub'),play:$('play'),slow:$('slow')};
+    jk:$('jk'),jh:$('jh'),ribs:$('ribs'),ribl:$('ribl'),spinel:$('spinel'),hipl:$('hipl'),gline:$('gline'),glabel:$('glabel'),
+    arrp:$('arrp'),phase:$('phase'),rk:$('rk'),rt:$('rt'),rd:$('rd'),scrub:$('scrub'),play:$('play'),slow:$('slow')};
   var rad=Math.PI/180;
   function P(x,y){return x.toFixed(1)+' '+y.toFixed(1)}
   function draw(s,lifting){
-    // s: 0=構え（床）, 1=立ち切り。股関節の位置と胴体の起き上がりで姿勢を決める
-    var H=[H0[0]+(H1[0]-H0[0])*s,H0[1]+(H1[1]-H0[1])*s];
-    var dx=H[0]-A[0],dy=H[1]-A[1],d=Math.min(Math.hypot(dx,dy),L1+L2-.5);
-    var a=(L1*L1-L2*L2+d*d)/(2*d),h=Math.sqrt(Math.max(0,L1*L1-a*a)),ux=dx/d,uy=dy/d;
-    var K=[A[0]+a*ux+h*uy,A[1]+a*uy-h*ux];
-    if(K[0]<A[0])K=[A[0]+a*ux-h*uy,A[1]+a*uy+h*ux];
-    var th=T0*(1-s),dir=[Math.sin(th),-Math.cos(th)];
+    // s: 0=立位, 1=最下点。膝は軽く曲げたまま、お尻を後ろへ引いて胴体を倒す
+    var phi=(2+3*s)*rad, psi=(0+24*s)*rad;
+    var K=[A[0]+L1*Math.sin(phi),A[1]-L1*Math.cos(phi)];
+    var H=[K[0]-L2*Math.sin(psi),K[1]-L2*Math.cos(psi)];
+    var th=(0+76*s)*rad, dir=[Math.sin(th),-Math.cos(th)];
     var S=[H[0]+TH*dir[0],H[1]+TH*dir[1]];
-    var by=S[1]+Math.sqrt(AL*AL-Math.pow(S[0]-BX,2));
-    var hd=[S[0]+46*dir[0],S[1]+46*dir[1]];
+    var by=S[1]+Math.sqrt(Math.max(0,AL*AL-Math.pow(S[0]-BX,2)));
+    // 頭は背骨の延長で、少し上向きに前へ（遠くを見る）
+    var ha=th-14*rad, hd=[S[0]+54*Math.sin(ha),S[1]-54*Math.cos(ha)];
+    var nk=[S[0]+26*Math.sin(ha),S[1]-26*Math.cos(ha)];
     el.leg.setAttribute('d','M'+P(A[0],A[1])+'L'+P(K[0],K[1])+'L'+P(H[0],H[1]));
-    el.torso.setAttribute('d','M'+P(H[0],H[1])+'L'+P(S[0],S[1])+'L'+P(S[0]+22*dir[0],S[1]+22*dir[1]));
+    el.torso.setAttribute('d','M'+P(H[0],H[1])+'L'+P(S[0],S[1])+'L'+P(nk[0],nk[1]));
     el.arm.setAttribute('d','M'+P(S[0],S[1])+'L'+P(BX,by));
     el.head.setAttribute('cx',hd[0]);el.head.setAttribute('cy',hd[1]);
     el.plate.setAttribute('cx',BX);el.plate.setAttribute('cy',by);el.hub.setAttribute('cx',BX);el.hub.setAttribute('cy',by);
@@ -139,30 +138,30 @@ svg text{font-family:'Noto Sans JP',sans-serif}
     el.foot.setAttribute('d','M'+P(A[0]-35,562)+'L'+P(A[0]+65,562));
     el.gline.setAttribute('d','M'+P(BX,40)+'L'+P(BX,562));
     el.glabel.setAttribute('x',BX);el.glabel.setAttribute('y',594);
-    // 肋骨の印：胴体の上寄りに、胴体に直角の短い線
     var rm=[H[0]+(S[0]-H[0])*.72,H[1]+(S[1]-H[1])*.72];
     el.ribs.setAttribute('d','M'+P(rm[0]-16*Math.cos(th),rm[1]-16*Math.sin(th))+'L'+P(rm[0]+16*Math.cos(th),rm[1]+16*Math.sin(th)));
-    el.ribl.setAttribute('x',rm[0]-26);el.ribl.setAttribute('y',rm[1]-6);
+    el.ribl.setAttribute('x',rm[0]-24);el.ribl.setAttribute('y',rm[1]-22);
     var sm=[H[0]+(S[0]-H[0])*.4,H[1]+(S[1]-H[1])*.4];
-    el.spinel.setAttribute('x',sm[0]-26);el.spinel.setAttribute('y',sm[1]+8);
+    el.spinel.setAttribute('x',sm[0]-24);el.spinel.setAttribute('y',sm[1]+14);
+    el.hipl.setAttribute('x',H[0]-18);el.hipl.setAttribute('y',H[1]+22);
     var ay=lifting?'M560 470V330M538 354L560 330L582 354':'M560 330V470M538 446L560 470L582 446';
     el.arrp.setAttribute('d',ay);
     var kn=Math.acos(((A[0]-K[0])*(H[0]-K[0])+(A[1]-K[1])*(H[1]-K[1]))/(L1*L2))/rad;
     el.rk.textContent=Math.round(kn)+'°';
     el.rt.textContent=Math.round(th/rad)+'°';
     el.rd.textContent=Math.round(s*100)+'%';
-    el.phase.textContent=s<.03?'構え':(s>.97?'立つ':(lifting?'引く':'下ろす'));
+    el.phase.textContent=s<.03?'立つ':(s>.97?'最下点':(lifting?'股関節を前へ':'お尻を引く'));
   }
   var playing=true,slow=false,last=0,clock=0;
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function ease(x){return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2}
-  var seg=[.6,1.8,.7,1.8];
+  var seg=[.6,2,.7,1.8];
   function cyc(t){
     var tot=seg[0]+seg[1]+seg[2]+seg[3];t=((t%tot)+tot)%tot;
-    if(t<seg[0])return[0,true];
-    t-=seg[0];if(t<seg[1])return[ease(t/seg[1]),true];
-    t-=seg[1];if(t<seg[2])return[1,false];
-    t-=seg[2];return[1-ease(t/seg[3]),false];
+    if(t<seg[0])return[0,false];
+    t-=seg[0];if(t<seg[1])return[ease(t/seg[1]),false];
+    t-=seg[1];if(t<seg[2])return[1,true];
+    t-=seg[2];return[1-ease(t/seg[3]),true];
   }
   function loop(ts){
     if(!last)last=ts;var dt=(ts-last)/1000;last=ts;
@@ -173,9 +172,9 @@ svg text{font-family:'Noto Sans JP',sans-serif}
   el.slow.onclick=function(){slow=!slow;el.slow.setAttribute('aria-pressed',slow?'true':'false')};
   el.scrub.oninput=function(){
     playing=false;el.play.textContent='再生';el.play.setAttribute('aria-pressed','false');
-    draw(el.scrub.value/100,true);
+    draw(el.scrub.value/100,false);
   };
-  draw(0,true);
+  draw(0,false);
   if(!reduce)requestAnimationFrame(loop);else{playing=false;el.play.textContent='再生';el.play.setAttribute('aria-pressed','false')}
 })();
 </script>
