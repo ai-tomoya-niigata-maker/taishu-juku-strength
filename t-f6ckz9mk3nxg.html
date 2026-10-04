@@ -53,8 +53,8 @@ svg text{font-family:'Noto Sans JP',sans-serif}
 <body>
 <div class="page">
   <span class="eyebrow">LIFT 04 ｜ BENT-OVER ROW</span>
-  <h1>ベントオーバーロウは、デッドリフトの姿勢で引きます</h1>
-  <div class="tags"><span class="tag">UPPER PULL</span><span class="tag o">矢状面</span><span class="tag o">両側性</span></div>
+  <h1>ベントオーバーロウは、肘を斜め上に引いて、肩を外旋します</h1>
+  <div class="tags"><span class="tag">UPPER PULL</span><span class="tag o">矢状面</span><span class="tag o">両側性</span><span class="tag o">マルチカールバー</span></div>
 
   <div class="main">
     <div class="fig">
@@ -64,6 +64,9 @@ svg text{font-family:'Noto Sans JP',sans-serif}
         <path d="M20 562H600" stroke="#94a3b8" stroke-width="3"/>
         <!-- 足 -->
         <path id="foot" fill="none" stroke="#94a3b8" stroke-width="5" stroke-linecap="round"/>
+        <!-- 肘を引く斜め上のガイド -->
+        <path id="eguide" stroke="#7dd3fc" stroke-width="2" stroke-dasharray="4 8" opacity=".8" fill="none"/>
+        
         <!-- 骨格 -->
         <path id="leg" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
         <path id="torso" fill="none" stroke="#f8fafc" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
@@ -82,9 +85,20 @@ svg text{font-family:'Noto Sans JP',sans-serif}
         <path id="ribs" stroke="#f6c90e" stroke-width="5" stroke-linecap="round"/>
         <text id="ribl" font-size="16" font-weight="700" fill="#f6c90e" text-anchor="end">肋骨は下げたまま</text>
         <text id="spinel" font-size="16" font-weight="700" fill="#7dd3fc" text-anchor="end">胴体は動かさない</text>
-        <text id="elbl" font-size="16" font-weight="700" fill="#f6c90e" text-anchor="end">肘を後ろへ</text>
+        <text id="elbl" font-size="16" font-weight="700" fill="#f6c90e" text-anchor="end">肘を斜め上・後ろへ</text>
+        <!-- 外旋インセット -->
+        <g transform="translate(430,36)">
+          <rect x="0" y="0" width="170" height="150" rx="12" fill="#0d1b2a"/>
+          <text x="85" y="26" font-size="15" font-weight="900" fill="#f6c90e" text-anchor="middle">肩関節の外旋</text>
+          <circle cx="85" cy="62" r="8" fill="#f6c90e"/>
+          <path id="fa0" d="M85 62L85 122" stroke="#94a3b8" stroke-width="3" stroke-dasharray="3 6" fill="none"/>
+          <path id="fa" stroke="#f8fafc" stroke-width="7" stroke-linecap="round" fill="none"/>
+          <circle id="fah" r="9" fill="none" stroke="#f6c90e" stroke-width="5"/>
+          <path id="faarc" stroke="#f6c90e" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <text x="85" y="144" font-size="13" fill="#94a3b8" text-anchor="middle">上腕は固定、手を外へ開く</text>
+        </g>
         <!-- 動きの矢印 -->
-        <g id="arrow" fill="none" stroke="#f6c90e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+        <g id="arrow" transform="translate(0,60)" fill="none" stroke="#f6c90e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
           <path id="arrp"/>
         </g>
       </svg>
@@ -101,9 +115,9 @@ svg text{font-family:'Noto Sans JP',sans-serif}
     </div>
 
     <div class="side">
-      <div class="rowcard"><h2>構え</h2><p>デッドリフトの姿勢から、股関節を引いて胴体を倒します。背中は平らのまま、バーは肩の真下にぶら下げます。</p></div>
-      <div class="rowcard"><h2>動作</h2><p>肘を後ろへ引き、バーをみぞおちの下へ運びます。胴体は動かしません。ゆっくり下ろします。</p></div>
-      <div class="rowcard"><h2>チェック</h2><p>反動で胴体が起き上がっていないか。肋骨が開いていないか。肩がすくんでいないか。</p></div>
+      <div class="rowcard"><h2>構え</h2><p>デッドリフトの姿勢から、股関節を引いて胴体を倒します。背中は平らのまま、マルチカールバーを肩の真下にぶら下げます。</p></div>
+      <div class="rowcard"><h2>動作</h2><p>土踏まずの真上へまっすぐ引くと、僧帽筋上部に入ります。肘を少し斜め上へ引き、僧帽筋下部と広背筋で引きます。引きながら、肩関節を外旋します。</p></div>
+      <div class="rowcard"><h2>チェック</h2><p>肩がすくんでいないか。反動で胴体が起き上がっていないか。肋骨が開いていないか。外旋で手首や肘がぶれていないか。</p></div>
       <div class="kgbox"><span class="no">10回挙上の目安</span>
         <div class="row"><div class="kg">60kg<small>130km/h</small></div><div class="kg">80kg<small>140km/h</small></div></div>
       </div>
@@ -117,7 +131,7 @@ svg text{font-family:'Noto Sans JP',sans-serif}
   var A=[225,545],L1=109,L2=131,TH=161,U=135,F=127;
   var el={leg:$('leg'),torso:$('torso'),arm:$('arm'),head:$('head'),plate:$('plate'),hub:$('hub'),foot:$('foot'),trail:$('trail'),
     jk:$('jk'),jh:$('jh'),je:$('je'),ribs:$('ribs'),ribl:$('ribl'),spinel:$('spinel'),elbl:$('elbl'),
-    arrp:$('arrp'),phase:$('phase'),rk:$('rk'),rt:$('rt'),rd:$('rd'),scrub:$('scrub'),play:$('play'),slow:$('slow')};
+    eguide:$('eguide'),fa:$('fa'),fah:$('fah'),faarc:$('faarc'),arrp:$('arrp'),phase:$('phase'),rk:$('rk'),rt:$('rt'),rd:$('rd'),scrub:$('scrub'),play:$('play'),slow:$('slow')};
   var rad=Math.PI/180;
   function P(x,y){return x.toFixed(1)+' '+y.toFixed(1)}
   // 姿勢（胴体は固定）：膝は軽く曲げ、股関節を引いて胴体を約60°倒す
@@ -125,19 +139,17 @@ svg text{font-family:'Noto Sans JP',sans-serif}
   var K=[A[0]+L1*Math.sin(phi),A[1]-L1*Math.cos(phi)];
   var H=[K[0]-L2*Math.sin(psi),K[1]-L2*Math.cos(psi)];
   var S=[H[0]+TH*dir[0],H[1]+TH*dir[1]];
-  var B0=[S[0],S[1]+U+F-4];                                           // 腕を伸ばしてぶら下げた位置
-  var N=[H[0]+.42*(S[0]-H[0])+32*nrm[0],H[1]+.42*(S[1]-H[1])+32*nrm[1]]; // みぞおちの下
-  function elbow(B){
-    var dx=B[0]-S[0],dy=B[1]-S[1],d=Math.min(Math.hypot(dx,dy),U+F-.5);
-    var a=(U*U-F*F+d*d)/(2*d),h=Math.sqrt(Math.max(0,U*U-a*a)),ux=dx/d,uy=dy/d;
-    var c1=[S[0]+a*ux+h*uy,S[1]+a*uy-h*ux],c2=[S[0]+a*ux-h*uy,S[1]+a*uy+h*ux];
-    // 肘は後ろ・上側（胴体の前下向きの法線と逆側）を選ぶ
-    var d1=(c1[0]-S[0])*nrm[0]+(c1[1]-S[1])*nrm[1],d2=(c2[0]-S[0])*nrm[0]+(c2[1]-S[1])*nrm[1];
-    return d1<d2?c1:c2;
+  // 肘を少し斜め上・後ろへ引く（画面の角度。90°=真下、180°=真後ろ、190°=後ろ少し上）
+  var A0=94*rad,A1=190*rad,G0=94*rad,G1=82*rad;
+  function arm(s){
+    var a=A0+(A1-A0)*s,g=G0+(G1-G0)*s;
+    var E=[S[0]+U*Math.cos(a),S[1]+U*Math.sin(a)];
+    var B=[E[0]+F*Math.cos(g),E[1]+F*Math.sin(g)];
+    return {E:E,B:B};
   }
+  var trail='';for(var i=0;i<=24;i++){var q=arm(i/24).B;trail+=(i?'L':'M')+P(q[0],q[1])}
   function draw(s,dirUp){
-    var B=[B0[0]+(N[0]-B0[0])*s,B0[1]+(N[1]-B0[1])*s];
-    var E=elbow(B);
+    var q=arm(s),E=q.E,B=q.B;
     var ha=th-14*rad,hd=[S[0]+54*Math.sin(ha),S[1]-54*Math.cos(ha)],nk=[S[0]+26*Math.sin(ha),S[1]-26*Math.cos(ha)];
     el.leg.setAttribute('d','M'+P(A[0],A[1])+'L'+P(K[0],K[1])+'L'+P(H[0],H[1]));
     el.torso.setAttribute('d','M'+P(H[0],H[1])+'L'+P(S[0],S[1])+'L'+P(nk[0],nk[1]));
@@ -147,12 +159,15 @@ svg text{font-family:'Noto Sans JP',sans-serif}
     el.jk.setAttribute('cx',K[0]);el.jk.setAttribute('cy',K[1]);el.jh.setAttribute('cx',H[0]);el.jh.setAttribute('cy',H[1]);
     el.je.setAttribute('cx',E[0]);el.je.setAttribute('cy',E[1]);
     el.foot.setAttribute('d','M'+P(A[0]-35,562)+'L'+P(A[0]+65,562));
-    el.trail.setAttribute('d','M'+P(B0[0],B0[1])+'L'+P(N[0],N[1]));
+    el.trail.setAttribute('d',trail);
+    var gx=S[0]+150*Math.cos(A1),gy=S[1]+150*Math.sin(A1);el.eguide.setAttribute('d','M'+P(S[0],S[1])+'L'+P(gx,gy));
+    var ex=85+50*Math.sin(s*28*rad),ey=62+50*Math.cos(s*28*rad);el.fa.setAttribute('d','M85 62L'+P(ex,ey));el.fah.setAttribute('cx',ex);el.fah.setAttribute('cy',ey);
+    el.faarc.setAttribute('d','M85 112A50 50 0 0 1 '+P(85+50*Math.sin(28*rad),62+50*Math.cos(28*rad))+(s>.02?'':''));
     var rm=[H[0]+(S[0]-H[0])*.72,H[1]+(S[1]-H[1])*.72];
     el.ribs.setAttribute('d','M'+P(rm[0]-16*Math.cos(th),rm[1]-16*Math.sin(th))+'L'+P(rm[0]+16*Math.cos(th),rm[1]+16*Math.sin(th)));
-    el.ribl.setAttribute('x',rm[0]-24);el.ribl.setAttribute('y',rm[1]-22);
+    el.ribl.setAttribute('x',rm[0]+22);el.ribl.setAttribute('y',rm[1]+46);el.ribl.setAttribute('text-anchor','start');
     el.spinel.setAttribute('x',H[0]-8);el.spinel.setAttribute('y',H[1]-16);
-    el.elbl.setAttribute('x',E[0]-16);el.elbl.setAttribute('y',E[1]+4);
+    el.elbl.setAttribute('x',E[0]-14);el.elbl.setAttribute('y',E[1]+6);
     var ay=dirUp?'M560 470V330M538 354L560 330L582 354':'M560 330V470M538 446L560 470L582 446';
     el.arrp.setAttribute('d',ay);
     var ea=Math.acos(((S[0]-E[0])*(B[0]-E[0])+(S[1]-E[1])*(B[1]-E[1]))/(U*F))/rad;
