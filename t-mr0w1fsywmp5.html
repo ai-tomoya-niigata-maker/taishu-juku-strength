@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ベンチプレス 3D フォーム図</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#161a21; --line:#2a303b; --text:#eef1f5; --sub:#9aa4b2;
+    --accent:#ffb020; --cyan:#34d3ee; --ok:#4ade80;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);
+    font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;overflow:hidden}
+  #gl{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+  .app{position:relative;z-index:1;height:100%;display:grid;grid-template-rows:auto 1fr;gap:8px;padding:10px 16px 14px}
+  header{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+  h1{font-size:17px;margin:0;font-weight:700;letter-spacing:.02em}
+  h1 span{color:var(--accent)}
+  .ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font-size:13px;color:var(--sub)}
+  .ctrl label{display:flex;align-items:center;gap:6px}
+  button{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;
+    padding:6px 12px;font-size:13px;cursor:pointer}
+  button:hover{border-color:var(--accent)}
+  input[type=range]{accent-color:var(--accent);width:120px}
+  .val{color:var(--text);font-variant-numeric:tabular-nums;min-width:3.2em;display:inline-block}
+  .views{display:grid;gap:8px;min-height:0;grid-template-columns:1fr;grid-template-rows:1fr}
+  .view{position:relative;border:1px solid var(--line);border-radius:12px;min-height:0;overflow:hidden}
+  .tag{position:absolute;left:10px;top:8px;font-size:12px;font-weight:700;color:var(--sub);pointer-events:none}
+  .read{position:absolute;right:10px;bottom:8px;text-align:right;line-height:1.6;font-size:13px;font-weight:700;pointer-events:none;
+    background:rgba(15,17,21,.72);padding:4px 10px;border-radius:8px}
+  .read b{font-variant-numeric:tabular-nums}
+  #r-side b{color:var(--cyan)} #r-top b{color:var(--accent)}
+  .hint{position:absolute;left:10px;bottom:8px;font-size:11px;color:var(--sub);pointer-events:none}
+  @media (max-width:760px){ h1{font-size:15px} }
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="app">
+  <header>
+    <h1>ベンチプレス <span>フォーム3D図</span></h1>
+    <div class="ctrl">
+      <button id="btn-play">⏸ 一時停止</button>
+      <label>位置 <input id="pos" type="range" min="0" max="100" value="0"></label>
+      <label>速さ <input id="spd" type="range" min="0.3" max="2" step="0.1" value="1"></label>
+      <label>脇の角度 <input id="ang" type="range" min="30" max="90" step="1" value="60"><span class="val" id="ang-v">60°</span></label>
+      <button id="btn-60">60°に戻す</button>
+    </div>
+    <div class="ctrl" id="cams">
+      <span>視点</span>
+      <button data-cam="diag">斜め</button>
+      <button data-cam="side">真横</button>
+      <button data-cam="top">真上</button>
+      <button data-cam="head">頭側</button>
+      <button data-cam="foot">足側</button>
+      <button id="btn-rot">⟳ 自動回転</button>
+    </div>
+  </header>
+  <div class="views">
+    <div class="view" id="v-main"><div class="tag">ドラッグで回転／ホイールでズーム／上の「視点」ボタンで切替</div>
+      <div class="read"><span id="r-side">手首と肘の前後ズレ <b id="dx">0.0 cm</b></span><br><span id="r-top">脇の角度 <b id="dang">60.0°</b></span></div></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(() => {
+  // ---------- 寸法 (m) ----------
+  // x: 頭→足方向(+x が足側), y: 上, z: 左右。肩を原点(x=0)にする
+  const Lu = 0.30, Lf = 0.27;          // 上腕・前腕
+  const SH_Z = 0.19, SH_Y = 0.15;      // 肩の位置
+  const GRIP_Z = 0.424;                // ハンドル(グリップ)位置
+  const DY_BOTTOM = -0.13, DY_TOP = 0.27; // 肩に対する肘の高さ（ボトム→トップ）
+  const GUIDE_Y = 1.0;                 // 上から見た角度ガイドを描く高さ
+
+  let armAngle = 60;                   // 脇の角度（°）：体幹(足方向)と上腕の水平投影のなす角
+  let playing = true, speed = 1, manualU = 0, clock = 0;
+
+  // ---------- three 基本 ----------
+  const canvas = document.getElementById('gl');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setScissorTest(true);
+
+  const scene = new THREE.Scene();
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x445066, 0.85));
+  const dl = new THREE.DirectionalLight(0xffffff, 0.8);
+  dl.position.set(-1.5, 3, 2); scene.add(dl);
+
+  const mat = (c, o={}) => new THREE.MeshStandardMaterial(Object.assign({color:c, roughness:.6, metalness:.05}, o));
+  const M = {
+    skin: mat(0xe8b896), shirt: mat(0x2f6df6), pants: mat(0x2b303b),
+    bench: mat(0x3a3f4b), pad: mat(0x1d2027), bar: mat(0xc9ced6,{metalness:.8,roughness:.3}),
+    plate: mat(0x6b7280,{transparent:true,opacity:0.28,depthWrite:false}), arm: mat(0xe8b896), joint: mat(0xffffff),
+    elbow: mat(0xffb020,{emissive:0x553300}), wrist: mat(0x34d3ee,{emissive:0x0a4a55}),
+    floor: mat(0x1a1e26)
+  };
+
+  // 単位長の円柱（y方向）を2点間に張る
+  const cylGeo = new THREE.CylinderGeometry(1,1,1,16);
+  const UP = new THREE.Vector3(0,1,0);
+  function makeLimb(material, r){
+    const m = new THREE.Mesh(cylGeo, material); m.userData.r = r; scene.add(m); return m;
+  }
+  function setLimb(m, a, b){
+    const d = new THREE.Vector3().subVectors(b, a), len = d.length();
+    m.position.copy(a).addScaledVector(d, .5);
+    m.quaternion.setFromUnitVectors(UP, d.normalize());
+    m.scale.set(m.userData.r, len, m.userData.r);
+  }
+  const sphere = (mt, r) => { const m = new THREE.Mesh(new THREE.SphereGeometry(r,20,16), mt); scene.add(m); return m; };
+  const box = (mt, w,h,d, x,y,z) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mt); m.position.set(x,y,z); scene.add(m); return m; };
+
+  // ---------- 床・ベンチ ----------
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(4,3), M.floor);
+  floor.rotation.x = -Math.PI/2; floor.position.set(0.4,-0.46,0); scene.add(floor);
+  const grid = new THREE.GridHelper(4, 16, 0x39414f, 0x252b35); grid.position.set(0.4,-0.459,0); scene.add(grid);
+
+  box(M.pad,  1.35, 0.06, 0.30, 0.3, -0.03, 0);       // ベンチ上面 y=0
+  box(M.bench,0.08, 0.40, 0.26, -0.15,-0.26, 0);
+  box(M.bench,0.08, 0.40, 0.26,  0.80,-0.26, 0);
+  box(M.bench,1.25, 0.03, 0.05, 0.3,-0.45, 0);
+
+  // ---------- 人体（寝ている） ----------
+  const torso = new THREE.Mesh(new THREE.CylinderGeometry(1,1,0.62,28), M.shirt);
+  torso.rotation.z = Math.PI/2; torso.scale.set(0.135, 1, 0.19); // y→厚み、z→幅
+  torso.position.set(0.27, 0.135, 0); scene.add(torso);
+  const head = sphere(M.skin, 0.105); head.position.set(-0.30, 0.17, 0);
+  const neck = sphere(M.skin, 0.05);  neck.position.set(-0.12, 0.13, 0);
+  const pelvis = new THREE.Mesh(new THREE.CylinderGeometry(1,1,0.2,20), M.pants);
+  pelvis.rotation.z = Math.PI/2; pelvis.scale.set(0.12,1,0.17); pelvis.position.set(0.62,0.12,0); scene.add(pelvis);
+
+  const legs = [];
+  for (const s of [1,-1]) {
+    const hip = new THREE.Vector3(0.62, 0.12, s*0.10);
+    const knee = new THREE.Vector3(1.0, 0.42, s*0.12);
+    const foot = new THREE.Vector3(1.12,-0.43, s*0.15);
+    const t = makeLimb(M.pants, 0.06), c = makeLimb(M.pants, 0.048);
+    setLimb(t, hip, knee); setLimb(c, knee, foot);
+    sphere(M.pants, 0.06).position.copy(knee);
+    box(M.bench, 0.26, 0.04, 0.11, foot.x+0.07, foot.y-0.01, foot.z);
+  }
+
+  // ---------- 腕＋バー ----------
+  const arms = [1,-1].map(s => ({
+    s,
+    upper: makeLimb(M.arm, 0.045), fore: makeLimb(M.arm, 0.038),
+    sh: sphere(M.joint, 0.058), el: sphere(M.elbow, 0.052), wr: sphere(M.wrist, 0.044),
+    // ガイド
+    gSide: makeLimb(new THREE.MeshBasicMaterial({color:0x34d3ee}), 0.006),
+    gDrop: makeLimb(new THREE.MeshBasicMaterial({color:0x6b5a2a}), 0.004),
+    gTorso: makeLimb(new THREE.MeshBasicMaterial({color:0xffffff}), 0.006),
+    gArm: makeLimb(new THREE.MeshBasicMaterial({color:0xffb020}), 0.007),
+    arc: null, label: null
+  }));
+
+  const barGroup = new THREE.Group(); scene.add(barGroup);
+  const barMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.014,0.014,1.5,16), M.bar);
+  barMesh.rotation.x = Math.PI/2; barGroup.add(barMesh);
+  for (const s of [1,-1]) for (const o of [0.60,0.65]) {
+    const p = new THREE.Mesh(new THREE.CylinderGeometry(0.2,0.2,0.04,32), M.plate);
+    p.rotation.x = Math.PI/2; p.position.z = s*o; barGroup.add(p);
+  }
+
+  // 角度の円弧と数字ラベル
+  function makeLabel(){
+    const cv = document.createElement('canvas'); cv.width = 192; cv.height = 96;
+    const tex = new THREE.CanvasTexture(cv);
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, depthTest:false, transparent:true}));
+    sp.scale.set(0.26,0.13,1); sp.renderOrder = 10; scene.add(sp);
+    return {cv, tex, sp, text:''};
+  }
+  function drawLabel(l, text){
+    if (l.text === text) return; l.text = text;
+    const g = l.cv.getContext('2d'); g.clearRect(0,0,192,96);
+    g.font = '700 64px -apple-system,sans-serif'; g.textAlign='center'; g.textBaseline='middle';
+    g.lineWidth = 8; g.strokeStyle = '#000'; g.strokeText(text, 96, 48);
+    g.fillStyle = '#ffb020'; g.fillText(text, 96, 48); l.tex.needsUpdate = true;
+  }
+  const ARC_N = 32;
+  for (const a of arms) {
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array((ARC_N+1)*3), 3));
+    a.arc = new THREE.Line(g, new THREE.LineBasicMaterial({color:0xffb020}));
+    a.arc.frustumCulled = false; scene.add(a.arc);
+    a.label = makeLabel();
+  }
+
+  // ---------- 姿勢計算 ----------
+  // u: 0=ボトム, 1=トップ
+  const V = (x,y,z) => new THREE.Vector3(x,y,z);
+  const readDx = document.getElementById('dx'), readAng = document.getElementById('dang');
+
+  function pose(u){
+    const th = armAngle * Math.PI/180, cs = Math.cos(th), sn = Math.sin(th);
+    const dy = DY_BOTTOM + (DY_TOP - DY_BOTTOM) * u;
+    const k = Math.sqrt(Math.max(Lu*Lu - dy*dy, 0));          // 上腕の水平投影長
+    const ex = k*cs;                                           // 肘のx（足方向）
+    const ezOff = k*sn;                                        // 肘の外側への張り出し
+    const ey = SH_Y + dy;
+    const dz = GRIP_Z - (SH_Z + ezOff);
+    const vert = Math.sqrt(Math.max(Lf*Lf - dz*dz, 0));        // 前腕の鉛直成分
+    const wy = ey + vert;                                      // 手首の高さ
+    let measAng = 0, measDx = 0;
+
+    for (const a of arms) {
+      const s = a.s;
+      const S = V(0, SH_Y, s*SH_Z), E = V(ex, ey, s*(SH_Z+ezOff)), W = V(ex, wy, s*GRIP_Z);
+      a.sh.position.copy(S); a.el.position.copy(E); a.wr.position.copy(W);
+      setLimb(a.upper, S, E); setLimb(a.fore, E, W);
+
+      // 横から：肘から真上へ伸ばすガイド（手首がこの線上に乗る）
+      setLimb(a.gSide, E, V(ex, ey+0.62, E.z));
+
+      // 上から：高さ GUIDE_Y に投影したガイドと角度円弧
+      const PS = V(0, GUIDE_Y, S.z), PE = V(E.x, GUIDE_Y, E.z);
+      setLimb(a.gDrop, E, PE);
+      setLimb(a.gTorso, PS, V(0.5, GUIDE_Y, S.z));
+      const ext = PE.clone().sub(PS).normalize().multiplyScalar(0.5);
+      setLimb(a.gArm, PS, PS.clone().add(ext));
+
+      const pos = a.arc.geometry.attributes.position, R = 0.22;
+      for (let i=0;i<=ARC_N;i++){
+        const t = th*i/ARC_N;
+        pos.setXYZ(i, R*Math.cos(t), GUIDE_Y, S.z + s*R*Math.sin(t));
+      }
+      pos.needsUpdate = true;
+      const mid = th/2;
+      a.label.sp.position.set(0.34*Math.cos(mid), GUIDE_Y+0.01, S.z + s*0.34*Math.sin(mid) - s*0.0);
+
+      // 実測（描画した幾何から算出）
+      const upper = E.clone().sub(S);
+      measAng = Math.atan2(Math.abs(upper.z), upper.x) * 180/Math.PI;
+      measDx = (W.x - E.x) * 100;
+    }
+    barGroup.position.set(ex, wy, 0);
+    const txt = Math.round(armAngle) + '°';
+    for (const a of arms) drawLabel(a.label, txt);
+    readDx.textContent = Math.abs(measDx).toFixed(1) + ' cm';
+    readAng.textContent = measAng.toFixed(1) + '°';
+  }
+
+  // ---------- カメラ・ビュー ----------
+  const bg = {main:0x0f1115, side:0x12161c, top:0x12161c};
+  const camMain = new THREE.PerspectiveCamera(40, 1, 0.05, 50);
+  camMain.position.set(1.9, 1.3, 2.1);
+  const controls = new THREE.OrbitControls(camMain, document.getElementById('v-main'));
+  controls.target.set(0.3, 0.3, 0); controls.enableDamping = true; controls.update();
+
+  function fitOrtho(cam, w, h, halfH, cx, cy){
+    const asp = w/h, hh = halfH, hw = hh*asp;
+    cam.left = cx-hw; cam.right = cx+hw; cam.top = cy+hh; cam.bottom = cy-hh;
+    cam.updateProjectionMatrix();
+  }
+
+  const views = [
+    {el:document.getElementById('v-main'), cam:camMain, bg:bg.main}
+  ];
+  // 上から見た図のときだけ角度ガイドを見やすくするため、床グリッドは両方に残す
+  function render(){
+    const W = innerWidth, H = innerHeight;
+    renderer.setSize(W, H, false);
+    for (const v of views){
+      const r = v.el.getBoundingClientRect();
+      const w = Math.max(1, Math.floor(r.width)), h = Math.max(1, Math.floor(r.height));
+      if (v.fit) v.fit(w,h); else { v.cam.aspect = w/h; v.cam.updateProjectionMatrix(); }
+      const x = Math.floor(r.left), y = Math.floor(H - r.bottom);
+      renderer.setViewport(x,y,w,h); renderer.setScissor(x,y,w,h);
+      renderer.setClearColor(v.bg, 1);
+      renderer.render(scene, v.cam);
+    }
+  }
+
+  // ---------- 視点プリセット ----------
+  const PRESETS = {
+    diag:{p:[1.9,1.3,2.1], t:[0.3,0.3,0]},
+    side:{p:[0.3,0.3,2.8], t:[0.3,0.3,0]},
+    top: {p:[0.3,3.0,0.001], t:[0.3,0.0,0]},
+    head:{p:[-2.4,0.55,0], t:[0.3,0.3,0]},
+    foot:{p:[2.9,0.55,0], t:[0.3,0.3,0]}
+  };
+  let tween = null;
+  document.querySelectorAll('#cams [data-cam]').forEach(b => b.onclick = () => {
+    const pr = PRESETS[b.dataset.cam];
+    tween = {t:0, p0:camMain.position.clone(), t0:controls.target.clone(),
+             p1:new THREE.Vector3(...pr.p), t1:new THREE.Vector3(...pr.t)};
+  });
+  controls.addEventListener('start', () => tween = null);
+  document.getElementById('btn-rot').onclick = e => {
+    controls.autoRotate = !controls.autoRotate;
+    e.target.style.borderColor = controls.autoRotate ? 'var(--accent)' : '';
+  };
+  controls.autoRotateSpeed = 2.0;
+  function stepTween(dt){
+    if (!tween) return;
+    tween.t = Math.min(1, tween.t + dt/0.7);
+    const k = tween.t*tween.t*(3-2*tween.t);
+    camMain.position.lerpVectors(tween.p0, tween.p1, k);
+    controls.target.lerpVectors(tween.t0, tween.t1, k);
+    if (tween.t >= 1) tween = null;
+  }
+
+  // ---------- UI ----------
+  const btnPlay = document.getElementById('btn-play'), posEl = document.getElementById('pos');
+  const spdEl = document.getElementById('spd'), angEl = document.getElementById('ang'), angV = document.getElementById('ang-v');
+  btnPlay.onclick = () => { playing = !playing; btnPlay.textContent = playing ? '⏸ 一時停止' : '▶ 再生'; };
+  posEl.oninput = () => { playing = false; btnPlay.textContent = '▶ 再生'; manualU = posEl.value/100; };
+  spdEl.oninput = () => speed = +spdEl.value;
+  angEl.oninput = () => { armAngle = +angEl.value; angV.textContent = armAngle + '°'; };
+  document.getElementById('btn-60').onclick = () => { armAngle = 60; angEl.value = 60; angV.textContent = '60°'; };
+
+  // 1サイクル：下ろす(1.6s) → 胸で一瞬止める(0.3s) → 挙げる(1.2s) → トップで止める(0.4s)
+  const seq = [[1.6,1,0],[0.3,0,0],[1.2,0,1],[0.4,1,1]];
+  const total = seq.reduce((a,b)=>a+b[0],0);
+  const ease = t => t*t*(3-2*t);
+  function uAt(t){
+    t = t % total;
+    // seq: [長さ, 開始値の記号, 終了値の記号] を u に変換
+    const segs = [[1.6,1,0],[0.3,0,0],[1.2,0,1],[0.4,1,1]];
+    for (const [d,a,b] of segs){
+      if (t < d) return a + (b-a)*ease(t/d);
+      t -= d;
+    }
+    return 0;
+  }
+
+  let last = performance.now();
+  function loop(now){
+    const dt = Math.min((now-last)/1000, 0.1); last = now;
+    let u;
+    if (playing){ clock += dt*speed; u = uAt(clock); posEl.value = Math.round(u*100); }
+    else u = manualU;
+    pose(u);
+    stepTween(dt);
+    controls.update();
+    render();
+    requestAnimationFrame(loop);
+  }
+  clock = 1.6;                 // トップから開始
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
