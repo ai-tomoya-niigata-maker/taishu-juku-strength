@@ -73,7 +73,7 @@ canvas:active{cursor:grabbing}
 (function(){
 var FORMS={
  ok:{name:'正しいフォーム',col:'#f6c90e',cam:'side',head:'胴体を立て、バーは足の中心の真上を通ります。',
-   pts:['胴体の傾きが小さい（約17°）','肘が高く、バーが肩の前に乗る','膝がつま先と同じ向きに開く','バーの軌道が足の中心の真上を垂直に動く']},
+   pts:['膝と股関節の屈曲角度が同じ（すねと胴体が平行）','肘が高く、バーが肩の前に乗る','膝がつま先と同じ向きに開く','バーの軌道が足の中心の真上を垂直に動く']},
  lean:{name:'NG：前傾',col:'#f87171',cam:'side',head:'胴体が前に倒れ、バーが足の中心より前へ流れます。',
    pts:['バーが前に出て、腰に負担がかかる','足裏全体で踏めず、前足部に体重が逃げる','対策：肘を上げて胸を立て、肋骨を下げる','対策：股関節と膝を同時に曲げ始める']},
  knee:{name:'NG：ニーイン',col:'#f87171',cam:'front',head:'しゃがむほど膝が内に入ります。正面から確認します。',
@@ -116,8 +116,13 @@ function proj(p){var q=ry(p,yaw);q=rx(q,-pitch);var k=D/(D-q[2]);return [CX+q[0]
 // u: 0=立位 1=ボトム
 function pose(f,u){
   var ankY=-1.04, phi=.42*u, th=1.5*u, lam=.30*u, kin=0, elbowDrop=0;
+  var MF=.085;
   if(f==='lean'){th=1.58*u;lam=.88*u;phi=.38*u}
   if(f==='knee'){kin=.62*u}
+  if(f==='ok'||f==='knee'){ // 膝の屈曲＝股関節の屈曲（すねと胴体が平行）かつバーが足の中心の真上
+    var lo0=0,hi0=1;for(var j=0;j<30;j++){var m0=(lo0+hi0)/2;(1.36*Math.sin(m0)+.085*(Math.cos(m0)-1)-.52*Math.sin(th)>0)?hi0=m0:lo0=m0}
+    phi=lam=lo0;
+  }
   if(f==='elbow'){elbowDrop=u;lam=.42*u}
   var kY=ankY+.52*Math.cos(phi),kZ=.52*Math.sin(phi);
   var hY=kY+.52*Math.cos(th),hZ=kZ-.52*Math.sin(th);
@@ -132,8 +137,8 @@ function pose(f,u){
   J.shL=U([-.27,.76,0]);J.shR=U([.27,.76,0]);
   var ey=.8-.34*elbowDrop, ez=.3-.12*elbowDrop;
   J.elL=U([-.31,ey,ez]);J.elR=U([.31,ey,ez]);
-  J.haL=U([-.2,.84,.1]);J.haR=U([.2,.84,.1]);
-  J.bar=U([0,.84,.12]);
+  J.haL=U([-.2,.84,.07]);J.haR=U([.2,.84,.07]);
+  J.bar=U([0,.84,MF]);
   J.lam=lam;
   return J;
 }
@@ -144,6 +149,16 @@ function drawPlane(){
   var a=1.15,q=[[0,-1.2,-a],[0,-1.2,a],[0,1.25,a],[0,1.25,-a]].map(proj);
   g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<4;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
   g.fillStyle='rgba(246,201,14,.08)';g.fill();g.lineWidth=2;g.strokeStyle='rgba(246,201,14,.55)';g.stroke();
+}
+function ang2(c,p){return Math.atan2(p[2]-c[2],p[1]-c[1])}
+function wedge(c,pa,pb,col,label){
+  var a1=ang2(c,pa),a2=ang2(c,pb),d=a2-a1;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;
+  var r=.27,pts=[proj(c)];for(var i=0;i<=18;i++){var a=a1+d*i/18;pts.push(proj([c[0],c[1]+r*Math.cos(a),c[2]+r*Math.sin(a)]))}
+  g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();
+  g.fillStyle=col==='#f6c90e'?'rgba(246,201,14,.38)':'rgba(248,113,113,.38)';g.fill();g.lineWidth=3;g.strokeStyle=col;g.stroke();
+  var am=a1+d/2,lp=proj([c[0],c[1]+(r+.2)*Math.cos(am),c[2]+(r+.2)*Math.sin(am)]);
+  g.font='900 '+Math.max(11,W*.017)+'px "Noto Sans JP",sans-serif';g.fillStyle=col;g.textAlign='center';g.fillText(label,lp[0],lp[1]);
+  return Math.round(180-Math.abs(d)*180/Math.PI);
 }
 function line(a,b,w,col){g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineWidth=w;g.strokeStyle=col;g.lineCap='round';g.stroke()}
 function disc(c,r,col){var pts=[];for(var i=0;i<28;i++){var a=i/28*Math.PI*2;pts.push(proj([c[0],c[1]+r*Math.cos(a),c[2]+r*Math.sin(a)]))}
@@ -181,12 +196,18 @@ function frame(ts){
   disc([b[0]-.5,b[1],b[2]],.15,'#f6c90e');disc([b[0]+.5,b[1],b[2]],.15,'#f6c90e');
   g.beginPath();g.arc(Q.head[0],Q.head[1],22*sc*Q.head[3],0,Math.PI*2);g.fillStyle='#0a0e1a';g.fill();g.lineWidth=5*sc+2;g.strokeStyle=col;g.stroke();
   [Q.chest,Q.pelvis].forEach(function(p){g.beginPath();g.arc(p[0],p[1],7*sc*p[3]+2,0,Math.PI*2);g.fillStyle=acc;g.fill()});
+  // 膝と股関節の屈曲角度
+  var kc=[0,J.kneeL[1],J.kneeL[2]],ac=[0,-1.04,0],hc=[0,J.pelvis[1],J.pelvis[2]],ch=[0,J.chest[1],J.chest[2]];
+  var kf=Math.round(180-Math.abs(((function(){var a1=ang2(kc,ac),a2=ang2(kc,hc),d=a2-a1;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return d})())*180/Math.PI));
+  var hf=Math.round(180-Math.abs(((function(){var a1=ang2(hc,kc),a2=ang2(hc,ch),d=a2-a1;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return d})())*180/Math.PI));
+  var same=Math.abs(kf-hf)<=6, wc=same?'#f6c90e':'#f87171';
+  if(u>.04){wedge(kc,ac,hc,wc,'膝 '+kf+'°');wedge(hc,kc,ch,wc,'股関節 '+hf+'°')}
   // 数値
-  var lean=Math.round(J.lam*180/Math.PI), gap=Math.round((b[2]-MIDFOOT)*82);
-  var leanBad=lean>26, gapBad=Math.abs(gap)>8;
+  var gap=Math.round((b[2]-MIDFOOT)*82), gapBad=Math.abs(gap)>8;
   var fs=Math.max(12,W*.022);g.font='900 '+fs+'px "Noto Sans JP",sans-serif';g.textAlign='left';
-  g.fillStyle=leanBad?'#f87171':'#f6c90e';g.fillText('胴体の傾き　'+lean+'°',W*.04,H*.09);
-  g.fillStyle=gapBad?'#f87171':'#f6c90e';g.fillText('バーのズレ　'+(gap>0?'前へ ':gap<0?'後ろへ ':'')+Math.abs(gap)+'cm',W*.04,H*.09+fs*1.5);
+  g.fillStyle=wc;g.fillText('膝の屈曲　'+kf+'°',W*.04,H*.09);
+  g.fillText('股関節の屈曲　'+hf+'°　'+(same?'＝ 同じ角度':'≠ 差 '+Math.abs(kf-hf)+'°'),W*.04,H*.09+fs*1.5);
+  g.fillStyle=gapBad?'#f87171':'#f6c90e';g.fillText('バーのズレ　'+(gap>0?'前へ ':gap<0?'後ろへ ':'')+Math.abs(gap)+'cm',W*.04,H*.09+fs*3);
   g.font='700 '+Math.max(10,W*.015)+'px "Noto Sans JP",sans-serif';g.fillStyle='rgba(248,250,252,.75)';
   var mp=proj([0,1.25,MIDFOOT]);g.textAlign='center';g.fillText('足の中心',mp[0],mp[1]-8);
   requestAnimationFrame(frame);
