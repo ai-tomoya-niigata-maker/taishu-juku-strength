@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>ワンハンドダンベルプレス 3D図</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#161a21; --line:#2a303b; --text:#eef1f5; --sub:#9aa4b2;
+    --accent:#ffb020; --cyan:#34d3ee; --ok:#4ade80; --ng:#ff5a5f;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--text);
+    font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;overflow:hidden}
+  #gl{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+  .app{position:relative;z-index:1;height:100%;display:grid;grid-template-rows:auto 1fr;gap:8px;padding:10px 16px 14px}
+  header{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+  h1{font-size:17px;margin:0;font-weight:700;letter-spacing:.02em}
+  h1 span{color:var(--accent)}
+  .ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:13px;color:var(--sub)}
+  .ctrl label{display:flex;align-items:center;gap:6px}
+  button{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;
+    padding:6px 12px;font-size:13px;cursor:pointer}
+  button:hover{border-color:var(--accent)}
+  button.on{border-color:var(--accent);background:#2a2314}
+  input[type=range]{accent-color:var(--accent);width:120px}
+  input[type=checkbox]{accent-color:var(--accent)}
+  .val{color:var(--text);font-variant-numeric:tabular-nums;min-width:3.2em;display:inline-block}
+  .views{display:grid;min-height:0;grid-template-columns:1fr;grid-template-rows:1fr}
+  .view{position:relative;border:1px solid var(--line);border-radius:12px;min-height:0;overflow:hidden}
+  .tag{position:absolute;left:10px;top:8px;font-size:12px;font-weight:700;color:var(--sub);pointer-events:none}
+  .read{position:absolute;left:10px;bottom:8px;max-width:calc(100% - 20px);line-height:1.6;font-size:13px;font-weight:700;pointer-events:none;
+    background:rgba(15,17,21,.78);padding:6px 12px;border-radius:8px}
+  #msg.hold{color:var(--accent)} #msg.free{color:var(--ng)}
+  #inset{position:absolute;right:10px;top:8px;width:280px;height:210px;pointer-events:none}
+  @media (max-width:760px){ h1{font-size:15px} #inset{width:210px;height:158px} }
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="app">
+  <header>
+    <h1>ワンハンドダンベルプレス <span>アンチローテーション 3D図</span></h1>
+    <div class="ctrl">
+      <button id="m-hold" class="on">通常（体幹で止めている）</button>
+      <button id="m-free">体幹を抜くと…（ダンベル側へ傾く）</button>
+      <label>止める力 <input id="hold" type="range" min="0" max="100" step="1" value="100"><span class="val" id="hold-v">100%</span></label>
+      <label><input id="vis" type="checkbox" checked> 体の中の負荷を表示</label>
+    </div>
+    <div class="ctrl">
+      <button id="btn-play">⏸ 一時停止</button>
+      <label>位置 <input id="pos" type="range" min="0" max="100" value="0"></label>
+      <label>速さ <input id="spd" type="range" min="0.3" max="2" step="0.1" value="1"></label>
+    </div>
+    <div class="ctrl" id="cams">
+      <span>視点</span>
+      <button data-cam="diag">斜め</button>
+      <button data-cam="side">真横</button>
+      <button data-cam="top">真上</button>
+      <button data-cam="head">頭側</button>
+      <button data-cam="foot">足側</button>
+      <button id="btn-rot">⟳ 自動回転</button>
+    </div>
+  </header>
+  <div class="views">
+    <div class="view" id="v-main">
+      <div class="tag">ドラッグで回転／ホイールでズーム</div>
+      <canvas id="inset"></canvas>
+      <div class="read"><span id="msg" class="hold"></span></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(() => {
+  // ---------- 寸法 (m) ----------
+  // x: 頭→足方向(+x が足側), y: 上, z: 左右（+z がダンベル側）。肩を原点(x=0)にする
+  const Lu = 0.30, Lf = 0.27;             // 上腕・前腕
+  const SH_Z = 0.19, SH_Y = 0.15;         // 肩の位置
+  const DY_BOTTOM = -0.13, DY_TOP = 0.27; // 肩に対する肘の高さ（ボトム→トップ）
+  const ARM_ANG = 40 * Math.PI/180;       // 脇の角度
+  // ボトムで「肘の真上に手首」になる左右位置。ダンベルはこの位置を天井へまっすぐ上下する
+  const GRIP_Z = SH_Z + Math.sqrt(Lu*Lu - DY_BOTTOM*DY_BOTTOM) * Math.sin(ARM_ANG);
+  const Y0 = 0.135;                       // 体幹の回転軸の高さ（体の中心）
+  const PELV_MAX = 18 * Math.PI/180;      // 体幹を抜いたとき、骨盤が逆側へ捻れる角（見せ方用）
+  const TILT_MAX = 25 * Math.PI/180;      // 体幹を抜いたとき、肩ラインがダンベル側へ傾く角（見せ方用）
+
+  let hold = 1, holdTarget = 1;           // 体幹で止める力 1=100%
+  let showLoad = true;
+  let playing = true, speed = 1, manualU = 0, clock = 0, tnow = 0;
+
+  // ---------- three 基本 ----------
+  const canvas = document.getElementById('gl');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setScissorTest(true);
+
+  const scene = new THREE.Scene();
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x445066, 0.85));
+  const dl = new THREE.DirectionalLight(0xffffff, 0.8);
+  dl.position.set(-1.5, 3, 2); scene.add(dl);
+
+  const mat = (c, o={}) => new THREE.MeshStandardMaterial(Object.assign({color:c, roughness:.6, metalness:.05}, o));
+  const glass = c => mat(c, {transparent:true, opacity:0.55, depthWrite:false});
+  const M = {
+    skin: mat(0xe8b896), shirt: glass(0x2f6df6), shirt2: glass(0x2a5fd6), shirt3: glass(0x2552b8), pants: mat(0x2b303b),
+    bench: mat(0x3a3f4b), pad: mat(0x1d2027), db: mat(0x8d94a0,{metalness:.7,roughness:.35}),
+    dbHandle: mat(0xc9ced6,{metalness:.8,roughness:.3}), arm: mat(0xe8b896), joint: mat(0xffffff),
+    elbow: mat(0xffb020,{emissive:0x553300}), wrist: mat(0x34d3ee,{emissive:0x0a4a55}),
+    floor: mat(0x1a1e26)
+  };
+
+  const cylGeo = new THREE.CylinderGeometry(1,1,1,16);
+  const UP = new THREE.Vector3(0,1,0);
+  function makeLimb(material, r){
+    const m = new THREE.Mesh(cylGeo, material); m.userData.r = r; scene.add(m); return m;
+  }
+  function setLimb(m, a, b){
+    const d = new THREE.Vector3().subVectors(b, a), len = d.length();
+    m.position.copy(a).addScaledVector(d, .5);
+    m.quaternion.setFromUnitVectors(UP, d.normalize());
+    m.scale.set(m.userData.r, len, m.userData.r);
+  }
+  const sphere = (mt, r) => { const m = new THREE.Mesh(new THREE.SphereGeometry(r,20,16), mt); scene.add(m); return m; };
+  const box = (mt, w,h,d, x,y,z) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mt); m.position.set(x,y,z); scene.add(m); return m; };
+  const V = (x,y,z) => new THREE.Vector3(x,y,z);
+  // 体幹の長軸(x軸, 高さY0)まわりに th だけ回す。th>0 でダンベル側(+z)が下がる
+  function rotX(v, th){
+    const y = v.y - Y0, z = v.z, c = Math.cos(th), s = Math.sin(th);
+    return V(v.x, Y0 + y*c - z*s, y*s + z*c);
+  }
+
+  // ---------- 床・ベンチ ----------
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(4,3), M.floor);
+  floor.rotation.x = -Math.PI/2; floor.position.set(0.4,-0.46,0); scene.add(floor);
+  const grid = new THREE.GridHelper(4, 16, 0x39414f, 0x252b35); grid.position.set(0.4,-0.459,0); scene.add(grid);
+
+  box(M.pad,  1.35, 0.06, 0.30, 0.3, -0.03, 0);
+  box(M.bench,0.08, 0.40, 0.26, -0.15,-0.26, 0);
+  box(M.bench,0.08, 0.40, 0.26,  0.80,-0.26, 0);
+  box(M.bench,1.25, 0.03, 0.05, 0.3,-0.45, 0);
+
+  // ---------- 人体（寝ている） ----------
+  // 体幹を3つに分ける。体幹を抜いたとき、胸はダンベル側へ傾き、骨盤は逆側へ捻れる（間の腹・腰は両方のつなぎ）
+  const slices = [
+    {x0:-0.04, x1:0.21, k:1.00, mt:M.shirt},
+    {x0: 0.20, x1:0.41, k:0.50, mt:M.shirt2},
+    {x0: 0.40, x1:0.58, k:0.12, mt:M.shirt3}
+  ];
+  for (const s of slices) {
+    const g = new THREE.Group(); g.position.set(0, Y0, 0); scene.add(g);
+    const len = s.x1 - s.x0 + 0.012;
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(1,1,len,28), s.mt);
+    m.rotation.z = Math.PI/2; m.scale.set(0.135,1,0.19);
+    m.position.set((s.x0+s.x1)/2, 0, 0); g.add(m);
+    s.g = g;
+  }
+  // 体の中の「体幹」：負荷がかかっているほど橙に光る（見えない力の見える化）
+  const coreMat = new THREE.MeshBasicMaterial({color:0xffb020, transparent:true, opacity:0, depthWrite:false});
+  const core = new THREE.Mesh(new THREE.CylinderGeometry(0.075,0.075,0.62,20), coreMat);
+  core.rotation.z = Math.PI/2; core.position.set(0.27, Y0, 0); core.renderOrder = 3; scene.add(core);
+
+  const head = sphere(M.skin, 0.105); head.position.set(-0.30, 0.17, 0);
+  const neck = sphere(M.skin, 0.05);  neck.position.set(-0.12, 0.13, 0);
+  const pelvisG = new THREE.Group(); pelvisG.position.set(0, Y0, 0); scene.add(pelvisG);
+  const pelvis = new THREE.Mesh(new THREE.CylinderGeometry(1,1,0.2,20), M.pants);
+  pelvis.rotation.z = Math.PI/2; pelvis.scale.set(0.12,1,0.17); pelvis.position.set(0.62,0.12-Y0,0); pelvisG.add(pelvis);
+
+  const legs = [];
+  for (const s of [1,-1]) {
+    const hip = V(0.62, 0.12, s*0.10), knee = V(1.0, 0.42, s*0.12), foot = V(1.12,-0.43, s*0.15);
+    const t = makeLimb(M.pants, 0.06), c = makeLimb(M.pants, 0.048);
+    legs.push({t, hip, knee});
+    setLimb(c, knee, foot);
+    sphere(M.pants, 0.06).position.copy(knee);
+    box(M.bench, 0.26, 0.04, 0.11, foot.x+0.07, foot.y-0.01, foot.z);
+  }
+
+  // ---------- 肩ライン・骨盤ライン ----------
+  const lineMat = (c, o=1) => new THREE.MeshBasicMaterial({color:c, depthTest:false, transparent:true, opacity:o});
+  const shLine = makeLimb(lineMat(0xffb020), 0.011); shLine.renderOrder = 6;
+  const hipLine = makeLimb(lineMat(0x34d3ee), 0.011); hipLine.renderOrder = 5;
+    // 「止めていなかったら傾く」位置（赤いゴースト）
+  const ghostMat = lineMat(0xff5a5f, 0);
+  const ghostLine = makeLimb(ghostMat, 0.011); ghostLine.renderOrder = 4;
+  const ghostDot = new THREE.Mesh(new THREE.SphereGeometry(0.03,16,12), ghostMat); ghostDot.renderOrder = 4; scene.add(ghostDot);
+
+  // ---------- 体幹まわりの力の矢印（赤＝かかる力／緑＝止める力） ----------
+  function arcArrow(R, color, headAtStart){
+    const g = new THREE.Group(); g.position.set(0.09, Y0, 0); g.rotation.y = -Math.PI/2; scene.add(g);
+    const a0 = -40*Math.PI/180, a1 = 8*Math.PI/180;
+    const m = lineMat(color, 0);
+    const torus = new THREE.Mesh(new THREE.TorusGeometry(R, 0.009, 8, 28, a1-a0), m);
+    torus.rotation.z = a0; torus.renderOrder = 7; g.add(torus);
+    const ang = headAtStart ? a0 : a1, sgn = headAtStart ? -1 : 1;
+    const cone = new THREE.Mesh(new THREE.ConeGeometry(0.03,0.07,14), m); cone.renderOrder = 7;
+    cone.position.set(R*Math.cos(ang), R*Math.sin(ang), 0);
+    const tan = new THREE.Vector3(-Math.sin(ang)*sgn, Math.cos(ang)*sgn, 0);
+    cone.quaternion.setFromUnitVectors(UP, tan);
+    g.add(cone);
+    return m;
+  }
+  const redArrowMat = arcArrow(0.31, 0xff5a5f, true);    // ダンベル側が下へ引かれる
+  const greenArrowMat = arcArrow(0.25, 0x4ade80, false); // 体幹で押し返す
+
+  // ---------- 腕＋ダンベル ----------
+  const press = {upper: makeLimb(M.arm, 0.045), fore: makeLimb(M.arm, 0.038),
+    sh: sphere(M.joint, 0.058), el: sphere(M.elbow, 0.052), wr: sphere(M.wrist, 0.044)};
+  const rest  = {upper: makeLimb(M.arm, 0.045), fore: makeLimb(M.arm, 0.038),
+    sh: sphere(M.joint, 0.058), el: sphere(M.elbow, 0.052), wr: sphere(M.wrist, 0.044)};
+
+  const dbGroup = new THREE.Group(); scene.add(dbGroup);
+  const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.014,0.014,0.17,16), M.dbHandle);
+  handle.rotation.x = Math.PI/2; dbGroup.add(handle);
+  for (const sz of [1,-1]) {
+    const h = new THREE.Mesh(new THREE.CylinderGeometry(0.075,0.075,0.07,6), M.db);
+    h.rotation.x = Math.PI/2; h.position.z = sz*0.12; dbGroup.add(h);
+  }
+
+  // 逆の手のIK（肩と手首の位置から肘を求める）
+  function ik(S, W, hint){
+    const d = W.clone().sub(S); let dist = Math.min(d.length(), Lu+Lf-1e-3); d.normalize();
+    const a = (Lu*Lu - Lf*Lf + dist*dist)/(2*dist), h = Math.sqrt(Math.max(Lu*Lu - a*a, 0));
+    const hp = hint.clone().addScaledVector(d, -hint.dot(d)).normalize();
+    return S.clone().addScaledVector(d, a).addScaledVector(hp, h);
+  }
+
+  // ---------- 姿勢計算 ----------
+  const msg = document.getElementById('msg');
+  const insetCv = document.getElementById('inset');
+
+  function pose(u){
+    const tw = TILT_MAX * (1 - hold);        // 止める力が減った分だけ、肩ラインがダンベル側へ傾く
+
+    const pel = -PELV_MAX * (1 - hold);      // 骨盤は逆側へ捻れる（ダンベル側の骨盤が浮く）
+    slices[0].g.rotation.x = tw;
+    slices[1].g.rotation.x = tw*0.45 + pel*0.35;
+    slices[2].g.rotation.x = pel*0.8;
+    pelvisG.rotation.x = pel;
+    for (const l of legs) setLimb(l.t, rotX(l.hip, pel), l.knee);
+    setLimb(hipLine, rotX(V(0.62, 0.12, -0.24), pel), rotX(V(0.62, 0.12, 0.24), pel));
+
+    // --- ダンベル側（押す腕） ---
+    // ボトム：肘の真上に手首。ダンベルは GRIP_Z の位置を天井へまっすぐ上下する
+    const cs = Math.cos(ARM_ANG), sn = Math.sin(ARM_ANG);
+    const dy = DY_BOTTOM + (DY_TOP - DY_BOTTOM) * u;
+    const k = Math.sqrt(Math.max(Lu*Lu - dy*dy, 0));
+    const ex = k*cs, ezOff = k*sn, ey = SH_Y + dy;
+    const dz = GRIP_Z - (SH_Z + ezOff);
+    const wy = ey + Math.sqrt(Math.max(Lf*Lf - dz*dz, 0));
+    const S = rotX(V(0, SH_Y, SH_Z), tw);
+    const E = rotX(V(ex, ey, SH_Z + ezOff), tw);
+    const W = rotX(V(ex, wy, GRIP_Z), tw);
+    press.sh.position.copy(S); press.el.position.copy(E); press.wr.position.copy(W);
+    setLimb(press.upper, S, E); setLimb(press.fore, E, W);
+    dbGroup.position.copy(W); dbGroup.rotation.x = tw;
+
+    // --- 逆の手：お腹の上に置く ---
+    const S2 = rotX(V(0, SH_Y, -SH_Z), tw);
+    const W2 = rotX(V(0.30, 0.31, -0.06), tw*0.5);
+    const E2 = ik(S2, W2, V(0,-0.4,-1));
+    rest.sh.position.copy(S2); rest.el.position.copy(E2); rest.wr.position.copy(W2);
+    setLimb(rest.upper, S2, E2); setLimb(rest.fore, E2, W2);
+
+    // --- 肩ライン（橙） ---
+    const c = S.clone().add(S2).multiplyScalar(.5), dd = S.clone().sub(S2);
+    setLimb(shLine, c.clone().addScaledVector(dd, -0.62), c.clone().addScaledVector(dd, 0.62));
+
+    // --- 体の中の負荷の見える化 ---
+    const vis = showLoad ? 1 : 0;
+    const pulse = 0.5 + 0.5*Math.sin(tnow*4);
+    coreMat.opacity = vis * hold * (0.28 + 0.30*pulse);                 // 止めているほど体幹が光る
+    redArrowMat.opacity = vis * (0.55 + 0.4*pulse);                     // ダンベル側へ傾けようとする力
+    greenArrowMat.opacity = vis * hold * (0.55 + 0.4*pulse);            // 体幹で押し返す力
+    // 赤いゴースト：止めていなかったら肩ラインが傾く先
+    const g0 = rotX(V(0, SH_Y, SH_Z), TILT_MAX), g1 = rotX(V(0, SH_Y, -SH_Z), TILT_MAX);
+    const gc = g0.clone().add(g1).multiplyScalar(.5), gd = g0.clone().sub(g1);
+    setLimb(ghostLine, gc.clone().addScaledVector(gd, -0.62), gc.clone().addScaledVector(gd, 0.62));
+    ghostDot.position.copy(g0);
+    ghostMat.opacity = vis * Math.min(1, hold*1.6) * 0.75;
+
+    // --- 表示 ---
+    const deg = tw*180/Math.PI;
+    if (hold > 0.97) {
+      msg.className = 'hold';
+      msg.textContent = '見た目はまっすぐのまま。でも体の中では、肩ラインをダンベル側へ傾けようとする力がかかり続け、体幹で止めている';
+    } else if (hold < 0.03) {
+      msg.className = 'free';
+      msg.textContent = '体幹の力を抜くと、肩ラインはダンベル側へ ' + deg.toFixed(0) + '° 傾き、骨盤は逆側へ ' + (-pel*180/Math.PI).toFixed(0) + '° 捻れる ＝ この捻れを止めるのが体幹にかかる負荷';
+    } else {
+      msg.className = 'free';
+      msg.textContent = '止める力 ' + Math.round(hold*100) + '％：肩ラインがダンベル側へ ' + deg.toFixed(0) + '°、骨盤が逆側へ ' + (-pel*180/Math.PI).toFixed(0) + '° 捻れている';
+    }
+    drawInset(tw, deg, pel);
+  }
+
+  // ---------- 頭側から見た断面（2D） ----------
+  function drawInset(tw, deg, pel){
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const W = 280, H = 210;
+    if (insetCv.width !== W*dpr) { insetCv.width = W*dpr; insetCv.height = H*dpr; }
+    const g = insetCv.getContext('2d');
+    g.setTransform(dpr,0,0,dpr,0,0); g.clearRect(0,0,W,H);
+    const S = 300, cx = 140, cy = 122;               // 300px = 1m
+    g.fillStyle = 'rgba(15,17,21,.82)'; g.strokeStyle = '#2a303b'; g.lineWidth = 1;
+    g.beginPath(); g.roundRect ? g.roundRect(.5,.5,W-1,H-1,12) : g.rect(.5,.5,W-1,H-1); g.fill(); g.stroke();
+    g.fillStyle = '#9aa4b2'; g.font = '700 11px -apple-system,sans-serif'; g.textAlign = 'left';
+    g.fillText('頭側から見た断面（イメージ）', 10, 16);
+    g.fillStyle = '#ffb020'; g.fillText('━ 肩ライン', 10, 32);
+    g.fillStyle = '#34d3ee'; g.fillText('━ 骨盤ライン', 10, 46);
+    if (showLoad) { g.fillStyle = '#ff5a5f'; g.fillText('┅ 止めなければ傾く先', 10, 60); }
+
+    // ベンチ
+    g.fillStyle = '#3a3f4b'; g.fillRect(cx-0.15*S, cy+0.135*S, 0.30*S, 7);
+
+    // 骨盤（逆側へ捻れる）
+    g.save(); g.translate(cx, cy); g.rotate(pel);
+    g.fillStyle = 'rgba(43,48,59,.95)'; g.strokeStyle = '#34d3ee'; g.lineWidth = 1.5;
+    g.beginPath(); g.ellipse(0,0,0.17*S,0.12*S,0,0,Math.PI*2); g.fill(); g.stroke();
+    g.restore();
+
+    // 体幹が光る（負荷）
+    const pulse = 0.5 + 0.5*Math.sin(tnow*4);
+    if (showLoad) {
+      g.save(); g.translate(cx, cy);
+      g.fillStyle = 'rgba(255,176,32,' + (hold*(0.25+0.3*pulse)).toFixed(3) + ')';
+      g.beginPath(); g.arc(0,0,0.075*S,0,Math.PI*2); g.fill(); g.restore();
+    }
+
+    // 胸郭（傾く）＋ダンベル側の腕
+    g.save(); g.translate(cx, cy); g.rotate(tw);
+    g.fillStyle = 'rgba(47,109,246,.5)'; g.strokeStyle = '#fff'; g.lineWidth = 1.5;
+    g.beginPath(); g.ellipse(0,0,0.19*S,0.135*S,0,0,Math.PI*2); g.fill(); g.stroke();
+    g.strokeStyle = '#e8b896'; g.lineWidth = 6; g.lineCap = 'round';
+    g.beginPath(); g.moveTo(0.19*S, -0.015*S); g.lineTo(GRIP_Z*S, -0.30*S); g.stroke();
+    g.fillStyle = '#c9ced6'; g.fillRect(GRIP_Z*S-14, -0.30*S-2, 28, 4);
+    g.fillStyle = '#8d94a0'; g.fillRect(GRIP_Z*S-17, -0.30*S-8, 7, 16); g.fillRect(GRIP_Z*S+10, -0.30*S-8, 7, 16);
+    g.restore();
+
+    // 肩ライン（橙）／骨盤ライン（水色）
+    g.lineCap = 'butt';
+    g.save(); g.translate(cx, cy); g.rotate(pel);
+    g.strokeStyle = '#34d3ee'; g.lineWidth = 3; g.beginPath(); g.moveTo(-0.24*S, 0); g.lineTo(0.24*S, 0); g.stroke(); g.restore();
+    g.save(); g.translate(cx, cy);
+    if (showLoad) {   // 止めなければ傾く先（赤の点線）
+      g.save(); g.rotate(TILT_MAX); g.globalAlpha = Math.min(1, hold*1.6)*0.8;
+      g.strokeStyle = '#ff5a5f'; g.lineWidth = 2; g.setLineDash([5,4]);
+      g.beginPath(); g.moveTo(-0.24*S, 0); g.lineTo(0.24*S, 0); g.stroke(); g.restore();
+    }
+    g.rotate(tw);
+    g.strokeStyle = '#ffb020'; g.lineWidth = 2.5; g.beginPath(); g.moveTo(-0.24*S, 0); g.lineTo(0.24*S, 0); g.stroke();
+    g.restore();
+
+    // 力の矢印（ダンベル側で、赤＝下へ引かれる／緑＝押し返す）
+    if (showLoad) {
+      const arrow = (R, a0, a1, ccw, col, a) => {
+        g.globalAlpha = a; g.strokeStyle = col; g.fillStyle = col; g.lineWidth = 3;
+        g.beginPath(); g.arc(cx, cy, R, a0, a1, ccw); g.stroke();
+        const tx = cx + R*Math.cos(a1), ty = cy + R*Math.sin(a1);
+        const dir = a1 + (ccw ? -Math.PI/2 : Math.PI/2);
+        g.beginPath(); g.moveTo(tx + 9*Math.cos(dir), ty + 9*Math.sin(dir));
+        g.lineTo(tx + 6*Math.cos(dir+2.4), ty + 6*Math.sin(dir+2.4));
+        g.lineTo(tx + 6*Math.cos(dir-2.4), ty + 6*Math.sin(dir-2.4)); g.fill(); g.globalAlpha = 1;
+      };
+      arrow(92, -0.15, 0.75, false, '#ff5a5f', 0.9);
+      arrow(78, 0.75, -0.15, true, '#4ade80', 0.9*hold);
+      g.font = '700 11px -apple-system,sans-serif'; g.textAlign = 'center';
+      g.fillStyle = '#ff5a5f'; g.fillText('傾ける力', cx+108, cy+62);
+      g.fillStyle = 'rgba(74,222,128,' + hold.toFixed(2) + ')'; g.fillText('止める力', cx+108, cy+76);
+    }
+
+    // 数値
+    g.textAlign = 'left'; g.fillStyle = '#9aa4b2'; g.font = '700 11px -apple-system,sans-serif';
+    g.fillText('肩の傾き ／ 骨盤の捻れ', 10, 188);
+    g.fillStyle = deg < 3 ? '#4ade80' : '#ff5a5f'; g.font = '700 22px -apple-system,sans-serif';
+    g.fillText(deg.toFixed(0) + '° ／ ' + (-pel*180/Math.PI).toFixed(0) + '°', 10, 206);
+  }
+
+  // ---------- カメラ・ビュー ----------
+  const camMain = new THREE.PerspectiveCamera(40, 1, 0.05, 50);
+  camMain.position.set(1.9, 1.3, 2.1);
+  const controls = new THREE.OrbitControls(camMain, document.getElementById('v-main'));
+  controls.target.set(0.3, 0.3, 0); controls.enableDamping = true; controls.update();
+
+  const vEl = document.getElementById('v-main');
+  function render(){
+    const W = innerWidth, H = innerHeight;
+    renderer.setSize(W, H, false);
+    const r = vEl.getBoundingClientRect();
+    const w = Math.max(1, Math.floor(r.width)), h = Math.max(1, Math.floor(r.height));
+    camMain.aspect = w/h; camMain.updateProjectionMatrix();
+    const x = Math.floor(r.left), y = Math.floor(H - r.bottom);
+    renderer.setViewport(x,y,w,h); renderer.setScissor(x,y,w,h);
+    renderer.setClearColor(0x0f1115, 1);
+    renderer.render(scene, camMain);
+  }
+
+  const PRESETS = {
+    diag:{p:[1.9,1.3,2.1], t:[0.3,0.3,0]},
+    side:{p:[0.3,0.3,2.8], t:[0.3,0.3,0]},
+    top: {p:[0.3,3.0,0.001], t:[0.3,0.0,0]},
+    head:{p:[-2.3,0.9,0.0], t:[0.3,0.3,0]},
+    foot:{p:[2.9,0.55,0], t:[0.3,0.3,0]}
+  };
+  let tween = null;
+  document.querySelectorAll('#cams [data-cam]').forEach(b => b.onclick = () => {
+    const pr = PRESETS[b.dataset.cam];
+    tween = {t:0, p0:camMain.position.clone(), t0:controls.target.clone(),
+             p1:new THREE.Vector3(...pr.p), t1:new THREE.Vector3(...pr.t)};
+  });
+  controls.addEventListener('start', () => tween = null);
+  document.getElementById('btn-rot').onclick = e => {
+    controls.autoRotate = !controls.autoRotate;
+    e.target.style.borderColor = controls.autoRotate ? 'var(--accent)' : '';
+  };
+  controls.autoRotateSpeed = 2.0;
+  function stepTween(dt){
+    if (!tween) return;
+    tween.t = Math.min(1, tween.t + dt/0.7);
+    const k = tween.t*tween.t*(3-2*tween.t);
+    camMain.position.lerpVectors(tween.p0, tween.p1, k);
+    controls.target.lerpVectors(tween.t0, tween.t1, k);
+    if (tween.t >= 1) tween = null;
+  }
+
+  // ---------- UI ----------
+  const btnPlay = document.getElementById('btn-play'), posEl = document.getElementById('pos');
+  const spdEl = document.getElementById('spd'), holdEl = document.getElementById('hold'), holdV = document.getElementById('hold-v');
+  const mHold = document.getElementById('m-hold'), mFree = document.getElementById('m-free');
+  function setHold(v, animate){
+    holdTarget = v;
+    if (!animate) hold = v;
+    holdEl.value = Math.round(v*100); holdV.textContent = Math.round(v*100) + '%';
+    mHold.classList.toggle('on', v >= 0.995); mFree.classList.toggle('on', v <= 0.005);
+  }
+  mHold.onclick = () => setHold(1, true);
+  mFree.onclick = () => setHold(0, true);
+  holdEl.oninput = () => setHold(+holdEl.value/100, false);
+  document.getElementById('vis').onchange = e => showLoad = e.target.checked;
+  btnPlay.onclick = () => { playing = !playing; btnPlay.textContent = playing ? '⏸ 一時停止' : '▶ 再生'; };
+  posEl.oninput = () => { playing = false; btnPlay.textContent = '▶ 再生'; manualU = posEl.value/100; };
+  spdEl.oninput = () => speed = +spdEl.value;
+
+  // 1サイクル：下ろす(1.6s) → ボトムで一瞬止める(0.3s) → 挙げる(1.2s) → トップで止める(0.4s)
+  const segs = [[1.6,1,0],[0.3,0,0],[1.2,0,1],[0.4,1,1]];
+  const total = segs.reduce((a,b)=>a+b[0],0);
+  const ease = t => t*t*(3-2*t);
+  function uAt(t){
+    t = t % total;
+    for (const [d,a,b] of segs){
+      if (t < d) return a + (b-a)*ease(t/d);
+      t -= d;
+    }
+    return 0;
+  }
+
+  let last = performance.now();
+  function loop(now){
+    const dt = Math.min((now-last)/1000, 0.1); last = now; tnow += dt;
+    // ボタンで切り替えたときはなめらかに変化
+    if (Math.abs(hold - holdTarget) > 1e-3) {
+      hold += Math.sign(holdTarget - hold) * Math.min(Math.abs(holdTarget - hold), dt*0.9);
+      holdEl.value = Math.round(hold*100); holdV.textContent = Math.round(hold*100) + '%';
+    }
+    let u;
+    if (playing){ clock += dt*speed; u = uAt(clock); posEl.value = Math.round(u*100); }
+    else u = manualU;
+    pose(u);
+    stepTween(dt);
+    controls.update();
+    render();
+    requestAnimationFrame(loop);
+  }
+  clock = 1.6;
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
