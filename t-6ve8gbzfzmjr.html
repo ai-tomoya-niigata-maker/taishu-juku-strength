@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>プッシュとプルの連動｜シーテッドロウ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-0:#05070d;--bg-1:#0a0e1a;--bg-2:#0d1b2a;--bg-3:#13253a;--bg-4:#1a3049;--line:#1e3555;
+  --gold:#f6c90e;--blue:#7dd3fc;--fg:#f8fafc;--fg-body:#e2e8f0;--fg-sub:#94a3b8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg-0);font-family:'Noto Sans JP',sans-serif;color:var(--fg-body);-webkit-font-smoothing:antialiased}
+body{background:radial-gradient(120% 120% at 50% 0%,#0a1220 0%,#05070d 70%);padding:24px 16px 44px}
+.page{max-width:1180px;margin:0 auto}
+.eyebrow{display:block;font-size:13px;letter-spacing:.3em;color:var(--gold);font-weight:700}
+h1{font-size:clamp(22px,3.6vw,38px);font-weight:900;color:var(--fg);line-height:1.35;margin-top:8px}
+.tags{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+.tag{font-size:13px;font-weight:900;letter-spacing:.12em;color:var(--bg-1);background:var(--gold);padding:5px 12px;border-radius:6px}
+.tag.o{background:var(--bg-4);color:var(--gold)}
+.ctrlbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:20px;background:var(--bg-3);border-radius:14px;padding:12px 16px}
+.ctrlbar button{font:inherit;font-size:14px;font-weight:700;color:var(--fg);background:var(--bg-4);border:0;border-radius:999px;padding:8px 18px;cursor:pointer}
+.ctrlbar button:hover{background:var(--line)}
+.ctrlbar button[aria-pressed="true"]{background:var(--gold);color:var(--bg-1)}
+.ctrlbar input[type=range]{flex:1;min-width:160px;accent-color:var(--gold)}
+.ctrlbar .lab{font-size:13px;color:var(--fg-sub);font-weight:700}
+.figs{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;margin-top:16px;align-items:start}
+.fig{position:relative;background:var(--bg-3);border-radius:16px;overflow:hidden}
+.fig::before{content:"";position:absolute;left:0;top:0;right:0;height:6px;background:var(--gold)}
+.fig svg{display:block;width:100%;height:auto}
+.fig .cap{position:absolute;left:18px;top:20px;font-size:15px;font-weight:900;color:var(--gold);letter-spacing:.08em}
+.fig .pole{position:absolute;left:18px;bottom:12px;font-size:clamp(18px,2.6vw,26px);font-weight:900;color:var(--fg)}
+svg text{font-family:'Noto Sans JP',sans-serif}
+.chain{margin-top:18px;background:var(--bg-3);border-radius:16px;overflow:hidden;position:relative}
+.chain::before{content:"";position:absolute;left:0;top:0;right:0;height:6px;background:var(--gold)}
+.chain h2{font-size:18px;font-weight:900;color:var(--fg);padding:22px 22px 6px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:14px 18px;text-align:left;border-top:1px solid var(--line);vertical-align:top;transition:background .3s,color .3s}
+thead th{font-size:14px;letter-spacing:.1em;color:var(--fg-sub);background:var(--bg-2)}
+td.k{font-weight:900;color:var(--fg);white-space:nowrap;width:22%}
+td .w{display:block;font-size:22px;font-weight:900;color:var(--fg)}
+td .g{display:block;font-size:13px;color:var(--fg-sub);margin-top:2px;line-height:1.5}
+td.on{background:rgba(246,201,14,.14)}
+td.on .w{color:var(--gold)}
+th.on{background:var(--gold);color:var(--bg-1)}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+.rowcard{position:relative;background:var(--bg-3);border-radius:14px;padding:16px 20px 18px 26px;overflow:hidden}
+.rowcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--gold)}
+.rowcard h2{font-size:18px;font-weight:900;color:var(--fg);margin-bottom:4px}
+.rowcard p{font-size:15px;line-height:1.7;color:var(--fg-body)}
+.band{margin-top:18px;background:var(--bg-4);border-radius:14px;padding:18px 24px;font-size:16px;line-height:1.7;color:var(--fg)}
+.band b{color:var(--gold)}
+.credit{margin-top:26px;text-align:center;font-size:12px;letter-spacing:.1em;color:var(--fg-sub)}
+@media (max-width:820px){.figs{grid-template-columns:1fr}.cards{grid-template-columns:1fr}td.k{width:auto}}
+</style>
+</head>
+<body>
+<div class="page">
+  <span class="eyebrow">SHOULDER ROTATION ｜ SEATED ROW</span>
+  <h1>プッシュとプルは、肩・肘・肩甲骨・胸椎がセットで動きます</h1>
+  <div class="tags"><span class="tag">UPPER PULL</span><span class="tag o">シーテッドロウ</span><span class="tag o">両側性</span></div>
+
+  <div class="ctrlbar">
+    <button id="auto" aria-pressed="true">自動</button>
+    <button id="bpush" aria-pressed="false">プッシュ位</button>
+    <button id="bpull" aria-pressed="false">プル位</button>
+    <button id="slow" aria-pressed="false">スロー</button>
+    <span class="lab">押す</span><input id="scrub" type="range" min="0" max="100" value="0" aria-label="プッシュからプルへ"><span class="lab">引く</span>
+  </div>
+
+  <div class="figs">
+    <div class="fig">
+      <div class="cap">横から（シーテッドロウ）</div>
+      <div class="pole" id="pole">プッシュ位</div>
+      <svg viewBox="0 0 620 520" role="img" aria-label="シーテッドロウを横から見た図">
+        <path d="M20 500H600" stroke="#94a3b8" stroke-width="3"/>
+        <!-- マシン -->
+        <rect x="560" y="230" width="36" height="270" rx="6" fill="#1a3049"/>
+        <circle cx="578" cy="300" r="14" fill="none" stroke="#94a3b8" stroke-width="4"/>
+        <path id="cable" stroke="#94a3b8" stroke-width="3" fill="none"/>
+        <!-- シートとフットプレート -->
+        <rect x="110" y="406" width="150" height="14" rx="5" fill="#1a3049"/>
+        <path d="M185 420V500M120 420V500" stroke="#1a3049" stroke-width="10"/>
+        <path d="M410 410V500" stroke="#94a3b8" stroke-width="8" stroke-linecap="round"/>
+        <!-- 脊柱（胸椎の屈曲・伸展） -->
+        <path id="spine" fill="none" stroke="#f8fafc" stroke-width="10" stroke-linecap="round"/>
+        <path id="thor" fill="none" stroke="#f6c90e" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+        <text id="thl" font-size="16" font-weight="700" fill="#f6c90e" text-anchor="end">胸椎</text>
+        <!-- 脚 -->
+        <path id="leg" fill="none" stroke="#f8fafc" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- 腕 -->
+        <path id="arm" fill="none" stroke="#f8fafc" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle id="head" r="24" fill="#13253a" stroke="#f8fafc" stroke-width="7"/>
+        <rect id="grip" width="10" height="46" rx="4" fill="#f6c90e"/>
+        <circle id="jS" r="7" fill="#f6c90e"/>
+        <circle id="jE" r="7" fill="#f6c90e"/>
+        <text id="el" font-size="16" font-weight="700" fill="#f6c90e" text-anchor="end">肘</text>
+        <!-- 前腕の向き（回内・回外） -->
+        <g transform="translate(500,60)">
+          <rect x="-70" y="-34" width="140" height="118" rx="12" fill="#0d1b2a"/>
+          <text x="0" y="-12" font-size="14" font-weight="900" fill="#f6c90e" text-anchor="middle">前腕の向き</text>
+          <circle cx="0" cy="26" r="20" fill="#13253a" stroke="#f8fafc" stroke-width="4"/>
+          <path id="palm" stroke="#f6c90e" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <text id="palml" x="0" y="76" font-size="14" font-weight="700" fill="#f8fafc" text-anchor="middle">回内</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="fig">
+      <div class="cap">真上から（肩甲骨と上腕骨）</div>
+      <svg viewBox="0 0 420 470" role="img" aria-label="肩甲骨と上腕骨を真上から見た図">
+        <text x="210" y="40" font-size="15" font-weight="700" fill="#94a3b8" text-anchor="middle">前</text>
+        <text x="210" y="452" font-size="15" font-weight="700" fill="#94a3b8" text-anchor="middle">後ろ</text>
+        <ellipse cx="210" cy="300" rx="62" ry="40" fill="#0d1b2a" stroke="#f8fafc" stroke-width="5"/>
+        <circle cx="210" cy="332" r="6" fill="#94a3b8"/>
+        <text x="222" y="318" font-size="13" fill="#94a3b8">背骨</text>
+        <text x="210" y="298" font-size="14" font-weight="700" fill="#94a3b8" text-anchor="middle">胸郭</text>
+        <path id="scapR" fill="none" stroke="#f6c90e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+        <path id="scapL" fill="none" stroke="#f6c90e" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+        <path id="humR" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path id="humL" fill="none" stroke="#f8fafc" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path id="bar" stroke="#f6c90e" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path id="epiR" stroke="#7dd3fc" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <path id="epiL" stroke="#7dd3fc" stroke-width="5" stroke-linecap="round" fill="none"/>
+        <circle id="gR" r="8" fill="#f6c90e" stroke="#0a0e1a" stroke-width="2"/>
+        <circle id="gL" r="8" fill="#f6c90e" stroke="#0a0e1a" stroke-width="2"/>
+        <text id="scl" font-size="15" font-weight="700" fill="#f6c90e">肩甲骨</text>
+        <text id="hul" font-size="15" font-weight="700" fill="#f8fafc">上腕骨</text>
+        <text id="rotl" font-size="15" font-weight="700" fill="#7dd3fc">内旋</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="chain">
+    <h2>押す動きと引く動きの組み合わせ</h2>
+    <table>
+      <thead><tr><th></th><th id="thPush">プッシュ（押す）</th><th id="thPull">プル（引く）</th></tr></thead>
+      <tbody>
+        <tr><td class="k">肩関節</td><td data-p="push"><span class="w">内旋</span><span class="g">上腕骨が体の内側へ回る</span></td><td data-p="pull"><span class="w">外旋</span><span class="g">上腕骨が体の外側へ回る</span></td></tr>
+        <tr><td class="k">肘・前腕</td><td data-p="push"><span class="w">回内</span><span class="g">手のひらが下へ向く</span></td><td data-p="pull"><span class="w">回外</span><span class="g">手のひらが上へ向く</span></td></tr>
+        <tr><td class="k">肩甲骨</td><td data-p="push"><span class="w">前突</span><span class="g">胸郭の前へすべり出る</span></td><td data-p="pull"><span class="w">後退</span><span class="g">背骨のほうへ寄る</span></td></tr>
+        <tr><td class="k">胸椎</td><td data-p="push"><span class="w">屈曲</span><span class="g">背中が丸まる方向</span></td><td data-p="pull"><span class="w">伸展</span><span class="g">背中が起きる方向</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cards">
+    <div class="rowcard"><h2>構え</h2><p>足をフットプレートに置き、膝は軽く曲げます。胸郭を骨盤の真上に揃え、肋骨は下げたままにします。</p></div>
+    <div class="rowcard"><h2>動作</h2><p>肩甲骨を後退させながら、肘を後ろへ引きます。肩は外旋し、前腕は回外し、胸椎は伸展します。戻りは肩甲骨を前突させ、腕をゆっくり伸ばします。</p></div>
+    <div class="rowcard"><h2>チェック</h2><p>肩がすくんでいないか。腰を反らせて引いていないか。肩が内に入ったまま、腕だけで引いていないか。</p></div>
+  </div>
+  <div class="band">プルでは<b>肩外旋・肘回外・肩甲骨後退・胸椎伸展</b>を同時に起こします。プッシュはその逆の組み合わせです。4つが揃うと、肩が安定したまま背中で引けます。</div>
+  <div class="credit">体修塾BCA ｜ 代表　大林智也</div>
+</div>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var rad=Math.PI/180;
+  function P(x,y){return x.toFixed(1)+' '+y.toFixed(1)}
+  function lerp(a,b,m){return a+(b-a)*m}
+  // ---------- 横から ----------
+  var H=[190,392],TH=170,U=135,F=127;
+  var K=[H[0]+131*Math.cos(10*rad),H[1]-131*Math.sin(10*rad)];
+  var Aank=[K[0]+109*Math.sin(20*rad),K[1]+109*Math.cos(20*rad)];
+  var E1={leg:$('leg'),spine:$('spine'),thor:$('thor'),thl:$('thl'),arm:$('arm'),head:$('head'),grip:$('grip'),jS:$('jS'),jE:$('jE'),el:$('el'),cable:$('cable'),palm:$('palm'),palml:$('palml'),pole:$('pole')};
+  E1.leg.setAttribute('d','M'+P(H[0],H[1])+'L'+P(K[0],K[1])+'L'+P(Aank[0],Aank[1])+'L'+P(Aank[0]+36,Aank[1]+6));
+  function side(m){
+    // m: 0=プッシュ位, 1=プル位。胸椎は屈曲(丸まる)→伸展(起きる)
+    var th=lerp(12,-6,m)*rad, dir=[Math.sin(th),-Math.cos(th)], nrm=[Math.cos(th),Math.sin(th)];
+    var S=[H[0]+TH*dir[0],H[1]+TH*dir[1]];
+    var bulge=lerp(26,-6,m);                        // 背中側へのふくらみ
+    var mid=[H[0]+TH*.5*dir[0]-bulge*nrm[0],H[1]+TH*.5*dir[1]-bulge*nrm[1]];
+    E1.spine.setAttribute('d','M'+P(H[0],H[1])+'Q'+P(mid[0]*2-(H[0]+S[0])/2,mid[1]*2-(H[1]+S[1])/2)+' '+P(S[0],S[1]));
+    // 胸椎の強調（脊柱の上半分）
+    var q1=[H[0]+(S[0]-H[0])*.38,H[1]+(S[1]-H[1])*.38];
+    var c=[mid[0]*2-(H[0]+S[0])/2,mid[1]*2-(H[1]+S[1])/2];
+    function bez(t){var a=(1-t)*(1-t),b=2*(1-t)*t,cc=t*t;return[a*H[0]+b*c[0]+cc*S[0],a*H[1]+b*c[1]+cc*S[1]]}
+    var pts='';for(var i=0;i<=10;i++){var p=bez(.4+.6*i/10);pts+=(i?'L':'M')+P(p[0],p[1])}
+    E1.thor.setAttribute('d',pts);
+    var tp=bez(.62);E1.thl.setAttribute('x',tp[0]-nrm[0]*0-18);E1.thl.setAttribute('y',tp[1]+4);
+    // 頭
+    var ha=th-lerp(-4,10,m)*rad, nk=[S[0]+24*Math.sin(ha),S[1]-24*Math.cos(ha)], hd=[S[0]+54*Math.sin(ha),S[1]-54*Math.cos(ha)];
+    E1.head.setAttribute('cx',hd[0]);E1.head.setAttribute('cy',hd[1]);
+    // 腕：プッシュ位=腕を前へ伸ばす、プル位=グリップをみぞおちへ
+    var Bext=[S[0]+U+F-6,S[1]+8];
+    var N=[H[0]+(S[0]-H[0])*.45+34*nrm[0],H[1]+(S[1]-H[1])*.45+34*nrm[1]];
+    var B=[lerp(Bext[0],N[0],m),lerp(Bext[1],N[1],m)];
+    var dx=B[0]-S[0],dy=B[1]-S[1],d=Math.min(Math.hypot(dx,dy),U+F-.5);
+    var a=(U*U-F*F+d*d)/(2*d),h=Math.sqrt(Math.max(0,U*U-a*a)),ux=dx/d,uy=dy/d;
+    var c1=[S[0]+a*ux+h*uy,S[1]+a*uy-h*ux],c2=[S[0]+a*ux-h*uy,S[1]+a*uy+h*ux];
+    var Ee=c1[0]<c2[0]?c1:c2;
+    E1.arm.setAttribute('d','M'+P(S[0],S[1])+'L'+P(Ee[0],Ee[1])+'L'+P(B[0],B[1]));
+    E1.grip.setAttribute('x',B[0]-5);E1.grip.setAttribute('y',B[1]-23);
+    E1.jS.setAttribute('cx',S[0]);E1.jS.setAttribute('cy',S[1]);E1.jE.setAttribute('cx',Ee[0]);E1.jE.setAttribute('cy',Ee[1]);
+    E1.el.setAttribute('x',Ee[0]-14);E1.el.setAttribute('y',Ee[1]+5);
+    E1.cable.setAttribute('d','M'+P(B[0]+5,B[1])+'L578 300');
+    // 前腕の向き：回内(手のひら下) → 回外(手のひら上)。矢印が手のひらの向き
+    var pa=lerp(90,-90,m)*rad, cx0=0,cy0=26;
+    E1.palm.setAttribute('d','M'+P(cx0,cy0)+'L'+P(cx0+32*Math.cos(pa),cy0+32*Math.sin(pa))+'M'+P(cx0+32*Math.cos(pa),cy0+32*Math.sin(pa))+'l'+P(-9*Math.cos(pa-.6)*1,-9*Math.sin(pa-.6))+'M'+P(cx0+32*Math.cos(pa),cy0+32*Math.sin(pa))+'l'+P(-9*Math.cos(pa+.6),-9*Math.sin(pa+.6)));
+    E1.palml.textContent=m<.5?'回内（手のひら下）':'回外（手のひら上）';
+  }
+  // ---------- 真上から ----------
+  var C=[210,300],RX=62,RY=40;
+  var E2={sR:$('scapR'),sL:$('scapL'),hR:$('humR'),hL:$('humL'),bar:$('bar'),eR:$('epiR'),eL:$('epiL'),gR:$('gR'),gL:$('gL'),scl:$('scl'),hul:$('hul'),rotl:$('rotl')};
+  function ell(t,off,sgn){return[C[0]+sgn*(RX+off)*Math.cos(t*rad),C[1]+(RY+off)*Math.sin(t*rad)]}
+  function top(m){
+    var tm=lerp(58,86,m),tg=lerp(-8,36,m);          // 肩甲骨：前突→後退
+    var al=lerp(-78,70,m),be=lerp(-90,-105,m),Lh=lerp(100,45,m),Lf=lerp(105,112,m);         // 上腕骨・前腕の向き
+    var rho=lerp(30,-30,m);                            // 上腕骨の回旋（内旋→外旋）
+    var out={};
+    [[1,'R'],[-1,'L']].forEach(function(z){
+      var sg=z[0],k=z[1];
+      var pts='';for(var i=0;i<=10;i++){var t=lerp(tm,tg,i/10),p=ell(t,5,sg);pts+=(i?'L':'M')+P(p[0],p[1])}
+      E2['s'+k].setAttribute('d',pts);
+      var G=ell(tg,9,sg);
+      E2['g'+k].setAttribute('cx',G[0]);E2['g'+k].setAttribute('cy',G[1]);
+      var A=[sg*Math.cos(al*rad),Math.sin(al*rad)];
+      var E=[G[0]+Lh*A[0],G[1]+Lh*A[1]];
+      var B=[sg*Math.cos(be*rad),Math.sin(be*rad)];
+      var Hd=[E[0]+Lf*B[0],E[1]+Lf*B[1]];
+      E2['h'+k].setAttribute('d','M'+P(G[0],G[1])+'L'+P(E[0],E[1])+'L'+P(Hd[0],Hd[1]));
+      var pr=[-A[1],A[0]],cs=Math.cos(rho*rad),sn=Math.sin(rho*rad);
+      var q=[pr[0]*cs-pr[1]*sn,pr[0]*sn+pr[1]*cs];
+      E2['e'+k].setAttribute('d','M'+P(E[0]-18*q[0],E[1]-18*q[1])+'L'+P(E[0]+18*q[0],E[1]+18*q[1]));
+      out[k]={G:G,E:E,Hd:Hd};
+    });
+    E2.bar.setAttribute('d','M'+P(out.L.Hd[0],out.L.Hd[1])+'L'+P(out.R.Hd[0],out.R.Hd[1]));
+    E2.scl.setAttribute('x',out.L.G[0]-16);E2.scl.setAttribute('y',out.L.G[1]+34);E2.scl.setAttribute('text-anchor','end');
+    E2.hul.setAttribute('x',out.R.E[0]+14);E2.hul.setAttribute('y',out.R.E[1]+(m<.5?0:10));
+    E2.rotl.setAttribute('x',out.R.E[0]+14);E2.rotl.setAttribute('y',out.R.E[1]+(m<.5?18:28));
+    E2.rotl.textContent=m<.5?'内旋':'外旋';
+  }
+  // ---------- 表のハイライト ----------
+  var tds=[].slice.call(document.querySelectorAll('td[data-p]')),thP=$('thPush'),thL=$('thPull');
+  var cur='';
+  function hi(m){
+    var p=m<.5?'push':'pull'; if(p===cur)return; cur=p;
+    tds.forEach(function(t){t.classList.toggle('on',t.dataset.p===p)});
+    thP.classList.toggle('on',p==='push');thL.classList.toggle('on',p==='pull');
+    $('pole').textContent=p==='push'?'プッシュ位':'プル位';
+  }
+  function draw(m){side(m);top(m);hi(m)}
+  // ---------- 操作 ----------
+  var mode='auto',slow=false,last=0,clock=0,m=0;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function ease(x){return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2}
+  var seg=[.9,1.8,.9,1.8];
+  function cyc(t){
+    var tot=seg[0]+seg[1]+seg[2]+seg[3];t=((t%tot)+tot)%tot;
+    if(t<seg[0])return 0;
+    t-=seg[0];if(t<seg[1])return ease(t/seg[1]);
+    t-=seg[1];if(t<seg[2])return 1;
+    t-=seg[2];return 1-ease(t/seg[3]);
+  }
+  function setBtn(){
+    $('auto').setAttribute('aria-pressed',mode==='auto'?'true':'false');
+    $('bpush').setAttribute('aria-pressed',mode==='push'?'true':'false');
+    $('bpull').setAttribute('aria-pressed',mode==='pull'?'true':'false');
+  }
+  function loop(ts){
+    if(!last)last=ts;var dt=(ts-last)/1000;last=ts;
+    if(mode==='auto'){clock+=dt*(slow?.5:1);m=cyc(clock);draw(m);$('scrub').value=Math.round(m*100)}
+    requestAnimationFrame(loop);
+  }
+  function pin(v,name){mode=name;m=v;draw(m);$('scrub').value=Math.round(m*100);setBtn()}
+  $('auto').onclick=function(){mode='auto';clock=m>=.5?seg[0]+seg[1]:0;setBtn()};
+  $('bpush').onclick=function(){pin(0,'push')};
+  $('bpull').onclick=function(){pin(1,'pull')};
+  $('slow').onclick=function(){slow=!slow;$('slow').setAttribute('aria-pressed',slow?'true':'false')};
+  $('scrub').oninput=function(){mode='manual';m=$('scrub').value/100;draw(m);setBtn()};
+  draw(0);
+  if(reduce){mode='push';setBtn()}else{requestAnimationFrame(loop)}
+})();
+</script>
+</body>
+</html>
