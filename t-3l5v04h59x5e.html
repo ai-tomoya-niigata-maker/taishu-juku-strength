@@ -197,7 +197,7 @@ th.on{background:var(--gold);color:var(--bg-1)}
   var NS=18,showNG=false;
   function wAt(t){return lerp(.155,.135,Math.min(1,t/.3))+(t>=.3?lerp(0,.05,Math.min(1,(t-.3)/.45)):0)-(t>.8?(t-.8)*.1:0)}
   function dAt(t){return t<.3?lerp(.10,.088,t/.3):lerp(.088,.108,Math.min(1,(t-.3)/.45))-(t>.85?(t-.85)*.2:0)}
-  var STX=.085,AY=.09,L1=.50,L2=.44,TL=.52,HEADOFF=.16,CMAX=90*rad,BENCH=.45;
+  var STX=0,HXS=.085,AY=.09,L1=.50,L2=.44,TL=.52,HEADOFF=.16,CMAX=90*rad,BENCH=.45;
   var RZ=-.74,RY=BENCH+.07;           // 後ろ足首（台の上）
   // 頭の中心が膝の真上に来る胴体の傾き(=すねの傾き)を求める
   function solveAlpha(c){
@@ -208,8 +208,8 @@ th.on{background:var(--gold);color:var(--bg-1)}
   function build(m){
     items.length=0;
     var c=m*CMAX,al=solveAlpha(c);                 // c=太ももの傾き, al=すね・胴体の傾き
-    var A=[STX,AY,0],K=[STX,AY+L1*Math.cos(al),L1*Math.sin(al)];
-    var Hs=[STX,K[1]+L2*Math.cos(c),K[2]-L2*Math.sin(c)];
+    var A=[STX,AY,0],K=[HXS*.5,AY+L1*Math.cos(al),L1*Math.sin(al)];
+    var Hs=[HXS,K[1]+L2*Math.cos(c),K[2]-L2*Math.sin(c)];
     var Pc=[0,Hs[1],Hs[2]];
     var T=[0,Math.cos(al),Math.sin(al)],N=[0,-Math.sin(al),Math.cos(al)];
     // 胴体（すねと平行）
@@ -224,15 +224,15 @@ th.on{background:var(--gold);color:var(--bg-1)}
     tube([Hs,K,A],[.088,.062,.042],BODY2,4,12);
     tube([[STX,.062,-.075],[STX,.05,.22]],[.036,.034],BODY2,3,12);
     // 後ろ脚（台に甲をのせる。2関節のIK、膝は下向き）
-    var Hr=[-STX,Hs[1],Hs[2]],Ar=[-STX,RY,RZ];
+    var Hr=[-HXS,Hs[1],Hs[2]],Ar=[-HXS,RY,RZ];
     var dz=Ar[2]-Hr[2],dy=Ar[1]-Hr[1],dd=Math.min(Math.sqrt(dz*dz+dy*dy),L1+L2-.002);
     var uz=dz/Math.sqrt(dz*dz+dy*dy),uy=dy/Math.sqrt(dz*dz+dy*dy);
     var hh=Math.sqrt(Math.max(0,L1*L1-dd*dd/4));
     var pz=-uy,py=uz; if(py>0){pz=-pz;py=-py}
-    var Kr=[-STX,Hr[1]+uy*dd/2+py*hh,Hr[2]+uz*dd/2+pz*hh];
-    var Arr=[-STX,Hr[1]+uy*dd,Hr[2]+uz*dd];
+    var Kr=[-HXS,Hr[1]+uy*dd/2+py*hh,Hr[2]+uz*dd/2+pz*hh];
+    var Arr=[-HXS,Hr[1]+uy*dd,Hr[2]+uz*dd];
     tube([Hr,Kr,Arr],[.088,.062,.042],BODY2,4,12);
-    tube([[-STX,BENCH+.05,RZ+.02],[-STX,BENCH+.035,RZ-.20]],[.036,.032],BODY2,3,12);
+    tube([[-HXS,BENCH+.05,RZ+.02],[-HXS,BENCH+.035,RZ-.20]],[.036,.032],BODY2,3,12);
     // 台
     var bx=.24,b0=-1.06,b1=-.52;
     var bc='#24415f';
@@ -257,14 +257,14 @@ th.on{background:var(--gold);color:var(--bg-1)}
       tube([Sj,E,B,add(B,[0,-.075,0])],[.055,.044,.036,.028],BODY,4,12);
     });
     // 雷：足首→膝→股関節→頭
-    var Hd=[STX,hc[1],hc[2]];
+    var Hd=[0,hc[1],hc[2]];
     dashed(A,K,'rgba(246,201,14,.98)',4,6);dashed(K,Hs,'rgba(246,201,14,.98)',4,6);dashed(Hs,Hd,'rgba(246,201,14,.98)',4,6);
     diamond(A,.022,'#f6c90e');diamond(K,.028,'#f6c90e');diamond(Hs,.028,'#f6c90e');diamond(Hd,.022,'#f6c90e');
     // 膝の真上（頭）
-    dashed([STX,0,K[2]],[STX,1.5,K[2]],'rgba(125,211,252,.9)',2,5);
+    dashed([0,0,K[2]],[0,1.5,K[2]],'rgba(125,211,252,.9)',2,5);
     // NG例：胴体が立つ（膝だけ曲がり、股関節が曲がらない）
     var NGtop=null;
-    if(showNG){NGtop=[STX,Hs[1]+TL+HEADOFF,Hs[2]];dashed(Hs,NGtop,'rgba(248,113,113,.95)',5,7);diamond(NGtop,.026,'#f87171')}
+    if(showNG){NGtop=[0,Hs[1]+TL+HEADOFF,Hs[2]];dashed(Hs,NGtop,'rgba(248,113,113,.95)',5,7);diamond(NGtop,.026,'#f87171')}
     return {A:A,K:K,Hs:Hs,Hd:Hd,al:al,c:c,NGtop:NGtop};
   }
   function label(txt,p,col,dx,dy,anchor){var q=proj(p);items.push({z:9,d:function(){
@@ -277,7 +277,7 @@ th.on{background:var(--gold);color:var(--bg-1)}
     for(var i=-5;i<=5;i++){var a=proj([i*.2,0,-1.2]),b=proj([i*.2,0,.7]);g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke()}
     for(var j=-6;j<=4;j++){var c=proj([-1,0,j*.2]),d=proj([1,0,j*.2]);g.beginPath();g.moveTo(c[0],c[1]);g.lineTo(d[0],d[1]);g.stroke()}
     var M=build(m);
-    label('膝の真上に頭',[STX,1.5,M.K[2]],'#7dd3fc',10,0);
+    label('膝の真上に頭',[0,1.5,M.K[2]],'#7dd3fc',10,0);
     label('膝',M.K,'#f6c90e',16,6);
     label('股関節',M.Hs,'#f6c90e',-14,-8,'right');
     if(M.NGtop)label('NG：胴体が立つと雷にならない',M.NGtop,'#f87171',14,0);
