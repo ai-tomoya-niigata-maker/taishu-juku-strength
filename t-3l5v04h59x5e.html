@@ -112,7 +112,7 @@ th.on{background:var(--gold);color:var(--bg-1)}
   </div>
   <div class="cards">
     <div class="rowcard"><h2>構え</h2><p>後ろ足の甲を台にのせ、前足を大きく前へ出します。前足の足裏全体で立ち、重さを前足に乗せます。</p></div>
-    <div class="rowcard"><h2>動作</h2><p>股関節を後ろへ引きながら、膝を前へ曲げます。膝と股関節が同じ角度で曲がり、胴体はすねと平行に前へ倒れます。戻りは前足で床を押します。</p></div>
+    <div class="rowcard"><h2>動作</h2><p>股関節を後ろへ引きながら、膝を前へ曲げ、一番下で大腿骨が地面と平行になります。膝と股関節が同じ角度で曲がり、胴体はすねと平行に前へ倒れます。戻りは前足で床を押します。</p></div>
     <div class="rowcard"><h2>チェック</h2><p>横から見て雷の形になっているか。頭が膝の真上か。前足の踵が浮いていないか。胴体が立ちすぎて膝だけが曲がっていないか。</p></div>
   </div>
   <div class="band"><b>膝と股関節は同じ角度</b>、<b>すねと胴体は平行（雷の形）</b>、<b>頭は膝の真上</b>。この3つが揃うと、前脚の太ももとお尻をバランスよく使えます。</div>
@@ -197,7 +197,7 @@ th.on{background:var(--gold);color:var(--bg-1)}
   var NS=18,showNG=false;
   function wAt(t){return lerp(.155,.135,Math.min(1,t/.3))+(t>=.3?lerp(0,.05,Math.min(1,(t-.3)/.45)):0)-(t>.8?(t-.8)*.1:0)}
   function dAt(t){return t<.3?lerp(.10,.088,t/.3):lerp(.088,.108,Math.min(1,(t-.3)/.45))-(t>.85?(t-.85)*.2:0)}
-  var STX=.085,AY=.09,L1=.44,L2=.44,TL=.52,HEADOFF=.16,CMAX=66*rad,BENCH=.45;
+  var STX=.085,AY=.09,L1=.50,L2=.44,TL=.52,HEADOFF=.16,CMAX=90*rad,BENCH=.45;
   var RZ=-.74,RY=BENCH+.07;           // 後ろ足首（台の上）
   // 頭の中心が膝の真上に来る胴体の傾き(=すねの傾き)を求める
   function solveAlpha(c){
@@ -271,7 +271,7 @@ th.on{background:var(--gold);color:var(--bg-1)}
     g.font='700 '+Math.max(12,W*.018)+'px "Noto Sans JP",sans-serif';g.fillStyle=col;g.textAlign=anchor||'left';
     g.lineWidth=4;g.strokeStyle='rgba(10,14,26,.85)';g.strokeText(txt,q[0]+dx,q[1]+dy);g.fillText(txt,q[0]+dx,q[1]+dy)}})}
   function frame(m){
-    S=Math.min(H*.50,W/2.0);CX=W*.5;CY=H*.54;CEN[1]=lerp(.78,.58,m);
+    S=Math.min(H*.50,W/2.0);CX=W*.5;CY=H*.54;CEN[1]=lerp(.82,.55,m);
     g.clearRect(0,0,W,H);
     g.lineWidth=1;g.strokeStyle='rgba(148,163,184,.22)';
     for(var i=-5;i<=5;i++){var a=proj([i*.2,0,-1.2]),b=proj([i*.2,0,.7]);g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke()}
