@@ -96,7 +96,7 @@ th.on{background:var(--gold);color:var(--bg-1)}
     <canvas id="cv" aria-label="ブルガリアンスクワットの3D図。膝と股関節を同じ角度で曲げ、すねと胴体が平行になって雷の形になる動きを見られます"></canvas>
     <div class="pole" id="pole">立つ</div>
     
-    <div class="legend"><span><i style="background:#f6c90e"></i>足首→膝→股関節→頭の雷</span><span><i style="background:#fb923c"></i>前から見た足首→膝→股関節</span><span><i style="background:#7dd3fc"></i>膝の真上</span><span><i style="background:#f87171"></i>NG例</span></div>
+    <div class="legend"><span><i style="background:#f6c90e"></i>足首→膝→股関節→頭の雷</span><span><i style="background:#fb923c"></i>前から見た足首→膝→股関節</span><span><i style="background:#7dd3fc"></i>膝の真上</span><span id="ngleg" style="display:none"><i style="background:#f87171"></i>NG例</span></div>
   </div>
 
   <div class="read">
@@ -308,7 +308,7 @@ th.on{background:var(--gold);color:var(--bg-1)}
   var seg=[.9,2.2,.9,2.0];
   function cyc(t){var tot=seg[0]+seg[1]+seg[2]+seg[3];t=((t%tot)+tot)%tot;
     if(t<seg[0])return 0;t-=seg[0];if(t<seg[1])return ease(t/seg[1]);t-=seg[1];if(t<seg[2])return 1;t-=seg[2];return 1-ease(t/seg[3])}
-  function setBtn(){$('auto').setAttribute('aria-pressed',mode==='auto'?'true':'false');$('bpush').setAttribute('aria-pressed',mode==='push'?'true':'false');$('bpull').setAttribute('aria-pressed',mode==='pull'?'true':'false');$('ng').setAttribute('aria-pressed',showNG?'true':'false')}
+  function setBtn(){$('auto').setAttribute('aria-pressed',mode==='auto'?'true':'false');$('bpush').setAttribute('aria-pressed',mode==='push'?'true':'false');$('bpull').setAttribute('aria-pressed',mode==='pull'?'true':'false');$('ng').setAttribute('aria-pressed',showNG?'true':'false');$('ngleg').style.display=showNG?'':'none'}
   function loop(ts){
     if(!last)last=ts;var dt=(ts-last)/1000;last=ts;
     if(mode==='auto'){clock+=dt*(slow?.5:1);m=cyc(clock);$('scrub').value=Math.round(m*100)}
