@@ -152,19 +152,40 @@ th.on{background:var(--gold);color:var(--bg-1)}
   [].forEach.call(document.querySelectorAll('.views button'),function(b){b.onclick=function(){var v=VIEWS[b.dataset.v];tYaw=v[0];tPitch=v[1]}});
   // ---------- 描画部品 ----------
   var items=[];
-  function sphere(p,r,col){var q=proj(p);items.push({z:q[2],d:function(){
-    var R=r*S*q[3];if(R<.5)return;
-    var gr=g.createRadialGradient(q[0]-R*.35,q[1]-R*.4,R*.1,q[0],q[1],R);
-    gr.addColorStop(0,col[0]);gr.addColorStop(.55,col[1]);gr.addColorStop(1,col[2]);
-    g.fillStyle=gr;g.beginPath();g.arc(q[0],q[1],R,0,6.2832);g.fill()}})}
-  function chain(a,b,r0,r1,col,n){n=n||Math.max(3,Math.round(len(sub(b,a))/(Math.min(r0,r1)*.32)));
-    for(var i=0;i<=n;i++){var t=i/n;sphere(add(mul(a,1-t),mul(b,t)),lerp(r0,r1,t),col)}}
   function seg3(a,b,w,col,zb){var pa=proj(a),pb=proj(b);items.push({z:(pa[2]+pb[2])/2+(zb||0),d:function(){
     g.strokeStyle=col;g.lineWidth=w*S*(pa[3]+pb[3])/2;g.lineCap='round';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.stroke()}})}
   function poly(pts,fill,stroke,alphaFn,zb){var q=pts.map(proj),z=0;q.forEach(function(p){z+=p[2]});z/=q.length;items.push({z:z+(zb||0),d:function(){
     g.globalAlpha=alphaFn?alphaFn():1;g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<q.length;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
     if(fill){g.fillStyle=fill;g.fill()}if(stroke){g.strokeStyle=stroke;g.lineWidth=2;g.stroke()}g.globalAlpha=1}})}
-  var SKIN=['#f4f7fb','#c9d4e1','#8497b1'],SKIN2=['#e9eff6','#b9c7d8','#7a8ea9'],GOLD=['#fff1a8','#f6c90e','#9a7b05'];
+  // ---- 滑らかな立体（メッシュ）：断面のリングをつないで面を張る ----
+  var LIGHT=nor([-.35,.75,.55]);
+  function meshDraw(rings,centers,shadow,light){
+    var R=rings.length,N=rings[0].length,pr=rings.map(function(r){return r.map(proj)});
+    for(var i=0;i<R-1;i++){
+      var cc=mul(add(centers[i],centers[i+1]),.5);
+      for(var j=0;j<N;j++){
+        var j2=(j+1)%N,a=pr[i][j],b=pr[i][j2],c=pr[i+1][j2],d=pr[i+1][j];
+        var mid=mul(add(add(rings[i][j],rings[i][j2]),add(rings[i+1][j2],rings[i+1][j])),.25);
+        var nn=nor(sub(mid,cc)),k=Math.max(0,dot(nn,LIGHT)),kk=.18+.82*Math.pow(k,.8);
+        var col='rgb('+Math.round(lerp(shadow[0],light[0],kk))+','+Math.round(lerp(shadow[1],light[1],kk))+','+Math.round(lerp(shadow[2],light[2],kk))+')';
+        (function(a,b,c,d,col){items.push({z:(a[2]+b[2]+c[2]+d[2])/4,d:function(){
+          g.fillStyle=col;g.strokeStyle=col;g.lineWidth=1;g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineTo(c[0],c[1]);g.lineTo(d[0],d[1]);g.closePath();g.fill();g.stroke()}})})(a,b,c,d,col);
+      }
+    }
+  }
+  function densify(pts,rad,k){var P=[],Rr=[];for(var i=0;i<pts.length-1;i++){for(var t=0;t<k;t++){var u=t/k;P.push(add(mul(pts[i],1-u),mul(pts[i+1],u)));Rr.push(lerp(rad[i],rad[i+1],u))}}P.push(pts[pts.length-1]);Rr.push(rad[rad.length-1]);return{P:P,R:Rr}}
+  function tube(pts,rad,col,k,sides){
+    var dd=densify(pts,rad,k||3),P=dd.P,rings=[],u=null;sides=sides||12;
+    for(var i=0;i<P.length;i++){
+      var t=nor(sub(P[Math.min(P.length-1,i+1)],P[Math.max(0,i-1)]));
+      if(!u){var ref=Math.abs(t[1])>.9?[1,0,0]:[0,1,0];u=nor(crs(t,ref))}else{u=nor(sub(u,mul(t,dot(u,t))))}
+      var v=crs(t,u),ring=[];
+      for(var j=0;j<sides;j++){var a=j/sides*6.2832;ring.push(add(P[i],add(mul(u,Math.cos(a)*dd.R[i]),mul(v,Math.sin(a)*dd.R[i]))))}
+      rings.push(ring);
+    }
+    meshDraw(rings,P,col[0],col[1]);
+  }
+  var BODY=[[78,94,122],[236,242,250]],BODY2=[[70,86,114],[222,230,242]],SKIN=0,SKIN2=0,GOLD=['#fff1a8','#f6c90e','#9a7b05'];
   // ---------- 人体モデル ----------
   var NS=18,U=.31,F=.29;
   function wAt(t){return lerp(.155,.135,Math.min(1,t/.3))*(t<.3?1:1)+(t>=.3?lerp(0,.05,Math.min(1,(t-.3)/.45)):0)-(t>.8?(t-.8)*.1:0)}
@@ -184,22 +205,30 @@ th.on{background:var(--gold);color:var(--bg-1)}
   function build(m){
     items.length=0;
     var sp=pose(m);
-    // 胴体：断面ごとに球を並べて厚みを出す
+    // 胴体：断面（楕円）のリングをつないだ滑らかな立体
+    var rings=[],cents=[],SIDES=18;
     for(var i=0;i<=NS;i++){
-      var t=i/NS,w=wAt(t),d=dAt(t);
-      for(var j=-2;j<=2;j++){sphere(loc(sp,i,j*w/2,0,0),d*.95,SKIN)}
+      var t=i/NS,w=wAt(t)*1.05,d=dAt(t)*1.0,ring=[];
+      for(var j=0;j<SIDES;j++){var an=j/SIDES*6.2832;ring.push(add(add(sp.P[i],[Math.cos(an)*w,0,0]),mul(sp.N[i],Math.sin(an)*d)))}
+      rings.push(ring);cents.push(sp.P[i]);
     }
+    meshDraw(rings,cents,BODY[0],BODY[1]);
     // 骨盤・脚
     var Hp=sp.P[0];
     [-1,1].forEach(function(sg){
-      var hip=add(Hp,[sg*.085,-.02,.03]),knee=[sg*.09,.52,.45],ank=[sg*.09,.13,.62];
-      chain(hip,knee,.082,.058,SKIN2);chain(knee,ank,.056,.040,SKIN2);
-      chain(ank,[sg*.09,.065,.80],.040,.034,SKIN2);
+      var hip=add(Hp,[sg*.085,-.02,.03]),knee=[sg*.09,.52,.45],ank=[sg*.09,.13,.62],toe=[sg*.09,.065,.80];
+      tube([hip,knee,ank,toe],[.088,.062,.042,.034],[BODY2[0],BODY2[1]],4,12);
     });
     // 首・頭
-    var top=sp.P[NS],hd=add(add(top,mul(sp.T[NS],.16)),mul(sp.N[NS],lerp(.03,.0,m)));
-    chain(add(top,mul(sp.T[NS],-.02)),add(top,mul(sp.T[NS],.10)),.045,.04,SKIN);
-    sphere(hd,.098,SKIN);
+    var top=sp.P[NS],hc=add(add(top,mul(sp.T[NS],.16)),mul(sp.N[NS],lerp(.03,.0,m)));
+    tube([add(top,mul(sp.T[NS],-.03)),add(top,mul(sp.T[NS],.11))],[.052,.045],[BODY[0],BODY[1]],3,12);
+    var hr=[],hcn=[],LAT=10;
+    for(var q=0;q<=LAT;q++){
+      var lat=-Math.PI/2+Math.PI*q/LAT,cs=Math.cos(lat),sn=Math.sin(lat),ctr=add(hc,mul(sp.T[NS],.108*sn)),ring=[];
+      for(var j=0;j<14;j++){var an=j/14*6.2832;ring.push(add(add(ctr,[Math.cos(an)*.082*cs,0,0]),mul(sp.N[NS],Math.sin(an)*.095*cs)))}
+      hr.push(ring);hcn.push(hc);
+    }
+    meshDraw(hr,hcn,BODY[0],BODY[1]);
     // 肩甲骨の位置（前突→後退）。肩関節は肩甲骨と一緒に動く
     var tm=lerp(58,86,m)*rad,tg=lerp(-8,36,m)*rad;
     var ISH=15,ISC=13,arms=[];
@@ -218,8 +247,8 @@ th.on{background:var(--gold);color:var(--bg-1)}
       var pp=sub(pole,mul(dn,dot(pole,dn))),pn=nor(pp);
       var E=add(add(Sj,mul(dn,a)),mul(pn,h));
       arms.push({sg:sg,S:Sj,E:E,B:B,sf:sf,tm:tm,tg:tg});
-      chain(Sj,E,.052,.043,SKIN);chain(E,B,.042,.034,SKIN);
-      sphere(Sj,.058,SKIN);sphere(E,.044,SKIN);sphere(B,.040,SKIN);
+      var fdir=nor(sub(B,E));
+      tube([Sj,E,B,add(B,mul(fdir,.07))],[.055,.044,.036,.028],[BODY[0],BODY[1]],4,12);
     });
     // マシン
     var gb=arms[0].B,gb2=arms[1].B,gm=mul(add(gb,gb2),.5);
