@@ -70,6 +70,7 @@ th.on{background:var(--gold);color:var(--bg-1)}
 .credit{margin-top:26px;text-align:center;font-size:12px;letter-spacing:.1em;color:var(--fg-sub)}
 @media (max-width:820px){.figs{grid-template-columns:1fr}.cards{grid-template-columns:1fr}td.k{width:auto}}
 .tri{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.band.front{border-left:7px solid #fb923c}.band.front b{color:#fb923c}
 </style>
 </head>
 <body>
@@ -94,14 +95,15 @@ th.on{background:var(--gold);color:var(--bg-1)}
     </div>
     <canvas id="cv" aria-label="ブルガリアンスクワットの3D図。膝と股関節を同じ角度で曲げ、すねと胴体が平行になって雷の形になる動きを見られます"></canvas>
     <div class="pole" id="pole">立つ</div>
-    <div class="hint">金色の線が雷の形。頭は膝の真上（青の点線）にあります</div>
-    <div class="legend"><span><i style="background:#f6c90e"></i>足首→膝→股関節→頭の雷</span><span><i style="background:#7dd3fc"></i>膝の真上</span><span><i style="background:#f87171"></i>NG例</span></div>
+    
+    <div class="legend"><span><i style="background:#f6c90e"></i>足首→膝→股関節→頭の雷</span><span><i style="background:#fb923c"></i>前から見た足首→膝→股関節</span><span><i style="background:#7dd3fc"></i>膝の真上</span><span><i style="background:#f87171"></i>NG例</span></div>
   </div>
 
   <div class="read">
     <div>膝の屈曲<b id="rk">0°</b></div>
     <div>股関節の屈曲<b id="rh">0°</b></div>
     <div>すねの傾き＝胴体の傾き<b id="rs">0°</b></div>
+    <div>前から見た脚の傾き（垂直から）<b id="rt">0°</b></div>
     <div>頭の位置<b id="rp">膝の真上</b></div>
   </div>
 
@@ -110,10 +112,11 @@ th.on{background:var(--gold);color:var(--bg-1)}
     <div class="rowcard"><h2>雷の形（Z字）</h2><p>すね・太もも・胴体を横から見ると、太ももを真ん中にして、すねと胴体が平行に並ぶ「雷」の形になります。</p></div>
     <div class="rowcard"><h2>頭は膝の真上</h2><p>胴体を前へ倒しながら、頭を膝の真上に置きます。重心が前足の真ん中に収まり、後ろ足に頼りません。</p></div>
   </div>
+  <div class="band front"><b>前から見ると</b>、足首は<b>頭の真下</b>。足首→膝→股関節を結んだラインは、<b>地面に対して少し斜め</b>（股関節が足首より外側）になります。膝は<b>このライン上</b>に乗せ、内にも外にも崩しません。</div>
   <div class="cards">
-    <div class="rowcard"><h2>構え</h2><p>後ろ足の甲を台にのせ、前足を大きく前へ出します。前足の足裏全体で立ち、重さを前足に乗せます。</p></div>
+    <div class="rowcard"><h2>構え</h2><p>後ろ足の甲を台にのせ、前足を大きく前へ出します。前足の足裏全体で立ち、足首を頭の真下に置きます。</p></div>
     <div class="rowcard"><h2>動作</h2><p>股関節を後ろへ引きながら、膝を前へ曲げ、一番下で大腿骨が地面と平行になります。膝と股関節が同じ角度で曲がり、胴体はすねと平行に前へ倒れます。戻りは前足で床を押します。</p></div>
-    <div class="rowcard"><h2>チェック</h2><p>横から見て雷の形になっているか。頭が膝の真上か。前足の踵が浮いていないか。胴体が立ちすぎて膝だけが曲がっていないか。</p></div>
+    <div class="rowcard"><h2>チェック</h2><p>横から見て雷の形になっているか。頭が膝の真上か。前から見て足首→膝→股関節が少し斜めの一直線か。前足の踵が浮いていないか。胴体が立ちすぎて膝だけが曲がっていないか。</p></div>
   </div>
   <div class="band"><b>膝と股関節は同じ角度</b>、<b>すねと胴体は平行（雷の形）</b>、<b>頭は膝の真上</b>。この3つが揃うと、前脚の太ももとお尻をバランスよく使えます。</div>
   <div class="credit">体修塾BCA ｜ 代表　大林智也</div>
@@ -210,6 +213,7 @@ th.on{background:var(--gold);color:var(--bg-1)}
     var c=m*CMAX,al=solveAlpha(c);                 // c=太ももの傾き, al=すね・胴体の傾き
     var A=[STX,AY,0],K=[HXS*.5,AY+L1*Math.cos(al),L1*Math.sin(al)];
     var Hs=[HXS,K[1]+L2*Math.cos(c),K[2]-L2*Math.sin(c)];
+    K[0]=HXS*(K[1]-AY)/(Hs[1]-AY);   // 前から見て足首・膝・股関節が一直線
     var Pc=[0,Hs[1],Hs[2]];
     var T=[0,Math.cos(al),Math.sin(al)],N=[0,-Math.sin(al),Math.cos(al)];
     // 胴体（すねと平行）
@@ -260,12 +264,15 @@ th.on{background:var(--gold);color:var(--bg-1)}
     var Hd=[0,hc[1],hc[2]];
     dashed(A,K,'rgba(246,201,14,.98)',4,6);dashed(K,Hs,'rgba(246,201,14,.98)',4,6);dashed(Hs,Hd,'rgba(246,201,14,.98)',4,6);
     diamond(A,.022,'#f6c90e');diamond(K,.028,'#f6c90e');diamond(Hs,.028,'#f6c90e');diamond(Hd,.022,'#f6c90e');
+    // 前から見た脚のライン：足首は頭の真下、足首→膝→股関節は地面に対して少し斜め
+    var sl=HXS/(Hs[1]-AY),Pl=function(y){return [(y-AY)*sl,y,0]};
+    dashed(Pl(0),Pl(1.15),'rgba(251,146,60,1)',4,8);
     // 膝の真上（頭）
     dashed([0,0,K[2]],[0,1.5,K[2]],'rgba(125,211,252,.9)',2,5);
     // NG例：胴体が立つ（膝だけ曲がり、股関節が曲がらない）
     var NGtop=null;
     if(showNG){NGtop=[0,Hs[1]+TL+HEADOFF,Hs[2]];dashed(Hs,NGtop,'rgba(248,113,113,.95)',5,7);diamond(NGtop,.026,'#f87171')}
-    return {A:A,K:K,Hs:Hs,Hd:Hd,al:al,c:c,NGtop:NGtop};
+    return {A:A,K:K,Hs:Hs,Hd:Hd,al:al,c:c,NGtop:NGtop,sl:sl,Pl:Pl};
   }
   function label(txt,p,col,dx,dy,anchor){var q=proj(p);items.push({z:9,d:function(){
     g.font='700 '+Math.max(12,W*.018)+'px "Noto Sans JP",sans-serif';g.fillStyle=col;g.textAlign=anchor||'left';
@@ -278,18 +285,21 @@ th.on{background:var(--gold);color:var(--bg-1)}
     for(var j=-6;j<=4;j++){var c=proj([-1,0,j*.2]),d=proj([1,0,j*.2]);g.beginPath();g.moveTo(c[0],c[1]);g.lineTo(d[0],d[1]);g.stroke()}
     var M=build(m);
     label('膝の真上に頭',[0,1.5,M.K[2]],'#7dd3fc',10,0);
+    label('前から見て少し斜め',M.Pl(1.15),'#fb923c',14,6);
+    label('足首は頭の真下',[0,0,0],'#fb923c',-16,-30,'right');
     label('膝',M.K,'#f6c90e',16,6);
     label('股関節',M.Hs,'#f6c90e',-14,-8,'right');
     if(M.NGtop)label('NG：胴体が立つと雷にならない',M.NGtop,'#f87171',14,0);
     items.sort(function(a,b){return a.z-b.z});
     items.forEach(function(it){it.d()});
   }
-  var ptxt=$('pole'),rh=$('rh'),rk=$('rk'),rs=$('rs'),rp=$('rp');
+  var ptxt=$('pole'),rh=$('rh'),rk=$('rk'),rs=$('rs'),rp=$('rp'),rt=$('rt');
   var dirDown=true;
+  function solveH(c){var al=solveAlpha(c);return AY+L1*Math.cos(al)+L2*Math.cos(c)}
   function readout(m){
     var c=m*CMAX,al=solveAlpha(c),ang=Math.round((c+al)/rad);
     rk.textContent=ang+'°';rh.textContent=ang+'°';rs.textContent=Math.round(al/rad)+'°';
-    rp.textContent='膝の真上';
+    rp.textContent='足首の真上・膝の真上';rt.textContent=Math.round(Math.atan(HXS/(solveH(c)-AY))/rad)+'°';
     ptxt.textContent=m<.04?'立つ':(m>.96?'一番下':(dirDown?'膝と股関節を同じだけ曲げる':'前足で床を押す'));
   }
   var mode='auto',slow=false,last=0,clock=0,m=0,prev=0;
