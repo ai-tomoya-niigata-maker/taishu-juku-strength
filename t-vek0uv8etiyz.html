@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>フルクリーン（オプティバー）｜3D解説</title>
+<style>
+:root{--bg-0:#05070d;--gold:#f6c90e;--fg:#f8fafc;--fg-sub:#94a3b8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg-0);font-family:'Noto Sans JP',sans-serif;color:var(--fg)}
+body{background:radial-gradient(120% 120% at 50% 0%,#0a1220 0%,#05070d 70%);padding:20px 0 40px}
+.page{width:min(96vw,1240px);margin:0 auto}
+iframe{display:block;width:100%;border:0;background:transparent;height:1200px}
+.sep{margin:34px 0 18px;text-align:center}
+.sep b{display:inline-block;background:var(--gold);color:#0a0e1a;font-weight:900;letter-spacing:.14em;font-size:13px;padding:7px 18px;border-radius:999px}
+.sep p{margin-top:12px;font-size:18px;font-weight:900}
+.sep span{display:block;margin-top:6px;font-size:13px;color:var(--fg-sub)}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.nav a{font-size:13px;font-weight:700;color:var(--fg);background:#1a3049;text-decoration:none;padding:8px 16px;border-radius:999px}
+</style></head><body><div class="page">
+<div class="nav"><a href="#a">① 床から引く版</a><a href="#b">② 切り返しあり版（下へ）</a></div>
+<iframe id="a" name="a" title="床から引くフルクリーン" srcdoc="<!DOCTYPE html>
+<html lang=&quot;ja&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<meta name=&quot;robots&quot; content=&quot;noindex, nofollow, noarchive&quot;>
+<title>フルクリーン（オプティバー）｜3D解説</title>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
+<link href=&quot;https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&amp;display=swap&quot; rel=&quot;stylesheet&quot;>
+<style>
+:root{--bg-0:#05070d;--bg-1:#0a0e1a;--bg-3:#13253a;--bg-4:#1a3049;--line:#1e3555;--gold:#f6c90e;--ng:#f87171;--fg:#f8fafc;--fg-body:#e2e8f0;--fg-sub:#94a3b8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg-0);font-family:'Noto Sans JP',sans-serif;color:var(--fg-body);-webkit-font-smoothing:antialiased}
+.wrap{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:20px;background:radial-gradient(120% 120% at 50% 0%,#0a1220 0%,#05070d 70%)}
+.frame{container-type:inline-size;width:min(96vw,1240px);background:var(--bg-1);border-radius:14px;overflow:hidden;display:block;position:relative;padding:2.6cqw 2.6cqw 2.8cqw}
+.side{display:block}
+.eyebrow{font-size:1cqw;letter-spacing:.3em;color:var(--gold);font-weight:700}
+h1{font-size:2.5cqw;font-weight:900;color:var(--fg);line-height:1.25;margin-top:.4em}
+.row{display:flex;gap:.45cqw;margin-top:1cqw;flex-wrap:wrap}
+.chip{font:inherit;font-weight:700;font-size:1.2cqw;color:var(--fg-body);background:transparent;border:.12cqw solid var(--line);border-radius:999px;padding:.4cqw .9cqw;cursor:pointer}
+.chip[aria-pressed=&quot;true&quot;]{background:var(--pc,var(--gold));border-color:var(--pc,var(--gold));color:#0a0e1a}
+.card{margin-top:1.4cqw;position:relative}
+.chead{background:var(--bg-3);border-radius:1cqw;padding:1.8cqw 2.2cqw 1.9cqw;position:relative;overflow:hidden}
+.chead::before{content:&quot;&quot;;position:absolute;left:0;top:0;right:0;height:.4cqw;background:var(--pc,var(--gold))}
+.card .en{font-size:1.1cqw;letter-spacing:.2em;font-weight:900;color:var(--pc,var(--gold))}
+.card h2{font-size:2.7cqw;font-weight:900;color:var(--fg);margin:.1em 0 .3em;line-height:1.3}
+.card p{font-size:1.9cqw;line-height:1.7;color:var(--fg)}
+.phasegrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw;margin-top:1.4cqw}
+.phcard{display:flex;gap:1.4cqw;align-items:flex-start;background:var(--bg-3);border:.25cqw solid transparent;border-radius:1cqw;padding:1.6cqw 1.8cqw;position:relative;overflow:hidden;opacity:.55;transition:opacity .25s,border-color .25s,background .25s}
+.phcard.on{opacity:1;background:var(--bg-4)}
+.phcard.p1.on{border-color:#fb923c}.phcard.p2.on{border-color:#f6c90e}.phcard.p3.on{border-color:#7dd3fc}.phcard.p4.on{border-color:#86efac}.phcard.p5.on{border-color:#c4b5fd}.phcard.p6.on{border-color:#fda4af}.phcard.p5 .pn,.phcard.p5 .pt1{color:#c4b5fd}.phcard.p6 .pn,.phcard.p6 .pt1{color:#fda4af}.phcard.p3 .pn,.phcard.p3 .pt1{color:#7dd3fc}.phcard.p4 .pn,.phcard.p4 .pt1{color:#86efac}
+.phcard .pn{flex:none;font-size:3cqw;font-weight:900;line-height:1}
+.phcard.p1 .pn,.phcard.p1 .pt1{color:#fb923c}.phcard.p2 .pn,.phcard.p2 .pt1{color:#f6c90e}
+.phcard .pt1{font-size:2cqw;font-weight:900;margin-bottom:.4cqw}
+.phcard .pt2{font-size:1.5cqw;line-height:1.65;color:var(--fg)}
+.ptgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw;margin-top:1.2cqw}
+.pt{background:var(--bg-3);border-radius:1cqw;padding:1.6cqw 1.8cqw 1.7cqw 2.6cqw;position:relative;overflow:hidden;min-height:7.5cqw;display:flex;align-items:center}
+.pt::before{content:&quot;&quot;;position:absolute;left:0;top:0;bottom:0;width:.7cqw;background:var(--pc,var(--gold))}
+.pt .n{flex:none;font-size:2.6cqw;font-weight:900;color:var(--pc,var(--gold));margin-right:1.2cqw;font-variant-numeric:tabular-nums}
+.pt .tx{font-size:1.75cqw;line-height:1.6;font-weight:500;color:var(--fg)}
+.slider{margin-top:1cqw;display:flex;align-items:center;gap:.8cqw;font-size:1.2cqw;color:var(--fg-sub);font-weight:700}
+.slider input{flex:1;accent-color:var(--gold)}
+.autob{font:inherit;font-size:1.3cqw;font-weight:900;color:var(--fg);background:var(--bg-4);border:0;border-radius:999px;padding:.6cqw 1.8cqw;cursor:pointer}
+.autob[aria-pressed=&quot;true&quot;]{background:var(--gold);color:#0a0e1a}
+.stagebox{position:relative;min-width:0;height:clamp(440px,56cqw,760px);margin-top:1.4cqw;background:var(--bg-3);border-radius:1cqw;overflow:hidden}
+canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none}
+canvas:active{cursor:grabbing}
+.cams{position:absolute;right:1.6cqw;top:1.4cqw;display:flex;gap:.4cqw;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:62%}
+.cams span{font-size:1.1cqw;color:var(--fg-sub);margin-right:.4cqw;font-weight:700}
+.cams button,.ctrl button{font:inherit;font-size:1.2cqw;font-weight:700;color:var(--fg);background:var(--bg-4);border:0;border-radius:999px;padding:.55cqw 1.2cqw;cursor:pointer}
+.cams button[aria-pressed=&quot;true&quot;]{background:var(--fg);color:#0a0e1a}
+.hint{position:absolute;left:1.6cqw;bottom:1.4cqw;font-size:1.1cqw;color:var(--fg-sub)}
+.ctrl{position:absolute;right:2.4cqw;bottom:2cqw;display:flex;gap:.4cqw}
+@media (max-width:700px){
+  .frame{width:96vw;padding:16px}.stagebox{height:104vw}
+  .eyebrow{font-size:10px}h1{font-size:22px}.chip{font-size:12px;padding:6px 11px}
+  .chead{padding:16px}.card .en{font-size:10px}.card h2{font-size:22px}.card p{font-size:15px}.ptgrid{grid-template-columns:1fr;gap:10px}.phasegrid{grid-template-columns:1fr}.phcard{padding:14px}.phcard .pn{font-size:24px}.phcard .pt1{font-size:16px}.phcard .pt2{font-size:13.5px}.pt{padding:14px 14px 14px 20px;min-height:0}.pt .n{font-size:22px}.pt .tx{font-size:15px}.slider{font-size:12px}
+  .cams button,.ctrl button{font-size:11px;padding:6px 12px}.cams span,.hint{font-size:10px}
+}
+.wrap{min-height:0;padding:0}html,body{height:auto}
+.rel{display:inline-block;margin-left:1cqw;background:#f6c90e;color:#0a0e1a;font-weight:900;font-size:1.15cqw;letter-spacing:.08em;padding:.25cqw 1.1cqw;border-radius:999px;vertical-align:.1em}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+<div class=&quot;frame&quot;>
+  <div class=&quot;side&quot;>
+    <span class=&quot;eyebrow&quot;>FULL CLEAN ｜ OPTI-BAR</span><span class=&quot;rel&quot;>放出系の種目</span>
+    <h1>オプティバーのフルクリーン｜足で引いて、バーの下へ潜ります</h1>
+    <div class=&quot;row&quot; id=&quot;forms&quot; role=&quot;group&quot; aria-label=&quot;フォームの選択&quot;></div>
+  </div>
+  <div class=&quot;stagebox&quot;>
+    <canvas id=&quot;cv&quot; aria-label=&quot;オプティバーを使ったフルクリーンの3D図&quot;></canvas>
+    <div class=&quot;cams&quot; id=&quot;cams&quot;><span>カメラ</span>
+      <button data-c=&quot;obl&quot; aria-pressed=&quot;false&quot;>斜め前</button>
+      <button data-c=&quot;side&quot; aria-pressed=&quot;true&quot;>横</button>
+      <button data-c=&quot;front&quot; aria-pressed=&quot;false&quot;>正面</button>
+      <button data-c=&quot;oblb&quot; aria-pressed=&quot;false&quot;>斜め後ろ</button>
+      <button data-c=&quot;back&quot; aria-pressed=&quot;false&quot;>後ろ</button>
+      <button data-c=&quot;top&quot; aria-pressed=&quot;false&quot;>真上</button>
+      <button data-c=&quot;low&quot; aria-pressed=&quot;false&quot;>ローアングル</button>
+    </div>
+    <div class=&quot;hint&quot;>ドラッグで自由に回せます　／　黄の壁＝矢状面　青の壁＝前額面</div>
+  </div>
+  <div class=&quot;slider&quot;><button class=&quot;autob&quot; id=&quot;pause&quot; aria-pressed=&quot;true&quot;>自動</button><button class=&quot;autob&quot; id=&quot;slow&quot; aria-pressed=&quot;false&quot;>スロー</button><span>動き</span><input type=&quot;range&quot; id=&quot;seek&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;0&quot; aria-label=&quot;動きの位置&quot;><span id=&quot;seekl&quot;>立位</span></div>
+  <div class=&quot;phasegrid&quot;>
+    <div class=&quot;phcard p1&quot; id=&quot;ph1&quot;><span class=&quot;pn&quot;>1</span><div><div class=&quot;pt1&quot;>ファーストプル　床〜膝</div><div class=&quot;pt2&quot;>腕は伸ばしたまま、足で床を押します。背中の角度を保ち、バーを膝の高さまで上げます。</div></div></div>
+    <div class=&quot;phcard p2&quot; id=&quot;ph2&quot;><span class=&quot;pn&quot;>2</span><div><div class=&quot;pt1&quot;>セカンドプル　伸び上がり</div><div class=&quot;pt2&quot;>お尻を前へ押し出し、股関節・膝・足首を一気に伸ばします（トリプルエクステンション）。足首が伸展して、かかとが上がり、つま先立ちになります。</div></div></div>
+    <div class=&quot;phcard p3&quot; id=&quot;ph3&quot;><span class=&quot;pn&quot;>3</span><div><div class=&quot;pt1&quot;>プルアンダー＆キャッチ</div><div class=&quot;pt2&quot;>股関節が伸び切ってから、肘を下へ潜らせ、バーの下へ入ります。キャッチの瞬間は、肘を脇の近くに収め、ハンドルが回転して、スクワットの深さで受け止めます。</div></div></div>
+    <div class=&quot;phcard p4&quot; id=&quot;ph4&quot;><span class=&quot;pn&quot;>4</span><div><div class=&quot;pt1&quot;>スタンド　立ち上がり</div><div class=&quot;pt2&quot;>キャッチの姿勢から、足で床を押して立ち上がります。胴体を立てたまま、肘は脇の近くに収めたままです。</div></div></div>
+    <div class=&quot;phcard p5&quot; id=&quot;ph5&quot;><span class=&quot;pn&quot;>5</span><div><div class=&quot;pt1&quot;>おろす　腰の脇まで</div><div class=&quot;pt2&quot;>スタンディングで、腕を伸ばしながらバーをおろし、ハンドルが腰の脇に来るところまで戻します。</div></div></div>
+    <div class=&quot;phcard p6&quot; id=&quot;ph6&quot;><span class=&quot;pn&quot;>6</span><div><div class=&quot;pt1&quot;>床へ戻す　次の1回へ</div><div class=&quot;pt2&quot;>お尻を後ろへ引き、膝を曲げて、バーを床へおろします。背中は丸めず、スタートの形に戻ります。</div></div></div>
+  </div>
+  <div class=&quot;card&quot; id=&quot;card&quot;></div>
+</div>
+</div>
+<script>
+(function(){
+var FORMS={
+ ok:{name:'正しいフォーム',col:'#f6c90e',cam:'side',head:'放出系の種目です。オプティバー（Perform Better）を床の固定点につないで、足で床を押してバーを加速し、伸び上がりの最後に手元から放すように送り出して、スクワットの深さで受け止めます。',
+   pts:['後ろが開いた枠の中に立つ。バーは床の固定点を中心に、弧を描いて上がる（ハンドルは回転）','ファーストプルは腕を伸ばしたまま、足で床を押す。背中の角度を保つ','セカンドプルでお尻を前へ押し出し、股関節・膝・足首を一気に伸ばす（トリプルエクステンション）','スクワットの深さで受け止め、キャッチの瞬間は肘を脇の近くに収める']},
+ arm:{name:'NG：腕で早く引く',col:'#f87171',cam:'side',head:'伸び上がる前に肘が曲がり、腕で引く形になります。足と股関節の力がバーに伝わりません。',
+   pts:['腕で早く引くと、足と股関節の力が使えない','バーが体の前へ離れやすい','対策：伸び上がるまで、腕はロープのように伸ばしたままにする','対策：伸び上がり切ってから、肘を動かして体を下へ潜らせる']},
+ far:{name:'NG：バーが体から離れる',col:'#f87171',cam:'side',head:'バーが体から離れ、前へ流れます。キャッチで前へ倒されやすくなります。',
+   pts:['バーが体から離れると、キャッチで前へ倒される','腕が伸びきり、肩に負担がかかる','対策：バーを体に近い軌道で引く','対策：セカンドプルでお尻を前へ押し出し、バーを体へ近づける']},
+ shallow:{name:'NG：キャッチが浅い',col:'#f87171',cam:'side',head:'キャッチが浅く、高い位置で受けます。これはパワークリーンの形で、フルクリーンではありません。',
+   pts:['浅いキャッチは、パワークリーン。フルクリーンではない','重量が増えると、受け止められなくなる','対策：バーの下へ深く潜る。足首と股関節の可動域を確保する','対策：伸び上がり切る前に潜り始めない']}
+};
+var FORDER=['ok','arm','far','shallow'];
+var CAMS={obl:{yaw:-.62,pitch:.28},front:{yaw:0,pitch:.04},side:{yaw:-Math.PI/2,pitch:.04},oblb:{yaw:Math.PI+.62,pitch:.28},back:{yaw:Math.PI,pitch:.04},top:{yaw:-Math.PI/2,pitch:1.5},low:{yaw:-.5,pitch:-.32}};
+var form='ok', playing=true, t=0, last=0, manual=null;
+var yaw=CAMS.side.yaw,pitch=CAMS.side.pitch,tyaw=yaw,tpitch=pitch,camLock=false,dragging=false,lx=0,ly=0;
+var cv=document.getElementById('cv'),g=cv.getContext('2d'),W=0,H=0,dpr=1;
+
+function setCam(n,user){tyaw=CAMS[n].yaw;tpitch=CAMS[n].pitch;
+  document.querySelectorAll('#cams button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.c===n?'true':'false')});if(user)camLock=true}
+function renderForms(){
+  var el=document.getElementById('forms');el.innerHTML='';
+  FORDER.forEach(function(k){var f=FORMS[k],b=document.createElement('button');b.className='chip';b.textContent=f.name;
+    b.style.setProperty('--pc',f.col);b.setAttribute('aria-pressed',k===form?'true':'false');
+    b.onclick=function(){form=k;camLock=false;renderForms();renderCard();setCam(f.cam,false)};el.appendChild(b)});
+}
+function renderCard(){var f=FORMS[form],c=document.getElementById('card');c.style.setProperty('--pc',f.col);
+  c.innerHTML='<div class=&quot;chead&quot;><span class=&quot;en&quot;>'+(form==='ok'?'CHECK POINTS':'COMMON MISTAKE')+'</span><h2>'+f.name+'</h2><p>'+f.head+'</p></div><div class=&quot;ptgrid&quot;>'+f.pts.map(function(x,i){return '<div class=&quot;pt&quot;><span class=&quot;n&quot;>'+(i+1)+'</span><span class=&quot;tx&quot;>'+x+'</span></div>'}).join('')+'</div>'}
+document.querySelectorAll('#cams button').forEach(function(b){b.onclick=function(){setCam(b.dataset.c,true)}});
+var pauseB=document.getElementById('pause'),slowB=document.getElementById('slow'),slow=false;
+function syncAuto(){pauseB.setAttribute('aria-pressed',playing?'true':'false')}
+pauseB.onclick=function(){playing=!playing;if(playing)manual=null;syncAuto()};
+slowB.onclick=function(){slow=!slow;slowB.setAttribute('aria-pressed',slow?'true':'false')};
+var seek=document.getElementById('seek');
+seek.oninput=function(){playing=false;syncAuto();manual=seek.value/100};
+function fit(){var r=cv.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0)}
+window.addEventListener('resize',fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(cv);
+cv.addEventListener('pointerdown',function(e){dragging=true;lx=e.clientX;ly=e.clientY;camLock=true;document.querySelectorAll('#cams button').forEach(function(b){b.setAttribute('aria-pressed','false')});cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',function(e){if(!dragging)return;yaw+=(e.clientX-lx)*.008;pitch=Math.max(-.6,Math.min(1.55,pitch+(e.clientY-ly)*.006));tyaw=yaw;tpitch=pitch;lx=e.clientX;ly=e.clientY});
+cv.addEventListener('pointerup',function(){dragging=false});cv.addEventListener('pointercancel',function(){dragging=false});
+
+function rx(p,a){var c=Math.cos(a),s=Math.sin(a);return [p[0],p[1]*c-p[2]*s,p[1]*s+p[2]*c]}
+function ry(p,a){var c=Math.cos(a),s=Math.sin(a);return [p[0]*c+p[2]*s,p[1],-p[0]*s+p[2]*c]}
+function add(a,b){return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]}
+var S0,CX,CY,D=5;
+function proj(p){var q=ry(p,yaw);q=rx(q,-pitch);var k=D/(D-q[2]);return [CX+q[0]*S0*k,CY-q[1]*S0*k,q[2],k]}
+
+// u: 0=立位 1=ボトム
+var AX=.17,TA=8*Math.PI/180,MIDFOOT=.06,HZ=.06;
+var LA=.80,TL1=.50,TL2=.26;
+var RB=3.0,YP=-.99;                 // 床の固定点（ランドマイン）の高さと、バーの回転半径
+var KP=[0,.28,.50,.78,1.0,1.3,1.6];   // スタート／ファースト／セカンド(伸び切り)／キャッチ／スタンド／腰の脇へ／床へ戻す
+var PMAX=1.6;
+function hs(v,p){
+  var n=KP.length,i=0;while(i<n-2&amp;&amp;p>KP[i+1])i++;
+  var t0=KP[i],t1=KP[i+1],h=t1-t0,u=(p-t0)/h,u2=u*u,u3=u2*u;
+  function m(k){var a=Math.max(0,k-1),b=Math.min(n-1,k+1);return (v[b]-v[a])/(KP[b]-KP[a])}
+  var m0=m(i)*h,m1=m(i+1)*h;
+  return (2*u3-3*u2+1)*v[i]+(u3-2*u2+u)*m0+(-2*u3+3*u2)*v[i+1]+(u3-u2)*m1;
+}
+function ik3(h,a,l1,l2,pole){var dv=sub(a,h),dl=Math.min(len(dv),l1+l2-.002),dn=nor(dv),aa=(l1*l1-l2*l2+dl*dl)/(2*dl),hh=Math.sqrt(Math.max(0,l1*l1-aa*aa)),pn=nor(sub(pole,mul(dn,dot(pole,dn))));return add(add(h,mul(dn,aa)),mul(pn,hh))}
+function pose(f,u){
+  var p=u*PMAX,rad=Math.PI/180,ankY=-1.04;
+  var YH=f==='shallow'?[-.78,-.50,.10,.30,.68,-.02,-.78]:[-.78,-.50,.10,.08,.68,-.02,-.78];
+  var LM=f==='shallow'?[50,44,6,8,0,0,50]:[50,44,6,16,0,0,50];
+  var yh=hs(YH,p),lam=hs(LM,p)*rad,lift=Math.max(0,hs([0,.02,.13,.0,0,0,0],p));
+  var ga=f==='arm'?.06:.50,gb=f==='arm'?.30:.66;                 // 股関節が伸び切ってから、肘を曲げて潜る
+  var gu=Math.max(0,Math.min(1,(p-ga)/(gb-ga)));gu=gu*gu*(3-2*gu);
+  var gd=Math.max(0,Math.min(1,(p-1.0)/.25));gd=gd*gd*(3-2*gd);   // スタンドからおろすとき、腕を伸ばす
+  var gg=gu*(1-gd);
+  var th0=Math.asin((-.78-YP)/RB),ZPe=HZ+RB*Math.cos(th0);
+  var th=Math.asin((yh-YP)/RB),zh=ZPe-RB*Math.cos(th);
+  var far=f==='far'?.28*Math.sin(Math.PI*Math.min(1,p/.72)):0;
+  var armz=(1-gg)*(-.03)+gg*.18,army=(1-gg)*(-LA)+gg*(-.04);
+  var Sz=zh-armz,Sy=yh-army;
+  var ay=ankY+lift;
+  var Hz=Sz-(TL1+TL2)*Math.sin(lam),Hy=Sy-(TL1+TL2)*Math.cos(lam);
+  var dx=Hz,dy=Hy-ay,d=Math.sqrt(dx*dx+dy*dy);
+  if(d>1.036){Hz=dx*1.036/d;Hy=ay+dy*1.036/d;d=1.036;dx=Hz;dy=Hy-ay}
+  var ux=dx/d,uy=dy/d,mh=Math.sqrt(Math.max(0,.52*.52-(d/2)*(d/2)));
+  var Kz=Hz/2+mh*uy,Ky=(ay+Hy)/2-mh*ux;
+  var pel=[0,Hy,Hz],J={pelvis:pel};
+  J.hipL=add(pel,[-.14,0,0]);J.hipR=add(pel,[.14,0,0]);
+  J.ankL=[-AX,ay,0];J.ankR=[AX,ay,0];
+  J.kneeL=[-(AX+.01),Ky,Kz];J.kneeR=[AX+.01,Ky,Kz];
+  J.footL=add(J.ankL,[-Math.sin(TA)*.28,-.02,Math.cos(TA)*.28]);J.footR=add(J.ankR,[Math.sin(TA)*.28,-.02,Math.cos(TA)*.28]);
+  var chest=add(pel,[0,TL1*Math.cos(lam),TL1*Math.sin(lam)]);
+  var shm=add(chest,[0,TL2*Math.cos(lam),TL2*Math.sin(lam)]);
+  var l3=lam*.6,neck=add(chest,[0,.34*Math.cos(lam),.34*Math.sin(lam)]);
+  J.chest=chest;J.neck=neck;J.head=add(neck,[0,.22*Math.cos(l3),.22*Math.sin(l3)]);
+  J.shL=add(shm,[-.27,0,0]);J.shR=add(shm,[.27,0,0]);
+  J.haL=[-.34,yh,zh+far];J.haR=[.34,yh,zh+far];
+  var epx=.35*(1-gg)+.08*gg,epy=-1,epz=.15*(1-gg)-.25*gg;       // 肘は下へ潜り、キャッチでは脇の近くに収まる
+  J.elL=ik3(J.shL,J.haL,.40,.40,[-epx,epy,epz]);J.elR=ik3(J.shR,J.haR,.40,.40,[epx,epy,epz]);
+  J.bar=[0,yh,zh+far];
+  J.lam=lam;J.theta=th;J.ZPe=ZPe;J.lift=lift;J.gg=gg;J.yh=yh;J.sz=Sz;J.far=far;
+  J.phase=p<KP[1]?1:p<KP[2]?2:p<KP[3]?3:p<KP[4]?4:p<KP[5]?5:6;
+  return J;
+}
+function barTrail(f){var r=[];for(var i=0;i<=30;i++){r.push(pose(f,i/30).bar)}return r}
+
+function drawPlane(){
+  var a=1.15,q=[[0,-1.2,-a],[0,-1.2,a],[0,1.25,a],[0,1.25,-a]].map(proj);
+  g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<4;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
+  g.fillStyle='rgba(246,201,14,.08)';g.fill();g.lineWidth=2;g.strokeStyle='rgba(246,201,14,.55)';g.stroke();
+}
+function drawPlane2(){
+  var a=1.15,z=MIDFOOT,q=[[-a,-1.2,z],[a,-1.2,z],[a,1.25,z],[-a,1.25,z]].map(proj);
+  g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<4;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
+  g.fillStyle='rgba(125,211,252,.08)';g.fill();g.lineWidth=2;g.strokeStyle='rgba(125,211,252,.6)';g.stroke();
+}
+function ang2(c,p){return Math.atan2(p[2]-c[2],p[1]-c[1])}
+function wedge(c,pa,pb,col,label){
+  var a1=ang2(c,pa),a2=ang2(c,pb),d=a2-a1;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;
+  var r=.27,pts=[proj(c)];for(var i=0;i<=18;i++){var a=a1+d*i/18;pts.push(proj([c[0],c[1]+r*Math.cos(a),c[2]+r*Math.sin(a)]))}
+  g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();
+  g.fillStyle=col==='#f6c90e'?'rgba(246,201,14,.38)':'rgba(248,113,113,.38)';g.fill();g.lineWidth=3;g.strokeStyle=col;g.stroke();
+  var am=a1+d/2,lp=proj([c[0],c[1]+(r+.2)*Math.cos(am),c[2]+(r+.2)*Math.sin(am)]);
+  g.font='900 '+Math.max(11,W*.017)+'px &quot;Noto Sans JP&quot;,sans-serif';g.fillStyle=col;g.textAlign='center';g.fillText(label,lp[0],lp[1]);
+  return Math.round(180-Math.abs(d)*180/Math.PI);
+}
+function line(a,b,w,col){g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineWidth=w;g.strokeStyle=col;g.lineCap='round';g.stroke()}
+function disc(c,r,col){var pts=[];for(var i=0;i<28;i++){var a=i/28*Math.PI*2;pts.push(proj([c[0],c[1]+r*Math.cos(a),c[2]+r*Math.sin(a)]))}
+  g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();g.fillStyle='#0a0e1a';g.fill();g.lineWidth=3;g.strokeStyle=col;g.stroke()}
+
+
+function sub(a,b){return[a[0]-b[0],a[1]-b[1],a[2]-b[2]]}
+function mul(a,k){return[a[0]*k,a[1]*k,a[2]*k]}
+function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]}
+function crs(a,b){return[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]]}
+function len(a){return Math.sqrt(dot(a,a))}
+function nor(a){var l=len(a)||1;return[a[0]/l,a[1]/l,a[2]/l]}
+function lerp(a,b,m){return a+(b-a)*m}
+var items=[],S=1;
+// ---------- 描画部品 ----------
+  var items=[];
+  function seg3(a,b,w,col,zb){var pa=proj(a),pb=proj(b);items.push({z:(pa[2]+pb[2])/2+(zb||0),d:function(){
+    g.strokeStyle=col;g.lineWidth=w*S*(pa[3]+pb[3])/2;g.lineCap='round';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.stroke()}})}
+  function poly(pts,fill,stroke,alphaFn,zb){var q=pts.map(proj),z=0;q.forEach(function(p){z+=p[2]});z/=q.length;items.push({z:z+(zb||0),d:function(){
+    g.globalAlpha=alphaFn?alphaFn():1;g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<q.length;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
+    if(fill){g.fillStyle=fill;g.fill()}if(stroke){g.strokeStyle=stroke;g.lineWidth=2;g.stroke()}g.globalAlpha=1}})}
+  // ---- 滑らかな立体（メッシュ）：断面のリングをつないで面を張る ----
+  var LIGHT=nor([-.35,.75,.55]);
+  function meshDraw(rings,centers,shadow,light){
+    var R=rings.length,N=rings[0].length,pr=rings.map(function(r){return r.map(proj)});
+    for(var i=0;i<R-1;i++){
+      var cc=mul(add(centers[i],centers[i+1]),.5);
+      for(var j=0;j<N;j++){
+        var j2=(j+1)%N,a=pr[i][j],b=pr[i][j2],c=pr[i+1][j2],d=pr[i+1][j];
+        var mid=mul(add(add(rings[i][j],rings[i][j2]),add(rings[i+1][j2],rings[i+1][j])),.25);
+        var nn=nor(sub(mid,cc)),k=Math.max(0,dot(nn,LIGHT)),kk=.18+.82*Math.pow(k,.8);
+        var col='rgb('+Math.round(lerp(shadow[0],light[0],kk))+','+Math.round(lerp(shadow[1],light[1],kk))+','+Math.round(lerp(shadow[2],light[2],kk))+')';
+        (function(a,b,c,d,col){items.push({z:(a[2]+b[2]+c[2]+d[2])/4,d:function(){
+          g.fillStyle=col;g.strokeStyle=col;g.lineWidth=1;g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineTo(c[0],c[1]);g.lineTo(d[0],d[1]);g.closePath();g.fill();g.stroke()}})})(a,b,c,d,col);
+      }
+    }
+  }
+  function densify(pts,rad,k){var P=[],Rr=[];for(var i=0;i<pts.length-1;i++){for(var t=0;t<k;t++){var u=t/k;P.push(add(mul(pts[i],1-u),mul(pts[i+1],u)));Rr.push(lerp(rad[i],rad[i+1],u))}}P.push(pts[pts.length-1]);Rr.push(rad[rad.length-1]);return{P:P,R:Rr}}
+  function tube(pts,rad,col,k,sides){
+    var dd=densify(pts,rad,k||3),P=dd.P,rings=[],u=null;sides=sides||12;
+    for(var i=0;i<P.length;i++){
+      var t=nor(sub(P[Math.min(P.length-1,i+1)],P[Math.max(0,i-1)]));
+      if(!u){var ref=Math.abs(t[1])>.9?[1,0,0]:[0,1,0];u=nor(crs(t,ref))}else{u=nor(sub(u,mul(t,dot(u,t))))}
+      var v=crs(t,u),ring=[];
+      for(var j=0;j<sides;j++){var a=j/sides*6.2832;ring.push(add(P[i],add(mul(u,Math.cos(a)*dd.R[i]),mul(v,Math.sin(a)*dd.R[i]))))}
+      rings.push(ring);
+    }
+    meshDraw(rings,P,col[0],col[1]);
+  }
+  var BODY=[[78,94,122],[236,242,250]],BODY2=[[70,86,114],[222,230,242]],SKIN=0,SKIN2=0,GOLD=['#fff1a8','#f6c90e','#9a7b05'];
+
+  function dashed(a,b,col,w,zb){var pa=proj(a),pb=proj(b);items.push({z:(pa[2]+pb[2])/2+(zb||0),d:function(){
+    g.setLineDash([8,8]);g.strokeStyle=col;g.lineWidth=w;g.lineCap='butt';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.stroke();g.setLineDash([])}})}
+  function diamond(p,r,col){var q=proj(p),R=r*S*q[3];items.push({z:q[2]+3,d:function(){
+    g.fillStyle=col;g.strokeStyle='#0a0e1a';g.lineWidth=2;g.beginPath();g.moveTo(q[0],q[1]-R);g.lineTo(q[0]+R,q[1]);g.lineTo(q[0],q[1]+R);g.lineTo(q[0]-R,q[1]);g.closePath();g.fill();g.stroke()}})}
+  var BODY=[[78,94,122],[236,242,250]],BODY2=[[70,86,114],[222,230,242]];
+    function wAt(t){return lerp(.155,.135,Math.min(1,t/.3))+(t>=.3?lerp(0,.05,Math.min(1,(t-.3)/.45)):0)-(t>.8?(t-.8)*.1:0)}
+  function dAt(t){return t<.3?lerp(.10,.088,t/.3):lerp(.088,.108,Math.min(1,(t-.3)/.45))-(t>.85?(t-.85)*.2:0)}
+function drawOpti(J){
+  var th=J.theta,R=RB,ZPe=J.ZPe,c=Math.cos(th),sn=Math.sin(th);
+  function W3(sv,x,dy){dy=dy||0;return [x,YP+sv*sn+dy*c,ZPe-sv*c+dy*sn]}
+  var BARC=[[70,74,82],[200,206,216]],SILV=[[110,116,126],[236,240,246]],GRIP=[[20,20,24],[120,124,134]];
+  // 実物（Perform Better）：後ろが開いた五角形の枠。前の中央にバーの差し込み口、後ろの両端に回転ハンドルとウエイトホーン
+  var P=[[R+.40,-.50],[R-.10,-.50],[R-.60,-.26],[R-.60,.26],[R-.10,.50],[R+.40,.50]];
+  for(var i=0;i<5;i++){var a=P[i],b=P[i+1];tube([W3(a[0],a[1]),W3(b[0],b[1])],[.032,.032],BARC,3,8)}
+  tube([W3(R-.60,0),W3(R-2.1,0)],[.022,.022],SILV,3,10);
+  [-1,1].forEach(function(sg){
+    var hx=sg*.34;
+    tube([W3(R+.05,hx,0),W3(R+.38,hx,0)],[.03,.03],GRIP,3,8);
+    tube([W3(R+.05,sg*.50),W3(R+.05,hx,0)],[.018,.018],BARC,2,8);tube([W3(R+.38,sg*.50),W3(R+.38,hx,0)],[.018,.018],BARC,2,8);
+    tube([W3(R+.40,sg*.50),W3(R+.40,sg*.88)],[.024,.024],SILV,3,10);
+    [sg*.66,sg*.76].forEach(function(px){var cen=W3(R+.40,px),pl=[];
+      for(var k=0;k<24;k++){var an=k/24*6.2832,ca=Math.cos(an),sa=Math.sin(an);pl.push([px,cen[1]+.15*(ca*sn+sa*c),cen[2]+.15*(-ca*c+sa*sn)])}
+      poly(pl,'#0a0e1a','#f6c90e',null,3)});
+  });
+}
+function frame(ts){
+  if(!last)last=ts;var dt=Math.min(.05,(ts-last)/1000);last=ts;
+  if(playing)t+=dt*(slow?.5:1)/10;
+  if(!dragging){var dyw=tyaw-yaw;dyw=Math.atan2(Math.sin(dyw),Math.cos(dyw));yaw+=dyw*Math.min(1,dt*6);pitch+=(tpitch-pitch)*Math.min(1,dt*6)}
+  var cyc=t-Math.floor(t),u=manual!==null?manual:Math.max(0,Math.min(1,(cyc-.05)/.9));
+  if(manual===null){seek.value=Math.round(u*100)}
+  document.getElementById('seekl').textContent=['','ファーストプル','セカンドプル','キャッチ','スタンド','腰の脇へ','床へ'][pose(form,u).phase];
+  var f=FORMS[form],J=pose(form,u);
+  var acc=f.col,col='#e2e8f0';
+  g.clearRect(0,0,W,H);
+  S0=Math.min(W*.42,H*.36);CX=W*.5-S0*.25;CY=H*.5+S0*.14;
+  drawPlane();drawPlane2();
+  var sc=S0/160;
+  var fc=[];for(var i=0;i<=40;i++){var th=i/40*Math.PI*2;fc.push(proj([Math.cos(th)*.6,-1.07,Math.sin(th)*.6]))}
+  g.beginPath();fc.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.strokeStyle='rgba(148,163,184,.45)';g.lineWidth=1.5;g.stroke();
+  g.setLineDash([10,8]);line(proj([0,-1.07,MIDFOOT]),proj([0,1.25,MIDFOOT]),2.5,'rgba(248,250,252,.6)');g.setLineDash([]);
+  g.setLineDash([2,8]);g.lineWidth=4;g.strokeStyle=acc;g.lineCap='round';g.beginPath();
+  var trl=[];for(var ti=0;ti<=40;ti++)trl.push(pose(form,ti/40).bar);
+  trl.forEach(function(p,i){var q=proj(p);i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])});g.stroke();g.setLineDash([]);
+  g.setLineDash([9,7]);
+  [-1,1].forEach(function(sg){line(proj([sg*AX-sg*Math.sin(TA)*.15,-1.07,-Math.cos(TA)*.15]),proj([sg*AX+sg*Math.sin(TA)*1.0,-1.07,Math.cos(TA)*1.0]),2.5,'rgba(125,211,252,.85)')});
+  g.setLineDash([]);
+  S=S0;items.length=0;
+  var armBad=(form==='arm'&amp;&amp;J.gg>.1&amp;&amp;u*PMAX<.5),armC=armBad?[[120,40,40],[255,150,150]]:BODY;
+  ['L','R'].forEach(function(sd){
+    var hp=J['hip'+sd],kn=J['knee'+sd],ak=J['ank'+sd];
+    tube([hp,kn,ak],[.105,.075,.052],BODY2,4,12);
+    var sg=sd==='L'?-1:1,fd=[sg*Math.sin(TA),0,Math.cos(TA)];
+    var heel=add(ak,add(mul(fd,-.09),[0,.005,0])),toe=[ak[0]+fd[0]*.26,-1.025,ak[2]+fd[2]*.26];
+    tube([heel,toe],[.04,.038],BODY2,3,12);
+  });
+  var Pp=J.pelvis,Pn=J.neck,Lv=[1,0,0],NR=18,rr=[],cc=[],Tt=nor(sub(Pn,Pp));
+  for(var ri=0;ri<=NR;ri++){var tt=ri/NR,ctr=add(Pp,mul(sub(Pn,Pp),tt));
+    var Nv=crs(Lv,Tt),w=wAt(Math.min(1,tt*1.08))*1.3,dd=dAt(Math.min(1,tt*1.08))*1.3,ring=[];
+    for(var jj=0;jj<18;jj++){var an=jj/18*6.2832;ring.push(add(add(ctr,mul(Lv,Math.cos(an)*w)),mul(Nv,Math.sin(an)*dd)))}
+    rr.push(ring);cc.push(ctr)}
+  meshDraw(rr,cc,BODY[0],BODY[1]);
+  var hd=J.head,Th=nor(sub(hd,Pn)),Nh=crs(Lv,Th);
+  tube([Pn,add(Pn,mul(sub(hd,Pn),.7))],[.06,.052],BODY,3,12);
+  var hr=[],hcn=[];
+  for(var q=0;q<=10;q++){var lat=-Math.PI/2+Math.PI*q/10,cs=Math.cos(lat),sn=Math.sin(lat),ctr=add(hd,mul(Th,.12*sn)),ring=[];
+    for(var jj=0;jj<14;jj++){var an=jj/14*6.2832;ring.push(add(add(ctr,mul(Lv,Math.cos(an)*.095*cs)),mul(Nh,Math.sin(an)*.11*cs)))}
+    hr.push(ring);hcn.push(hd)}
+  meshDraw(hr,hcn,BODY[0],BODY[1]);
+  [['shL','elL','haL'],['shR','elR','haR']].forEach(function(c){tube([J[c[0]],J[c[1]],J[c[2]]],[.062,.05,.045],armC,4,12)});
+  drawOpti(J);
+  diamond(J.pelvis,.03,acc);diamond(J.chest,.03,acc);
+  items.sort(function(a,b){return a.z-b.z});items.forEach(function(it){it.d()});
+  [1,2,3,4,5,6].forEach(function(k){var e=document.getElementById('ph'+k);if(e)e.classList.toggle('on',J.phase===k)});
+  var kc=[0,J.kneeL[1],J.kneeL[2]],ac=[0,J.ankL[1],0],hc=[0,J.pelvis[1],J.pelvis[2]],ch=[0,J.chest[1],J.chest[2]];
+  var kf=Math.round(180-Math.abs(((function(){var a1=ang2(kc,ac),a2=ang2(kc,hc),d=a2-a1;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return d})())*180/Math.PI));
+  var hf=Math.round(180-Math.abs(((function(){var a1=ang2(hc,kc),a2=ang2(hc,ch),d=a2-a1;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return d})())*180/Math.PI));
+  var wc='#f6c90e';
+  if(u>.04){wedge(kc,ac,hc,wc,'膝 '+kf+'°');wedge(hc,kc,ch,wc,'股関節 '+hf+'°')}
+  var PHN=['','ファーストプル（床〜膝）','セカンドプル（伸び上がり）','プルアンダー＆キャッチ','スタンド（立ち上がり）','腰の脇へおろす','床へ戻す'];
+  var hcm=Math.round((J.yh+1.07)*82),far=J.far*82>8;
+  var fs=Math.max(12,W*.022);g.font='900 '+fs+'px &quot;Noto Sans JP&quot;,sans-serif';g.textAlign='left';
+  g.fillStyle=wc;g.fillText('膝の屈曲　'+kf+'°',W*.04,H*.09);
+  g.fillText('股関節の屈曲　'+hf+'°',W*.04,H*.09+fs*1.5);
+  g.fillStyle='#f6c90e';g.fillText('背中の傾き　'+Math.round(J.lam*180/Math.PI)+'°',W*.04,H*.09+fs*3);
+  g.fillStyle=['','#fb923c','#f6c90e','#7dd3fc','#86efac','#c4b5fd','#fda4af'][J.phase];g.fillText('局面　'+PHN[J.phase],W*.04,H*.09+fs*4.5);
+  g.fillStyle='#f6c90e';g.fillText('バーの高さ　床から '+hcm+'cm',W*.04,H*.09+fs*6);
+  g.fillStyle=armBad?'#f87171':'#f6c90e';g.fillText('腕　'+(armBad?'早く曲がる（腕で引いている）':(J.phase>=5?'伸ばして腰の脇へ':(J.gg<.5?'まっすぐ（ロープのように）':'曲げて潜る'))),W*.04,H*.09+fs*7.5);
+  var pfa=Math.round(Math.asin(Math.min(1,J.lift/.35))*180/Math.PI);
+  g.fillStyle=pfa>4?'#86efac':'#e2e8f0';g.fillText('足首　'+(pfa>4?'伸展（つま先立ち）'+pfa+'°':'床について曲がっている'),W*.04,H*.09+fs*9);
+  g.fillStyle=far?'#f87171':'#f6c90e';g.fillText('バーと体の距離　'+(far?'離れる ＋'+Math.round(J.far*82)+'cm':'近い'),W*.04,H*.09+fs*10.5);
+  g.fillStyle='#7dd3fc';g.fillText('前額面　足幅　腰幅（つま先は少し外へ）',W*.04,H*.09+fs*12);
+  g.font='700 '+Math.max(10,W*.015)+'px &quot;Noto Sans JP&quot;,sans-serif';g.fillStyle='rgba(248,250,252,.75)';
+  var mp=proj([0,1.25,MIDFOOT]);g.textAlign='center';g.fillText('足の中心',mp[0],mp[1]-8);
+  var bl=proj([0,YP+(RB-2.1)*Math.sin(J.theta),J.ZPe-(RB-2.1)*Math.cos(J.theta)]);
+  g.textAlign='left';g.fillStyle='#cbd5e1';g.fillText('→ 床の固定点（ランドマイン）へ',bl[0]+6,bl[1]-6);
+  requestAnimationFrame(frame);
+}
+function postH(){try{parent.postMessage({fcH:Math.ceil(document.querySelector('.frame').getBoundingClientRect().height)},'*')}catch(e){}}
+if(window.ResizeObserver)new ResizeObserver(postH).observe(document.querySelector('.frame'));window.addEventListener('load',postH);setInterval(postH,800);
+fit();renderForms();renderCard();setCam('side',false);requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
+"></iframe>
+<div class="sep" id="b"><b>VERSION 2</b><p>切り返しあり｜腰の脇から床へ落として、止まらず引き直す</p><span>上の版の「腰の脇へおろす」から、バーを床へ落とし、反発を受けて切り返します。</span></div>
+<iframe id="b2" name="b2" title="切り返しありのフルクリーン" srcdoc="<!DOCTYPE html>
+<html lang=&quot;ja&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<meta name=&quot;robots&quot; content=&quot;noindex, nofollow, noarchive&quot;>
+<title>フルクリーン（オプティバー・切り返しあり）</title>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
+<link href=&quot;https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&amp;display=swap&quot; rel=&quot;stylesheet&quot;>
+<style>
+:root{--bg-0:#05070d;--bg-1:#0a0e1a;--bg-3:#13253a;--bg-4:#1a3049;--line:#1e3555;--gold:#f6c90e;--ng:#f87171;--fg:#f8fafc;--fg-body:#e2e8f0;--fg-sub:#94a3b8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg-0);font-family:'Noto Sans JP',sans-serif;color:var(--fg-body);-webkit-font-smoothing:antialiased}
+.wrap{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:20px;background:radial-gradient(120% 120% at 50% 0%,#0a1220 0%,#05070d 70%)}
+.frame{container-type:inline-size;width:min(96vw,1240px);background:var(--bg-1);border-radius:14px;overflow:hidden;display:block;position:relative;padding:2.6cqw 2.6cqw 2.8cqw}
+.side{display:block}
+.eyebrow{font-size:1cqw;letter-spacing:.3em;color:var(--gold);font-weight:700}
+h1{font-size:2.5cqw;font-weight:900;color:var(--fg);line-height:1.25;margin-top:.4em}
+.row{display:flex;gap:.45cqw;margin-top:1cqw;flex-wrap:wrap}
+.chip{font:inherit;font-weight:700;font-size:1.2cqw;color:var(--fg-body);background:transparent;border:.12cqw solid var(--line);border-radius:999px;padding:.4cqw .9cqw;cursor:pointer}
+.chip[aria-pressed=&quot;true&quot;]{background:var(--pc,var(--gold));border-color:var(--pc,var(--gold));color:#0a0e1a}
+.card{margin-top:1.4cqw;position:relative}
+.chead{background:var(--bg-3);border-radius:1cqw;padding:1.8cqw 2.2cqw 1.9cqw;position:relative;overflow:hidden}
+.chead::before{content:&quot;&quot;;position:absolute;left:0;top:0;right:0;height:.4cqw;background:var(--pc,var(--gold))}
+.card .en{font-size:1.1cqw;letter-spacing:.2em;font-weight:900;color:var(--pc,var(--gold))}
+.card h2{font-size:2.7cqw;font-weight:900;color:var(--fg);margin:.1em 0 .3em;line-height:1.3}
+.card p{font-size:1.9cqw;line-height:1.7;color:var(--fg)}
+.phasegrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw;margin-top:1.4cqw}
+.phcard{display:flex;gap:1.4cqw;align-items:flex-start;background:var(--bg-3);border:.25cqw solid transparent;border-radius:1cqw;padding:1.6cqw 1.8cqw;position:relative;overflow:hidden;opacity:.55;transition:opacity .25s,border-color .25s,background .25s}
+.phcard.on{opacity:1;background:var(--bg-4)}
+.phcard.p1.on{border-color:#fb923c}.phcard.p2.on{border-color:#f6c90e}.phcard.p3.on{border-color:#7dd3fc}.phcard.p4.on{border-color:#86efac}.phcard.p5.on{border-color:#c4b5fd}.phcard.p6.on{border-color:#fda4af}.phcard.p5 .pn,.phcard.p5 .pt1{color:#c4b5fd}.phcard.p6 .pn,.phcard.p6 .pt1{color:#fda4af}.phcard.p3 .pn,.phcard.p3 .pt1{color:#7dd3fc}.phcard.p4 .pn,.phcard.p4 .pt1{color:#86efac}
+.phcard .pn{flex:none;font-size:3cqw;font-weight:900;line-height:1}
+.phcard.p1 .pn,.phcard.p1 .pt1{color:#fb923c}.phcard.p2 .pn,.phcard.p2 .pt1{color:#f6c90e}
+.phcard .pt1{font-size:2cqw;font-weight:900;margin-bottom:.4cqw}
+.phcard .pt2{font-size:1.5cqw;line-height:1.65;color:var(--fg)}
+.ptgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw;margin-top:1.2cqw}
+.pt{background:var(--bg-3);border-radius:1cqw;padding:1.6cqw 1.8cqw 1.7cqw 2.6cqw;position:relative;overflow:hidden;min-height:7.5cqw;display:flex;align-items:center}
+.pt::before{content:&quot;&quot;;position:absolute;left:0;top:0;bottom:0;width:.7cqw;background:var(--pc,var(--gold))}
+.pt .n{flex:none;font-size:2.6cqw;font-weight:900;color:var(--pc,var(--gold));margin-right:1.2cqw;font-variant-numeric:tabular-nums}
+.pt .tx{font-size:1.75cqw;line-height:1.6;font-weight:500;color:var(--fg)}
+.slider{margin-top:1cqw;display:flex;align-items:center;gap:.8cqw;font-size:1.2cqw;color:var(--fg-sub);font-weight:700}
+.slider input{flex:1;accent-color:var(--gold)}
+.autob{font:inherit;font-size:1.3cqw;font-weight:900;color:var(--fg);background:var(--bg-4);border:0;border-radius:999px;padding:.6cqw 1.8cqw;cursor:pointer}
+.autob[aria-pressed=&quot;true&quot;]{background:var(--gold);color:#0a0e1a}
+.stagebox{position:relative;min-width:0;height:clamp(440px,56cqw,760px);margin-top:1.4cqw;background:var(--bg-3);border-radius:1cqw;overflow:hidden}
+canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none}
+canvas:active{cursor:grabbing}
+.cams{position:absolute;right:1.6cqw;top:1.4cqw;display:flex;gap:.4cqw;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:62%}
+.cams span{font-size:1.1cqw;color:var(--fg-sub);margin-right:.4cqw;font-weight:700}
+.cams button,.ctrl button{font:inherit;font-size:1.2cqw;font-weight:700;color:var(--fg);background:var(--bg-4);border:0;border-radius:999px;padding:.55cqw 1.2cqw;cursor:pointer}
+.cams button[aria-pressed=&quot;true&quot;]{background:var(--fg);color:#0a0e1a}
+.hint{position:absolute;left:1.6cqw;bottom:1.4cqw;font-size:1.1cqw;color:var(--fg-sub)}
+.ctrl{position:absolute;right:2.4cqw;bottom:2cqw;display:flex;gap:.4cqw}
+@media (max-width:700px){
+  .frame{width:96vw;padding:16px}.stagebox{height:104vw}
+  .eyebrow{font-size:10px}h1{font-size:22px}.chip{font-size:12px;padding:6px 11px}
+  .chead{padding:16px}.card .en{font-size:10px}.card h2{font-size:22px}.card p{font-size:15px}.ptgrid{grid-template-columns:1fr;gap:10px}.phasegrid{grid-template-columns:1fr}.phcard{padding:14px}.phcard .pn{font-size:24px}.phcard .pt1{font-size:16px}.phcard .pt2{font-size:13.5px}.pt{padding:14px 14px 14px 20px;min-height:0}.pt .n{font-size:22px}.pt .tx{font-size:15px}.slider{font-size:12px}
+  .cams button,.ctrl button{font-size:11px;padding:6px 12px}.cams span,.hint{font-size:10px}
+}
+.wrap{min-height:0;padding:0}html,body{height:auto}
+.rel{display:inline-block;margin-left:1cqw;background:#f6c90e;color:#0a0e1a;font-weight:900;font-size:1.15cqw;letter-spacing:.08em;padding:.25cqw 1.1cqw;border-radius:999px;vertical-align:.1em}
+</style>
+</head>
+<body>
+<div class=&quot;wrap&quot;>
+<div class=&quot;frame&quot;>
+  <div class=&quot;side&quot;>
+    <span class=&quot;eyebrow&quot;>FULL CLEAN ｜ OPTI-BAR ｜ 切り返しあり</span><span class=&quot;rel&quot;>放出系の種目</span>
+    <h1>ドロップして切り返す｜床へ落として、止まらず引き直します</h1>
+    <div class=&quot;row&quot; id=&quot;forms&quot; role=&quot;group&quot; aria-label=&quot;フォームの選択&quot;></div>
+  </div>
+  <div class=&quot;stagebox&quot;>
+    <canvas id=&quot;cv&quot; aria-label=&quot;オプティバーを使ったフルクリーンの3D図&quot;></canvas>
+    <div class=&quot;cams&quot; id=&quot;cams&quot;><span>カメラ</span>
+      <button data-c=&quot;obl&quot; aria-pressed=&quot;false&quot;>斜め前</button>
+      <button data-c=&quot;side&quot; aria-pressed=&quot;true&quot;>横</button>
+      <button data-c=&quot;front&quot; aria-pressed=&quot;false&quot;>正面</button>
+      <button data-c=&quot;oblb&quot; aria-pressed=&quot;false&quot;>斜め後ろ</button>
+      <button data-c=&quot;back&quot; aria-pressed=&quot;false&quot;>後ろ</button>
+      <button data-c=&quot;top&quot; aria-pressed=&quot;false&quot;>真上</button>
+      <button data-c=&quot;low&quot; aria-pressed=&quot;false&quot;>ローアングル</button>
+    </div>
+    <div class=&quot;hint&quot;>ドラッグで自由に回せます　／　黄の壁＝矢状面　青の壁＝前額面</div>
+  </div>
+  <div class=&quot;slider&quot;><button class=&quot;autob&quot; id=&quot;pause&quot; aria-pressed=&quot;true&quot;>自動</button><button class=&quot;autob&quot; id=&quot;slow&quot; aria-pressed=&quot;false&quot;>スロー</button><span>動き</span><input type=&quot;range&quot; id=&quot;seek&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;0&quot; aria-label=&quot;動きの位置&quot;><span id=&quot;seekl&quot;>立位</span></div>
+  <div class=&quot;phasegrid&quot;>
+    <div class=&quot;phcard p6&quot; id=&quot;ph1&quot;><span class=&quot;pn&quot;>1</span><div><div class=&quot;pt1&quot;>ドロップ　腰の脇から床へ</div><div class=&quot;pt2&quot;>腰の脇の位置から、腕を伸ばしたまま、体を落としてバーを床へ落とします。膝と股関節を曲げて、受ける準備をします。</div></div></div>
+    <div class=&quot;phcard p1&quot; id=&quot;ph2&quot;><span class=&quot;pn&quot;>2</span><div><div class=&quot;pt1&quot;>切り返し　反発を受けて引き始め</div><div class=&quot;pt2&quot;>床で止まらず、バーの反発を受けた瞬間に、足で床を押して引き始めます（ストレッチ・ショートニング）。</div></div></div>
+    <div class=&quot;phcard p2&quot; id=&quot;ph3&quot;><span class=&quot;pn&quot;>3</span><div><div class=&quot;pt1&quot;>ファースト〜セカンドプル</div><div class=&quot;pt2&quot;>腕は伸ばしたまま、足で押して加速し、股関節・膝・足首を一気に伸ばします。足首が伸展して、つま先立ちになります。</div></div></div>
+    <div class=&quot;phcard p3&quot; id=&quot;ph4&quot;><span class=&quot;pn&quot;>4</span><div><div class=&quot;pt1&quot;>プルアンダー＆キャッチ</div><div class=&quot;pt2&quot;>股関節が伸び切ってから、肘を下へ潜らせ、バーの下へ入ります。キャッチの瞬間は、肘を脇の近くに収めます。</div></div></div>
+    <div class=&quot;phcard p4&quot; id=&quot;ph5&quot;><span class=&quot;pn&quot;>5</span><div><div class=&quot;pt1&quot;>スタンド　立ち上がり</div><div class=&quot;pt2&quot;>キャッチの姿勢から、足で床を押して立ち上がります。肘は脇の近くに収めたままです。</div></div></div>
+    <div class=&quot;phcard p5&quot; id=&quot;ph6&quot;><span class=&quot;pn&quot;>6</span><div><div class=&quot;pt1&quot;>腰の脇へ　次の1回へ</div><div class=&quot;pt2&quot;>腕を伸ばしながら、ハンドルを腰の脇までおろします。ここから、次のドロップへ入ります。</div></div></div>
+  </div>
+  <div class=&quot;card&quot; id=&quot;card&quot;></div>
+</div>
+</div>
+<script>
+(function(){
+var FORMS={
+ ok:{name:'正しいフォーム',col:'#f6c90e',cam:'side',head:'放出系の種目です。腰の脇から、バーを床へ落とし（ドロップ）、床で止まらずに跳ね返りを受けて、そのまま次のクリーンへ切り返します。',
+   pts:['腰の脇から、体を落としながらバーを床へ落とす（腕は伸ばしたまま）','床で止まらず、反発を受けて切り返す（ストレッチ・ショートニング）','切り返しでも背骨はまっすぐ。足で床を押して加速する','伸び上がり→肘の潜り込み→キャッチは、床から引く版と同じ']},
+ stop:{name:'NG：床で止まる',col:'#f87171',cam:'side',head:'床で一度止まり、切り返しの反発が使えません。床から引く通常のクリーンと同じ動きになります。',
+   pts:['止まると、落とした勢い（反発）が消える','足と股関節の力だけで引くことになる','対策：床に着く前から、膝と股関節を曲げて受ける準備をする','対策：着いた瞬間に、足で床を押して引き始める']},
+ arm:{name:'NG：腕で早く引く',col:'#f87171',cam:'side',head:'伸び上がる前に肘が曲がり、腕で引く形になります。足と股関節の力がバーに伝わりません。',
+   pts:['腕で早く引くと、足と股関節の力が使えない','バーが体の前へ離れやすい','対策：伸び上がるまで、腕はロープのように伸ばしたままにする','対策：伸び上がり切ってから、肘を動かして体を下へ潜らせる']},
+ far:{name:'NG：バーが体から離れる',col:'#f87171',cam:'side',head:'バーが体から離れ、前へ流れます。キャッチで前へ倒されやすくなります。',
+   pts:['バーが体から離れると、キャッチで前へ倒される','腕が伸びきり、肩に負担がかかる','対策：バーを体に近い軌道で引く','対策：セカンドプルでお尻を前へ押し出し、バーを体へ近づける']}
+};
+var FORDER=['ok','stop','arm','far'];
+var CAMS={obl:{yaw:-.62,pitch:.28},front:{yaw:0,pitch:.04},side:{yaw:-Math.PI/2,pitch:.04},oblb:{yaw:Math.PI+.62,pitch:.28},back:{yaw:Math.PI,pitch:.04},top:{yaw:-Math.PI/2,pitch:1.5},low:{yaw:-.5,pitch:-.32}};
+var form='ok', playing=true, t=0, last=0, manual=null;
+var yaw=CAMS.side.yaw,pitch=CAMS.side.pitch,tyaw=yaw,tpitch=pitch,camLock=false,dragging=false,lx=0,ly=0;
+var cv=document.getElementById('cv'),g=cv.getContext('2d'),W=0,H=0,dpr=1;
+
+function setCam(n,user){tyaw=CAMS[n].yaw;tpitch=CAMS[n].pitch;
+  document.querySelectorAll('#cams button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.c===n?'true':'false')});if(user)camLock=true}
+function renderForms(){
+  var el=document.getElementById('forms');el.innerHTML='';
+  FORDER.forEach(function(k){var f=FORMS[k],b=document.createElement('button');b.className='chip';b.textContent=f.name;
+    b.style.setProperty('--pc',f.col);b.setAttribute('aria-pressed',k===form?'true':'false');
+    b.onclick=function(){form=k;camLock=false;renderForms();renderCard();setCam(f.cam,false)};el.appendChild(b)});
+}
+function renderCard(){var f=FORMS[form],c=document.getElementById('card');c.style.setProperty('--pc',f.col);
+  c.innerHTML='<div class=&quot;chead&quot;><span class=&quot;en&quot;>'+(form==='ok'?'CHECK POINTS':'COMMON MISTAKE')+'</span><h2>'+f.name+'</h2><p>'+f.head+'</p></div><div class=&quot;ptgrid&quot;>'+f.pts.map(function(x,i){return '<div class=&quot;pt&quot;><span class=&quot;n&quot;>'+(i+1)+'</span><span class=&quot;tx&quot;>'+x+'</span></div>'}).join('')+'</div>'}
+document.querySelectorAll('#cams button').forEach(function(b){b.onclick=function(){setCam(b.dataset.c,true)}});
+var pauseB=document.getElementById('pause'),slowB=document.getElementById('slow'),slow=false;
+function syncAuto(){pauseB.setAttribute('aria-pressed',playing?'true':'false')}
+pauseB.onclick=function(){playing=!playing;if(playing)manual=null;syncAuto()};
+slowB.onclick=function(){slow=!slow;slowB.setAttribute('aria-pressed',slow?'true':'false')};
+var seek=document.getElementById('seek');
+seek.oninput=function(){playing=false;syncAuto();manual=seek.value/100};
+function fit(){var r=cv.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0)}
+window.addEventListener('resize',fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(cv);
+cv.addEventListener('pointerdown',function(e){dragging=true;lx=e.clientX;ly=e.clientY;camLock=true;document.querySelectorAll('#cams button').forEach(function(b){b.setAttribute('aria-pressed','false')});cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',function(e){if(!dragging)return;yaw+=(e.clientX-lx)*.008;pitch=Math.max(-.6,Math.min(1.55,pitch+(e.clientY-ly)*.006));tyaw=yaw;tpitch=pitch;lx=e.clientX;ly=e.clientY});
+cv.addEventListener('pointerup',function(){dragging=false});cv.addEventListener('pointercancel',function(){dragging=false});
+
+function rx(p,a){var c=Math.cos(a),s=Math.sin(a);return [p[0],p[1]*c-p[2]*s,p[1]*s+p[2]*c]}
+function ry(p,a){var c=Math.cos(a),s=Math.sin(a);return [p[0]*c+p[2]*s,p[1],-p[0]*s+p[2]*c]}
+function add(a,b){return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]}
+var S0,CX,CY,D=5;
+function proj(p){var q=ry(p,yaw);q=rx(q,-pitch);var k=D/(D-q[2]);return [CX+q[0]*S0*k,CY-q[1]*S0*k,q[2],k]}
+
+// u: 0=立位 1=ボトム
+var AX=.17,TA=8*Math.PI/180,MIDFOOT=.06,HZ=.06;
+var LA=.80,TL1=.50,TL2=.26;
+var RB=3.0,YP=-.99;                 // 床の固定点（ランドマイン）の高さと、バーの回転半径
+var KP=[0,.28,.50,.78,1.0,1.3,1.6];   // スタート／ファースト／セカンド(伸び切り)／キャッチ／スタンド／腰の脇へ／床へ戻す
+var PMAX=1.6;
+function hs(v,p){
+  var n=KP.length,i=0;while(i<n-2&amp;&amp;p>KP[i+1])i++;
+  var t0=KP[i],t1=KP[i+1],h=t1-t0,u=(p-t0)/h,u2=u*u,u3=u2*u;
+  function m(k){var a=Math.max(0,k-1),b=Math.min(n-1,k+1);return (v[b]-v[a])/(KP[b]-KP[a])}
+  var m0=m(i)*h,m1=m(i+1)*h;
+  return (2*u3-3*u2+1)*v[i]+(u3-2*u2+u)*m0+(-2*u3+3*u2)*v[i+1]+(u3-u2)*m1;
+}
+function ik3(h,a,l1,l2,pole){var dv=sub(a,h),dl=Math.min(len(dv),l1+l2-.002),dn=nor(dv),aa=(l1*l1-l2*l2+dl*dl)/(2*dl),hh=Math.sqrt(Math.max(0,l1*l1-aa*aa)),pn=nor(sub(pole,mul(dn,dot(pole,dn))));return add(add(h,mul(dn,aa)),mul(pn,hh))}
+function pose(f,u){
+  var p=u*PMAX,rad=Math.PI/180,ankY=-1.04;
+  var YH=f==='shallow'?[-.78,-.50,.10,.30,.68,-.02,-.78]:[-.78,-.50,.10,.08,.68,-.02,-.78];
+  var LM=f==='shallow'?[50,44,6,8,0,0,50]:[50,44,6,16,0,0,50];
+  var yh=hs(YH,p),lam=hs(LM,p)*rad,lift=Math.max(0,hs([0,.02,.13,.0,0,0,0],p));
+  var ga=f==='arm'?.06:.50,gb=f==='arm'?.30:.66;                 // 股関節が伸び切ってから、肘を曲げて潜る
+  var gu=Math.max(0,Math.min(1,(p-ga)/(gb-ga)));gu=gu*gu*(3-2*gu);
+  var gd=Math.max(0,Math.min(1,(p-1.0)/.25));gd=gd*gd*(3-2*gd);   // スタンドからおろすとき、腕を伸ばす
+  var gg=gu*(1-gd);
+  var th0=Math.asin((-.78-YP)/RB),ZPe=HZ+RB*Math.cos(th0);
+  var th=Math.asin((yh-YP)/RB),zh=ZPe-RB*Math.cos(th);
+  var far=f==='far'?.28*Math.sin(Math.PI*Math.min(1,p/.72)):0;
+  var armz=(1-gg)*(-.03)+gg*.18,army=(1-gg)*(-LA)+gg*(-.04);
+  var Sz=zh-armz,Sy=yh-army;
+  var ay=ankY+lift;
+  var Hz=Sz-(TL1+TL2)*Math.sin(lam),Hy=Sy-(TL1+TL2)*Math.cos(lam);
+  var dx=Hz,dy=Hy-ay,d=Math.sqrt(dx*dx+dy*dy);
+  if(d>1.036){Hz=dx*1.036/d;Hy=ay+dy*1.036/d;d=1.036;dx=Hz;dy=Hy-ay}
+  var ux=dx/d,uy=dy/d,mh=Math.sqrt(Math.max(0,.52*.52-(d/2)*(d/2)));
+  var Kz=Hz/2+mh*uy,Ky=(ay+Hy)/2-mh*ux;
+  var pel=[0,Hy,Hz],J={pelvis:pel};
+  J.hipL=add(pel,[-.14,0,0]);J.hipR=add(pel,[.14,0,0]);
+  J.ankL=[-AX,ay,0];J.ankR=[AX,ay,0];
+  J.kneeL=[-(AX+.01),Ky,Kz];J.kneeR=[AX+.01,Ky,Kz];
+  J.footL=add(J.ankL,[-Math.sin(TA)*.28,-.02,Math.cos(TA)*.28]);J.footR=add(J.ankR,[Math.sin(TA)*.28,-.02,Math.cos(TA)*.28]);
+  var chest=add(pel,[0,TL1*Math.cos(lam),TL1*Math.sin(lam)]);
+  var shm=add(chest,[0,TL2*Math.cos(lam),TL2*Math.sin(lam)]);
+  var l3=lam*.6,neck=add(chest,[0,.34*Math.cos(lam),.34*Math.sin(lam)]);
+  J.chest=chest;J.neck=neck;J.head=add(neck,[0,.22*Math.cos(l3),.22*Math.sin(l3)]);
+  J.shL=add(shm,[-.27,0,0]);J.shR=add(shm,[.27,0,0]);
+  J.haL=[-.34,yh,zh+far];J.haR=[.34,yh,zh+far];
+  var epx=.35*(1-gg)+.08*gg,epy=-1,epz=.15*(1-gg)-.25*gg;       // 肘は下へ潜り、キャッチでは脇の近くに収まる
+  J.elL=ik3(J.shL,J.haL,.40,.40,[-epx,epy,epz]);J.elR=ik3(J.shR,J.haR,.40,.40,[epx,epy,epz]);
+  J.bar=[0,yh,zh+far];
+  J.lam=lam;J.theta=th;J.ZPe=ZPe;J.lift=lift;J.gg=gg;J.yh=yh;J.sz=Sz;J.far=far;
+  J.phase=p<KP[1]?1:p<KP[2]?2:p<KP[3]?3:p<KP[4]?4:p<KP[5]?5:6;
+  return J;
+}
+function barTrail(f){var r=[];for(var i=0;i<=30;i++){r.push(pose(f,i/30).bar)}return r}
+
+function drawPlane(){
+  var a=1.15,q=[[0,-1.2,-a],[0,-1.2,a],[0,1.25,a],[0,1.25,-a]].map(proj);
+  g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<4;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
+  g.fillStyle='rgba(246,201,14,.08)';g.fill();g.lineWidth=2;g.strokeStyle='rgba(246,201,14,.55)';g.stroke();
+}
+function drawPlane2(){
+  var a=1.15,z=MIDFOOT,q=[[-a,-1.2,z],[a,-1.2,z],[a,1.25,z],[-a,1.25,z]].map(proj);
+  g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<4;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
+  g.fillStyle='rgba(125,211,252,.08)';g.fill();g.lineWidth=2;g.strokeStyle='rgba(125,211,252,.6)';g.stroke();
+}
+function ang2(c,p){return Math.atan2(p[2]-c[2],p[1]-c[1])}
+function wedge(c,pa,pb,col,label){
+  var a1=ang2(c,pa),a2=ang2(c,pb),d=a2-a1;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;
+  var r=.27,pts=[proj(c)];for(var i=0;i<=18;i++){var a=a1+d*i/18;pts.push(proj([c[0],c[1]+r*Math.cos(a),c[2]+r*Math.sin(a)]))}
+  g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();
+  g.fillStyle=col==='#f6c90e'?'rgba(246,201,14,.38)':'rgba(248,113,113,.38)';g.fill();g.lineWidth=3;g.strokeStyle=col;g.stroke();
+  var am=a1+d/2,lp=proj([c[0],c[1]+(r+.2)*Math.cos(am),c[2]+(r+.2)*Math.sin(am)]);
+  g.font='900 '+Math.max(11,W*.017)+'px &quot;Noto Sans JP&quot;,sans-serif';g.fillStyle=col;g.textAlign='center';g.fillText(label,lp[0],lp[1]);
+  return Math.round(180-Math.abs(d)*180/Math.PI);
+}
+function line(a,b,w,col){g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineWidth=w;g.strokeStyle=col;g.lineCap='round';g.stroke()}
+function disc(c,r,col){var pts=[];for(var i=0;i<28;i++){var a=i/28*Math.PI*2;pts.push(proj([c[0],c[1]+r*Math.cos(a),c[2]+r*Math.sin(a)]))}
+  g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();g.fillStyle='#0a0e1a';g.fill();g.lineWidth=3;g.strokeStyle=col;g.stroke()}
+
+
+function sub(a,b){return[a[0]-b[0],a[1]-b[1],a[2]-b[2]]}
+function mul(a,k){return[a[0]*k,a[1]*k,a[2]*k]}
+function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]}
+function crs(a,b){return[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]]}
+function len(a){return Math.sqrt(dot(a,a))}
+function nor(a){var l=len(a)||1;return[a[0]/l,a[1]/l,a[2]/l]}
+function lerp(a,b,m){return a+(b-a)*m}
+var items=[],S=1;
+// ---------- 描画部品 ----------
+  var items=[];
+  function seg3(a,b,w,col,zb){var pa=proj(a),pb=proj(b);items.push({z:(pa[2]+pb[2])/2+(zb||0),d:function(){
+    g.strokeStyle=col;g.lineWidth=w*S*(pa[3]+pb[3])/2;g.lineCap='round';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.stroke()}})}
+  function poly(pts,fill,stroke,alphaFn,zb){var q=pts.map(proj),z=0;q.forEach(function(p){z+=p[2]});z/=q.length;items.push({z:z+(zb||0),d:function(){
+    g.globalAlpha=alphaFn?alphaFn():1;g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<q.length;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
+    if(fill){g.fillStyle=fill;g.fill()}if(stroke){g.strokeStyle=stroke;g.lineWidth=2;g.stroke()}g.globalAlpha=1}})}
+  // ---- 滑らかな立体（メッシュ）：断面のリングをつないで面を張る ----
+  var LIGHT=nor([-.35,.75,.55]);
+  function meshDraw(rings,centers,shadow,light){
+    var R=rings.length,N=rings[0].length,pr=rings.map(function(r){return r.map(proj)});
+    for(var i=0;i<R-1;i++){
+      var cc=mul(add(centers[i],centers[i+1]),.5);
+      for(var j=0;j<N;j++){
+        var j2=(j+1)%N,a=pr[i][j],b=pr[i][j2],c=pr[i+1][j2],d=pr[i+1][j];
+        var mid=mul(add(add(rings[i][j],rings[i][j2]),add(rings[i+1][j2],rings[i+1][j])),.25);
+        var nn=nor(sub(mid,cc)),k=Math.max(0,dot(nn,LIGHT)),kk=.18+.82*Math.pow(k,.8);
+        var col='rgb('+Math.round(lerp(shadow[0],light[0],kk))+','+Math.round(lerp(shadow[1],light[1],kk))+','+Math.round(lerp(shadow[2],light[2],kk))+')';
+        (function(a,b,c,d,col){items.push({z:(a[2]+b[2]+c[2]+d[2])/4,d:function(){
+          g.fillStyle=col;g.strokeStyle=col;g.lineWidth=1;g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineTo(c[0],c[1]);g.lineTo(d[0],d[1]);g.closePath();g.fill();g.stroke()}})})(a,b,c,d,col);
+      }
+    }
+  }
+  function densify(pts,rad,k){var P=[],Rr=[];for(var i=0;i<pts.length-1;i++){for(var t=0;t<k;t++){var u=t/k;P.push(add(mul(pts[i],1-u),mul(pts[i+1],u)));Rr.push(lerp(rad[i],rad[i+1],u))}}P.push(pts[pts.length-1]);Rr.push(rad[rad.length-1]);return{P:P,R:Rr}}
+  function tube(pts,rad,col,k,sides){
+    var dd=densify(pts,rad,k||3),P=dd.P,rings=[],u=null;sides=sides||12;
+    for(var i=0;i<P.length;i++){
+      var t=nor(sub(P[Math.min(P.length-1,i+1)],P[Math.max(0,i-1)]));
+      if(!u){var ref=Math.abs(t[1])>.9?[1,0,0]:[0,1,0];u=nor(crs(t,ref))}else{u=nor(sub(u,mul(t,dot(u,t))))}
+      var v=crs(t,u),ring=[];
+      for(var j=0;j<sides;j++){var a=j/sides*6.2832;ring.push(add(P[i],add(mul(u,Math.cos(a)*dd.R[i]),mul(v,Math.sin(a)*dd.R[i]))))}
+      rings.push(ring);
+    }
+    meshDraw(rings,P,col[0],col[1]);
+  }
+  var BODY=[[78,94,122],[236,242,250]],BODY2=[[70,86,114],[222,230,242]],SKIN=0,SKIN2=0,GOLD=['#fff1a8','#f6c90e','#9a7b05'];
+
+  function dashed(a,b,col,w,zb){var pa=proj(a),pb=proj(b);items.push({z:(pa[2]+pb[2])/2+(zb||0),d:function(){
+    g.setLineDash([8,8]);g.strokeStyle=col;g.lineWidth=w;g.lineCap='butt';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.stroke();g.setLineDash([])}})}
+  function diamond(p,r,col){var q=proj(p),R=r*S*q[3];items.push({z:q[2]+3,d:function(){
+    g.fillStyle=col;g.strokeStyle='#0a0e1a';g.lineWidth=2;g.beginPath();g.moveTo(q[0],q[1]-R);g.lineTo(q[0]+R,q[1]);g.lineTo(q[0],q[1]+R);g.lineTo(q[0]-R,q[1]);g.closePath();g.fill();g.stroke()}})}
+  var BODY=[[78,94,122],[236,242,250]],BODY2=[[70,86,114],[222,230,242]];
+    function wAt(t){return lerp(.155,.135,Math.min(1,t/.3))+(t>=.3?lerp(0,.05,Math.min(1,(t-.3)/.45)):0)-(t>.8?(t-.8)*.1:0)}
+  function dAt(t){return t<.3?lerp(.10,.088,t/.3):lerp(.088,.108,Math.min(1,(t-.3)/.45))-(t>.85?(t-.85)*.2:0)}
+function mapP(u){
+  // 腰の脇で待つ → ドロップ(速く) → 切り返して一気に引く → 潜り込み → スタンド → 腰の脇へ → 待つ
+  var L=[.05,.10,(form==='stop'?.14:0),.09,.10,.18,.36,.12],P0=[1.3,1.3,1.6,1.6,0,.5,.78,1.0],P1=[1.3,1.6,1.6,.5,.5,.78,1.0,1.3];
+  // 区間：待つ/ドロップ/床で止まる(NGのみ)/引く(0→.5)/(予備)/潜り込み(.5→.78)/スタンド(.78→1.0)/腰の脇へ(1.0→1.3)
+  var tot=0,i;for(i=0;i<L.length;i++)tot+=L[i];
+  var x=u*tot,acc=0;
+  var seg=[{l:.05,a:1.3,b:1.3,e:0},{l:.10,a:1.3,b:1.6,e:1},{l:(form==='stop'?.14:0),a:1.6,b:1.6,e:0},{l:.09,a:0,b:.5,e:2},{l:.10,a:.5,b:.78,e:0},{l:.18,a:.78,b:1.0,e:3},{l:.36,a:1.0,b:1.3,e:3},{l:.12,a:1.3,b:1.3,e:0}];
+  tot=0;seg.forEach(function(q){tot+=q.l});x=u*tot;
+  for(i=0;i<seg.length;i++){var q=seg[i];if(q.l<=0)continue;
+    if(x<=acc+q.l||i===seg.length-1){var s=Math.max(0,Math.min(1,(x-acc)/q.l));
+      if(q.e===1)s=s*s;            // ドロップ：落ちるほど速い
+      else if(q.e===2)s=1-Math.pow(1-s,1.5);   // 切り返し：最初が速い
+      else if(q.e===3)s=s*s*(3-2*s);
+      return q.a+(q.b-q.a)*s}
+    acc+=q.l}
+  return 1.3;
+}
+function phB(p){return p>1.3+1e-6?1:p<.14?2:p<.5?3:p<.78?4:p<1.0?5:6}
+function drawOpti(J){
+  var th=J.theta,R=RB,ZPe=J.ZPe,c=Math.cos(th),sn=Math.sin(th);
+  function W3(sv,x,dy){dy=dy||0;return [x,YP+sv*sn+dy*c,ZPe-sv*c+dy*sn]}
+  var BARC=[[70,74,82],[200,206,216]],SILV=[[110,116,126],[236,240,246]],GRIP=[[20,20,24],[120,124,134]];
+  // 実物（Perform Better）：後ろが開いた五角形の枠。前の中央にバーの差し込み口、後ろの両端に回転ハンドルとウエイトホーン
+  var P=[[R+.40,-.50],[R-.10,-.50],[R-.60,-.26],[R-.60,.26],[R-.10,.50],[R+.40,.50]];
+  for(var i=0;i<5;i++){var a=P[i],b=P[i+1];tube([W3(a[0],a[1]),W3(b[0],b[1])],[.032,.032],BARC,3,8)}
+  tube([W3(R-.60,0),W3(R-2.1,0)],[.022,.022],SILV,3,10);
+  [-1,1].forEach(function(sg){
+    var hx=sg*.34;
+    tube([W3(R+.05,hx,0),W3(R+.38,hx,0)],[.03,.03],GRIP,3,8);
+    tube([W3(R+.05,sg*.50),W3(R+.05,hx,0)],[.018,.018],BARC,2,8);tube([W3(R+.38,sg*.50),W3(R+.38,hx,0)],[.018,.018],BARC,2,8);
+    tube([W3(R+.40,sg*.50),W3(R+.40,sg*.88)],[.024,.024],SILV,3,10);
+    [sg*.66,sg*.76].forEach(function(px){var cen=W3(R+.40,px),pl=[];
+      for(var k=0;k<24;k++){var an=k/24*6.2832,ca=Math.cos(an),sa=Math.sin(an);pl.push([px,cen[1]+.15*(ca*sn+sa*c),cen[2]+.15*(-ca*c+sa*sn)])}
+      poly(pl,'#0a0e1a','#f6c90e',null,3)});
+  });
+}
+function frame(ts){
+  if(!last)last=ts;var dt=Math.min(.05,(ts-last)/1000);last=ts;
+  if(playing)t+=dt*(slow?.5:1)/7;
+  if(!dragging){var dyw=tyaw-yaw;dyw=Math.atan2(Math.sin(dyw),Math.cos(dyw));yaw+=dyw*Math.min(1,dt*6);pitch+=(tpitch-pitch)*Math.min(1,dt*6)}
+  var cyc=t-Math.floor(t),u=manual!==null?manual:cyc;
+  if(manual===null){seek.value=Math.round(u*100)}
+  document.getElementById('seekl').textContent=['','ドロップ','切り返し','ファースト〜セカンド','キャッチ','スタンド','腰の脇へ'][phB(mapP(u))];
+  var f=FORMS[form],pr=mapP(u),J=pose(form,pr/PMAX);J.phase=phB(pr);
+  var acc=f.col,col='#e2e8f0';
+  g.clearRect(0,0,W,H);
+  S0=Math.min(W*.42,H*.36);CX=W*.5-S0*.25;CY=H*.5+S0*.14;
+  drawPlane();drawPlane2();
+  var sc=S0/160;
+  var fc=[];for(var i=0;i<=40;i++){var th=i/40*Math.PI*2;fc.push(proj([Math.cos(th)*.6,-1.07,Math.sin(th)*.6]))}
+  g.beginPath();fc.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.strokeStyle='rgba(148,163,184,.45)';g.lineWidth=1.5;g.stroke();
+  g.setLineDash([10,8]);line(proj([0,-1.07,MIDFOOT]),proj([0,1.25,MIDFOOT]),2.5,'rgba(248,250,252,.6)');g.setLineDash([]);
+  g.setLineDash([2,8]);g.lineWidth=4;g.strokeStyle=acc;g.lineCap='round';g.beginPath();
+  var trl=[];for(var ti=0;ti<=40;ti++)trl.push(pose(form,ti/40).bar);
+  trl.forEach(function(p,i){var q=proj(p);i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])});g.stroke();g.setLineDash([]);
+  g.setLineDash([9,7]);
+  [-1,1].forEach(function(sg){line(proj([sg*AX-sg*Math.sin(TA)*.15,-1.07,-Math.cos(TA)*.15]),proj([sg*AX+sg*Math.sin(TA)*1.0,-1.07,Math.cos(TA)*1.0]),2.5,'rgba(125,211,252,.85)')});
+  g.setLineDash([]);
+  S=S0;items.length=0;
+  var armBad=(form==='arm'&amp;&amp;J.gg>.1&amp;&amp;mapP(u)<.5),armC=armBad?[[120,40,40],[255,150,150]]:BODY;
+  ['L','R'].forEach(function(sd){
+    var hp=J['hip'+sd],kn=J['knee'+sd],ak=J['ank'+sd];
+    tube([hp,kn,ak],[.105,.075,.052],BODY2,4,12);
+    var sg=sd==='L'?-1:1,fd=[sg*Math.sin(TA),0,Math.cos(TA)];
+    var heel=add(ak,add(mul(fd,-.09),[0,.005,0])),toe=[ak[0]+fd[0]*.26,-1.025,ak[2]+fd[2]*.26];
+    tube([heel,toe],[.04,.038],BODY2,3,12);
+  });
+  var Pp=J.pelvis,Pn=J.neck,Lv=[1,0,0],NR=18,rr=[],cc=[],Tt=nor(sub(Pn,Pp));
+  for(var ri=0;ri<=NR;ri++){var tt=ri/NR,ctr=add(Pp,mul(sub(Pn,Pp),tt));
+    var Nv=crs(Lv,Tt),w=wAt(Math.min(1,tt*1.08))*1.3,dd=dAt(Math.min(1,tt*1.08))*1.3,ring=[];
+    for(var jj=0;jj<18;jj++){var an=jj/18*6.2832;ring.push(add(add(ctr,mul(Lv,Math.cos(an)*w)),mul(Nv,Math.sin(an)*dd)))}
+    rr.push(ring);cc.push(ctr)}
+  meshDraw(rr,cc,BODY[0],BODY[1]);
+  var hd=J.head,Th=nor(sub(hd,Pn)),Nh=crs(Lv,Th);
+  tube([Pn,add(Pn,mul(sub(hd,Pn),.7))],[.06,.052],BODY,3,12);
+  var hr=[],hcn=[];
+  for(var q=0;q<=10;q++){var lat=-Math.PI/2+Math.PI*q/10,cs=Math.cos(lat),sn=Math.sin(lat),ctr=add(hd,mul(Th,.12*sn)),ring=[];
+    for(var jj=0;jj<14;jj++){var an=jj/14*6.2832;ring.push(add(add(ctr,mul(Lv,Math.cos(an)*.095*cs)),mul(Nh,Math.sin(an)*.11*cs)))}
+    hr.push(ring);hcn.push(hd)}
+  meshDraw(hr,hcn,BODY[0],BODY[1]);
+  [['shL','elL','haL'],['shR','elR','haR']].forEach(function(c){tube([J[c[0]],J[c[1]],J[c[2]]],[.062,.05,.045],armC,4,12)});
+  drawOpti(J);
+  diamond(J.pelvis,.03,acc);diamond(J.chest,.03,acc);
+  items.sort(function(a,b){return a.z-b.z});items.forEach(function(it){it.d()});
+  [1,2,3,4,5,6].forEach(function(k){var e=document.getElementById('ph'+k);if(e)e.classList.toggle('on',J.phase===k)});
+  var kc=[0,J.kneeL[1],J.kneeL[2]],ac=[0,J.ankL[1],0],hc=[0,J.pelvis[1],J.pelvis[2]],ch=[0,J.chest[1],J.chest[2]];
+  var kf=Math.round(180-Math.abs(((function(){var a1=ang2(kc,ac),a2=ang2(kc,hc),d=a2-a1;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return d})())*180/Math.PI));
+  var hf=Math.round(180-Math.abs(((function(){var a1=ang2(hc,kc),a2=ang2(hc,ch),d=a2-a1;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;return d})())*180/Math.PI));
+  var wc='#f6c90e';
+  if(u>.04){wedge(kc,ac,hc,wc,'膝 '+kf+'°');wedge(hc,kc,ch,wc,'股関節 '+hf+'°')}
+  var PHN=['','ドロップ（腰の脇から床へ）','切り返し（反発を受けて引き始め）','ファースト〜セカンドプル','プルアンダー＆キャッチ','スタンド（立ち上がり）','腰の脇へ'];
+  var hcm=Math.round((J.yh+1.07)*82),far=J.far*82>8;
+  var fs=Math.max(12,W*.022);g.font='900 '+fs+'px &quot;Noto Sans JP&quot;,sans-serif';g.textAlign='left';
+  g.fillStyle=wc;g.fillText('膝の屈曲　'+kf+'°',W*.04,H*.09);
+  g.fillText('股関節の屈曲　'+hf+'°',W*.04,H*.09+fs*1.5);
+  g.fillStyle='#f6c90e';g.fillText('背中の傾き　'+Math.round(J.lam*180/Math.PI)+'°',W*.04,H*.09+fs*3);
+  g.fillStyle=['','#fda4af','#fb923c','#f6c90e','#7dd3fc','#86efac','#c4b5fd'][J.phase];g.fillText('局面　'+PHN[J.phase],W*.04,H*.09+fs*4.5);
+  g.fillStyle='#f6c90e';g.fillText('バーの高さ　床から '+hcm+'cm',W*.04,H*.09+fs*6);
+  g.fillStyle=armBad?'#f87171':'#f6c90e';g.fillText('腕　'+(armBad?'早く曲がる（腕で引いている）':(J.phase===6?'伸ばして腰の脇へ':(J.gg<.5?'まっすぐ（ロープのように）':'曲げて潜る'))),W*.04,H*.09+fs*7.5);
+  var pfa=Math.round(Math.asin(Math.min(1,J.lift/.35))*180/Math.PI);
+  g.fillStyle=pfa>4?'#86efac':'#e2e8f0';g.fillText('足首　'+(pfa>4?'伸展（つま先立ち）'+pfa+'°':'床について曲がっている'),W*.04,H*.09+fs*9);
+  g.fillStyle=far?'#f87171':'#f6c90e';g.fillText('バーと体の距離　'+(far?'離れる ＋'+Math.round(J.far*82)+'cm':'近い'),W*.04,H*.09+fs*10.5);
+  g.fillStyle='#7dd3fc';g.fillText('前額面　足幅　腰幅（つま先は少し外へ）',W*.04,H*.09+fs*12);
+  g.font='700 '+Math.max(10,W*.015)+'px &quot;Noto Sans JP&quot;,sans-serif';g.fillStyle='rgba(248,250,252,.75)';
+  var mp=proj([0,1.25,MIDFOOT]);g.textAlign='center';g.fillText('足の中心',mp[0],mp[1]-8);
+  var bl=proj([0,YP+(RB-2.1)*Math.sin(J.theta),J.ZPe-(RB-2.1)*Math.cos(J.theta)]);
+  g.textAlign='left';g.fillStyle='#cbd5e1';g.fillText('→ 床の固定点（ランドマイン）へ',bl[0]+6,bl[1]-6);
+  requestAnimationFrame(frame);
+}
+function postH(){try{parent.postMessage({fcH:Math.ceil(document.querySelector('.frame').getBoundingClientRect().height)},'*')}catch(e){}}
+if(window.ResizeObserver)new ResizeObserver(postH).observe(document.querySelector('.frame'));window.addEventListener('load',postH);setInterval(postH,800);
+fit();renderForms();renderCard();setCam('side',false);requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
+"></iframe>
+</div>
+<script>
+window.addEventListener('message',function(e){
+  if(!e.data||!e.data.fcH)return;
+  [].forEach.call(document.querySelectorAll('iframe'),function(f){if(f.contentWindow===e.source)f.style.height=e.data.fcH+'px'});
+});
+</script>
+</body></html>
