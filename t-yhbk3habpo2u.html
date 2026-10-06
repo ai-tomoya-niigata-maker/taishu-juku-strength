@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>ボックスジャンプ｜3D解説</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg-0:#05070d;--bg-1:#0a0e1a;--bg-3:#13253a;--bg-4:#1a3049;--line:#1e3555;--gold:#f6c90e;--ng:#f87171;--fg:#f8fafc;--fg-body:#e2e8f0;--fg-sub:#94a3b8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg-0);font-family:'Noto Sans JP',sans-serif;color:var(--fg-body);-webkit-font-smoothing:antialiased}
+.wrap{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:20px;background:radial-gradient(120% 120% at 50% 0%,#0a1220 0%,#05070d 70%)}
+.frame{container-type:inline-size;width:min(96vw,1240px);background:var(--bg-1);border-radius:14px;overflow:hidden;display:block;position:relative;padding:2.6cqw 2.6cqw 2.8cqw}
+.side{display:block}
+.eyebrow{font-size:1cqw;letter-spacing:.3em;color:var(--gold);font-weight:700}
+h1{font-size:2.5cqw;font-weight:900;color:var(--fg);line-height:1.25;margin-top:.4em}
+.row{display:flex;gap:.45cqw;margin-top:1cqw;flex-wrap:wrap}
+.chip{font:inherit;font-weight:700;font-size:1.2cqw;color:var(--fg-body);background:transparent;border:.12cqw solid var(--line);border-radius:999px;padding:.4cqw .9cqw;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--pc,var(--gold));border-color:var(--pc,var(--gold));color:#0a0e1a}
+.card{margin-top:1.4cqw;position:relative}
+.chead{background:var(--bg-3);border-radius:1cqw;padding:1.8cqw 2.2cqw 1.9cqw;position:relative;overflow:hidden}
+.chead::before{content:"";position:absolute;left:0;top:0;right:0;height:.4cqw;background:var(--pc,var(--gold))}
+.card .en{font-size:1.1cqw;letter-spacing:.2em;font-weight:900;color:var(--pc,var(--gold))}
+.card h2{font-size:2.7cqw;font-weight:900;color:var(--fg);margin:.1em 0 .3em;line-height:1.3}
+.card p{font-size:1.9cqw;line-height:1.7;color:var(--fg)}
+.phasegrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw;margin-top:1.4cqw}
+.phcard{display:flex;gap:1.4cqw;align-items:flex-start;background:var(--bg-3);border:.25cqw solid transparent;border-radius:1cqw;padding:1.6cqw 1.8cqw;position:relative;overflow:hidden;opacity:.55;transition:opacity .25s,border-color .25s,background .25s}
+.phcard.on{opacity:1;background:var(--bg-4)}
+.phcard.p1.on{border-color:#fb923c}.phcard.p2.on{border-color:#f6c90e}.phcard.p3.on{border-color:#7dd3fc}.phcard.p4.on{border-color:#86efac}.phcard.p7.on{border-color:#fda4af}.phcard.p8.on{border-color:#a5b4fc}.phcard.p7 .pn,.phcard.p7 .pt1{color:#fda4af}.phcard.p8 .pn,.phcard.p8 .pt1{color:#a5b4fc}.phcard.p5.on{border-color:#c4b5fd}.phcard.p6.on{border-color:#fda4af}.phcard.p5 .pn,.phcard.p5 .pt1{color:#c4b5fd}.phcard.p6 .pn,.phcard.p6 .pt1{color:#fda4af}.phcard.p3 .pn,.phcard.p3 .pt1{color:#7dd3fc}.phcard.p4 .pn,.phcard.p4 .pt1{color:#86efac}
+.phcard .pn{flex:none;font-size:3cqw;font-weight:900;line-height:1}
+.phcard.p1 .pn,.phcard.p1 .pt1{color:#fb923c}.phcard.p2 .pn,.phcard.p2 .pt1{color:#f6c90e}
+.phcard .pt1{font-size:2cqw;font-weight:900;margin-bottom:.4cqw}
+.phcard .pt2{font-size:1.5cqw;line-height:1.65;color:var(--fg)}
+.ptgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw;margin-top:1.2cqw}
+.pt{background:var(--bg-3);border-radius:1cqw;padding:1.6cqw 1.8cqw 1.7cqw 2.6cqw;position:relative;overflow:hidden;min-height:7.5cqw;display:flex;align-items:center}
+.pt::before{content:"";position:absolute;left:0;top:0;bottom:0;width:.7cqw;background:var(--pc,var(--gold))}
+.pt .n{flex:none;font-size:2.6cqw;font-weight:900;color:var(--pc,var(--gold));margin-right:1.2cqw;font-variant-numeric:tabular-nums}
+.pt .tx{font-size:1.75cqw;line-height:1.6;font-weight:500;color:var(--fg)}
+.slider{margin-top:1cqw;display:flex;align-items:center;gap:.8cqw;font-size:1.2cqw;color:var(--fg-sub);font-weight:700}
+.slider input{flex:1;accent-color:var(--gold)}
+.autob{font:inherit;font-size:1.3cqw;font-weight:900;color:var(--fg);background:var(--bg-4);border:0;border-radius:999px;padding:.6cqw 1.8cqw;cursor:pointer}
+.autob[aria-pressed="true"]{background:var(--gold);color:#0a0e1a}
+.stagebox{position:relative;min-width:0;height:clamp(440px,56cqw,760px);margin-top:1.4cqw;background:var(--bg-3);border-radius:1cqw;overflow:hidden}
+canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none}
+canvas:active{cursor:grabbing}
+.cams{position:absolute;right:1.6cqw;top:1.4cqw;display:flex;gap:.4cqw;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:62%}
+.cams span{font-size:1.1cqw;color:var(--fg-sub);margin-right:.4cqw;font-weight:700}
+.cams button,.ctrl button{font:inherit;font-size:1.2cqw;font-weight:700;color:var(--fg);background:var(--bg-4);border:0;border-radius:999px;padding:.55cqw 1.2cqw;cursor:pointer}
+.cams button[aria-pressed="true"]{background:var(--fg);color:#0a0e1a}
+.hint{position:absolute;left:1.6cqw;bottom:1.4cqw;font-size:1.1cqw;color:var(--fg-sub)}
+.ctrl{position:absolute;right:2.4cqw;bottom:2cqw;display:flex;gap:.4cqw}
+@media (max-width:700px){
+  .frame{width:96vw;padding:16px}.stagebox{height:104vw}
+  .eyebrow{font-size:10px}h1{font-size:22px}.chip{font-size:12px;padding:6px 11px}
+  .chead{padding:16px}.card .en{font-size:10px}.card h2{font-size:22px}.card p{font-size:15px}.ptgrid{grid-template-columns:1fr;gap:10px}.phasegrid{grid-template-columns:1fr}.phcard{padding:14px}.phcard .pn{font-size:24px}.phcard .pt1{font-size:16px}.phcard .pt2{font-size:13.5px}.pt{padding:14px 14px 14px 20px;min-height:0}.pt .n{font-size:22px}.pt .tx{font-size:15px}.slider{font-size:12px}
+  .cams button,.ctrl button{font-size:11px;padding:6px 12px}.cams span,.hint{font-size:10px}
+}
+.wrap{min-height:0;padding:0}html,body{height:auto}
+.rel{display:inline-block;margin-left:1cqw;background:#f6c90e;color:#0a0e1a;font-weight:900;font-size:1.15cqw;letter-spacing:.08em;padding:.25cqw 1.1cqw;border-radius:999px;vertical-align:.1em}
+.hl{font-size:1.15cqw;font-weight:900;color:var(--fg-sub);align-self:center;margin-right:.4cqw}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="frame">
+  <div class="side">
+    <span class="eyebrow">BOX JUMP</span><span class="rel">プライオメトリクス（跳躍）</span>
+    <h1>腕を振って伸び上がり、箱の上にピタッと着地します</h1>
+    <div class="row" id="forms" role="group" aria-label="フォームの選択"></div>
+    <div class="row" id="hbtns" role="group" aria-label="箱の高さ"><span class="hl">箱の高さ</span></div>
+  </div>
+  <div class="stagebox">
+    <canvas id="cv" aria-label="ボックスジャンプの3D図"></canvas>
+    <div class="cams" id="cams"><span>カメラ</span>
+      <button data-c="obl" aria-pressed="false">斜め前</button>
+      <button data-c="side" aria-pressed="true">横</button>
+      <button data-c="front" aria-pressed="false">正面</button>
+      <button data-c="oblb" aria-pressed="false">斜め後ろ</button>
+      <button data-c="back" aria-pressed="false">後ろ</button>
+      <button data-c="top" aria-pressed="false">真上</button>
+      <button data-c="low" aria-pressed="false">ローアングル</button>
+    </div>
+    <div class="hint">ドラッグで自由に回せます　／　黄の壁＝矢状面</div>
+  </div>
+  <div class="slider"><button class="autob" id="pause" aria-pressed="true">自動</button><button class="autob" id="slow" aria-pressed="false">スロー</button><span>動き</span><input type="range" id="seek" min="0" max="100" value="0" aria-label="動きの位置"><span id="seekl">立位</span></div>
+  <div class="phasegrid">
+    <div class="phcard p2 on"><span class="pn">★</span><div><div class="pt1">遅いSSCを習得するのに最適</div><div class="pt2">沈み込みから踏み切りまで、時間をかけて伸ばされ、縮む動きです。接地時間が長いSSC（伸張－短縮サイクル）を、ゆっくり正確に身につけられます。</div></div></div>
+    <div class="phcard p3 on"><span class="pn">★</span><div><div class="pt1">着地衝撃が大きいから、箱を使う</div><div class="pt2">ジャンプ系は、着地の衝撃が大きい種目です。着地を高い箱の上にすると、落下する距離が小さくなり、衝撃を小さくできます。降りるときも、階段状にします。</div></div></div>
+  </div>
+  <div class="phasegrid">
+    <div class="phcard p1" id="ph1"><span class="pn">1</span><div><div class="pt1">構え</div><div class="pt2">箱の前に、足幅は腰幅で立ちます。つま先は少し外へ。腕は体の横に下ろします。</div></div></div>
+    <div class="phcard p2" id="ph2"><span class="pn">2</span><div><div class="pt1">沈み込み　カウンタームーブメント</div><div class="pt2">腕を後ろへ振りながら、股関節と膝を同時に曲げて沈みます。ばねをためます。</div></div></div>
+    <div class="phcard p3" id="ph3"><span class="pn">3</span><div><div class="pt1">踏み切り　伸び上がり</div><div class="pt2">足裏で床を強く押し、股関節・膝・足首を一気に伸ばします。腕を前上へ振り上げます。</div></div></div>
+    <div class="phcard p4" id="ph4"><span class="pn">4</span><div><div class="pt1">空中　膝を引き上げる</div><div class="pt2">膝を胸へ引き上げて、足全体を箱の上へ運びます。</div></div></div>
+    <div class="phcard p5" id="ph5"><span class="pn">5</span><div><div class="pt1">着地　ピタッと吸収</div><div class="pt2">足裏全体で、箱の中央に着地。膝と股関節を曲げて衝撃を吸収します。ニーイン・グラつきゼロ。踵を残します。</div></div></div>
+    <div class="phcard p6" id="ph6"><span class="pn">6</span><div><div class="pt1">箱の上で立つ</div><div class="pt2">股関節を伸ばし切って、まっすぐ立ちます。姿勢を整えます。</div></div></div>
+    <div class="phcard p7" id="ph7"><span class="pn">7</span><div><div class="pt1">階段でステップダウン</div><div class="pt2">箱から、階段状に1段ずつ降ります。飛び降りず、1段ごとに静かに置いて、衝撃を小さくします。膝は内に入れません。</div></div></div>
+    <div class="phcard p8" id="ph8"><span class="pn">8</span><div><div class="pt1">床で受ける</div><div class="pt2">床に降りたら、静かに受けて立ちます。次の1回へ。</div></div></div>
+  </div>
+  <div class="card" id="card"></div>
+</div>
+</div>
+<script>
+(function(){
+var FORMS={
+ ok:{name:'正しいフォーム',col:'#f6c90e',cam:'side',head:'プライオメトリクス（跳躍）の代表種目で、遅いSSCを習得するのに最適です。腕を振って沈み、股関節・膝・足首を一気に伸ばして跳び、箱の上に「ピタッ」と着地します。10回連続で跳べる高さが、到達指標になります。',
+   pts:['腕を後ろへ振って沈み、前上へ振り上げて跳ぶ（腕の振りも力になる）','足裏で床を強く押し、股関節・膝・足首を一気に伸ばす','膝を引き上げ、足全体を箱の上へ運ぶ','ピタッと着地。膝と股関節で吸収し、ニーイン・グラつきゼロ。踵を残す']},
+ kneein:{name:'NG：着地でニーイン',col:'#f87171',cam:'front',head:'着地で膝が内に入ります。正面から確認します。',
+   pts:['膝が内に入ると、膝と股関節に負担がかかる','着地でグラつくのは、足が眠っているサイン','対策：足裏で箱を外へ押し、大臀筋を使う','対策：足の3点（母指球・小指球・踵）で踏む']},
+ stiff:{name:'NG：着地が硬い',col:'#f87171',cam:'side',head:'着地で膝が伸びたまま、衝撃を受けます。「ガツン」と音が出ます。',
+   pts:['衝撃が膝と腰に直接かかる','着地の音が大きい（ガツン）','対策：足が箱についたら、膝と股関節を曲げて吸収する','対策：「ピタッ」と静かに止める']},
+ jumpdown:{name:'NG：飛び降りる',col:'#f87171',cam:'side',head:'箱から階段を使わず、飛び降りています。着地衝撃が大きくなります。',
+   pts:['飛び降りると、床への着地衝撃が大きい','降りるときの衝撃が、膝と腰にたまっていく','対策：階段状にして、1段ずつ静かに降りる','対策：降りるときも、足裏全体で静かに置く']},
+ heel:{name:'NG：踵が浮く',col:'#f87171',cam:'side',head:'着地でつま先だけが箱につき、踵が浮きます。',
+   pts:['踵が浮くと、ふくらはぎとアキレス腱に負担が集中する','バランスが崩れ、後ろへ落ちやすい','対策：踵を箱に残す（背屈）','対策：足裏全体で箱を押さえる']}
+};
+var FORDER=['ok','kneein','stiff','heel','jumpdown'];
+var CAMS={obl:{yaw:-.62,pitch:.28},front:{yaw:0,pitch:.04},side:{yaw:-Math.PI/2,pitch:.04},oblb:{yaw:Math.PI+.62,pitch:.28},back:{yaw:Math.PI,pitch:.04},top:{yaw:-Math.PI/2,pitch:1.5},low:{yaw:-.5,pitch:-.32}};
+var form='ok', playing=true, t=0, last=0, manual=null;
+var yaw=CAMS.side.yaw,pitch=CAMS.side.pitch,tyaw=yaw,tpitch=pitch,camLock=false,dragging=false,lx=0,ly=0;
+var cv=document.getElementById('cv'),g=cv.getContext('2d'),W=0,H=0,dpr=1;
+
+function setCam(n,user){tyaw=CAMS[n].yaw;tpitch=CAMS[n].pitch;
+  document.querySelectorAll('#cams button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.c===n?'true':'false')});if(user)camLock=true}
+function renderForms(){
+  var el=document.getElementById('forms');el.innerHTML='';
+  FORDER.forEach(function(k){var f=FORMS[k],b=document.createElement('button');b.className='chip';b.textContent=f.name;
+    b.style.setProperty('--pc',f.col);b.setAttribute('aria-pressed',k===form?'true':'false');
+    b.onclick=function(){form=k;camLock=false;renderForms();renderCard();setCam(f.cam,false)};el.appendChild(b)});
+}
+function renderCard(){var f=FORMS[form],c=document.getElementById('card');c.style.setProperty('--pc',f.col);
+  c.innerHTML='<div class="chead"><span class="en">'+(form==='ok'?'CHECK POINTS':'COMMON MISTAKE')+'</span><h2>'+f.name+'</h2><p>'+f.head+'</p></div><div class="ptgrid">'+f.pts.map(function(x,i){return '<div class="pt"><span class="n">'+(i+1)+'</span><span class="tx">'+x+'</span></div>'}).join('')+'</div>'}
+document.querySelectorAll('#cams button').forEach(function(b){b.onclick=function(){setCam(b.dataset.c,true)}});
+var pauseB=document.getElementById('pause'),slowB=document.getElementById('slow'),slow=false;
+function syncAuto(){pauseB.setAttribute('aria-pressed',playing?'true':'false')}
+pauseB.onclick=function(){playing=!playing;if(playing)manual=null;syncAuto()};
+slowB.onclick=function(){slow=!slow;slowB.setAttribute('aria-pressed',slow?'true':'false')};
+var seek=document.getElementById('seek');
+seek.oninput=function(){playing=false;syncAuto();manual=seek.value/100};
+function fit(){var r=cv.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0)}
+window.addEventListener('resize',fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(cv);
+cv.addEventListener('pointerdown',function(e){dragging=true;lx=e.clientX;ly=e.clientY;camLock=true;document.querySelectorAll('#cams button').forEach(function(b){b.setAttribute('aria-pressed','false')});cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',function(e){if(!dragging)return;yaw+=(e.clientX-lx)*.008;pitch=Math.max(-.6,Math.min(1.55,pitch+(e.clientY-ly)*.006));tyaw=yaw;tpitch=pitch;lx=e.clientX;ly=e.clientY});
+cv.addEventListener('pointerup',function(){dragging=false});cv.addEventListener('pointercancel',function(){dragging=false});
+
+function rx(p,a){var c=Math.cos(a),s=Math.sin(a);return [p[0],p[1]*c-p[2]*s,p[1]*s+p[2]*c]}
+function ry(p,a){var c=Math.cos(a),s=Math.sin(a);return [p[0]*c+p[2]*s,p[1],-p[0]*s+p[2]*c]}
+function add(a,b){return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]}
+var S0,CX,CY,D=5;
+var ZC=.6;
+function proj(p){p=[p[0],p[1],p[2]-ZC];var q=ry(p,yaw);q=rx(q,-pitch);var k=D/(D-q[2]);return [CX+q[0]*S0*k,CY-q[1]*S0*k,q[2],k]}
+
+// u: 0=立位 1=ボトム
+var AX=.17,TA=8*Math.PI/180,MIDFOOT=.06;
+var boxH=90;                                    // 箱の高さ(cm)。1単位=約82cm
+function boxTop(){return -1.07+boxH/82}
+var BZ0=.70,BZD=.86,LAN=BZ0+.36,TRD=.42;          // 箱の手前の縁、奥行き、箱の上での足首の位置、階段の踏面の奥行き
+function nSteps(){return Math.ceil(boxH/35)}      // 1段あたり35cm以下になるように階段にする
+function stepY(k){return boxTop()-k*(boxH/82)/nSteps()}   // k段目の踏面の高さ（k=nSteps()で床）
+function stepZ(k){return BZ0+BZD+(k-1)*TRD+.15}  // k段目での足首のz
+var ANK=-1.04,L1=.52,L2=.52,TLN=.76,ARM=.80;
+function ik3(h,a,l1,l2,pole){var dv=sub(a,h),dl=Math.min(len(dv),l1+l2-.002),dn=nor(dv),aa=(l1*l1-l2*l2+dl*dl)/(2*dl),hh=Math.sqrt(Math.max(0,l1*l1-aa*aa)),pn=nor(sub(pole,mul(dn,dot(pole,dn))));return add(add(h,mul(dn,aa)),mul(pn,hh))}
+function keys(f){
+  var K={
+    stand:{t:0,s:0,l:0,a:0,hl:0,kin:0},
+    dip:{t:62,s:-35,l:40,a:-55,hl:0,kin:0},
+    to:{t:3,s:-3,l:-3,a:150,hl:.12,kin:0},
+    tuck:{t:134,s:-10,l:36,a:55,hl:.10,kin:0},
+    land:{t:92,s:-38,l:42,a:40,hl:0,kin:0},
+    stick:{t:102,s:-44,l:48,a:30,hl:0,kin:0},
+    bstand:{t:0,s:0,l:0,a:0,hl:0,kin:0},
+    fland:{t:48,s:-26,l:22,a:22,hl:0,kin:0},
+    sdown:{t:26,s:-16,l:12,a:12,hl:0,kin:0}
+  };
+  if(f==='kneein'){K.land.kin=.5;K.stick.kin=.7;K.fland.kin=.35;K.sdown.kin=.4}
+  if(f==='jumpdown'){K.fland={t:14,s:-5,l:6,a:8,hl:0,kin:0}}
+  if(f==='stiff'){K.land={t:16,s:-6,l:8,a:12,hl:0,kin:0};K.stick={t:24,s:-10,l:10,a:10,hl:0,kin:0}}
+  if(f==='heel'){K.land.hl=.12;K.stick.hl=.11;K.land.s=-22;K.stick.s=-26}
+  return K;
+}
+function flightK(K,s){var mid={t:78,s:-98,l:26,a:80,hl:.10,kin:0};   // まず膝を曲げて足を後ろへ引き上げ、そのあと股関節を曲げて前へ運ぶ
+  return s<.04?K.to:s<.20?mixK(K.to,mid,ease((s-.04)/.16)):s<.55?mixK(mid,K.tuck,ease((s-.20)/.35)):s<.76?K.tuck:mixK(K.tuck,K.land,ease((s-.76)/.24))}
+function flightZ(s){return s*s*(3-2*s)}   // 前へ進むのは中盤。はじめは上へ、足を引き上げてから前へ
+var _cl={};
+function clearExtra(f){   // 空中で、つま先・膝が箱の縁に当たらない高さまで、跳ぶ高さを足す
+  var key=f+boxH;if(_cl[key]!==undefined)return _cl[key];
+  var K=keys(f),bt=boxTop(),aF=ANK,aB=bt+.03,r=Math.PI/180,P0=stancePelvis(K.to,0,aF),P1=stancePelvis(K.land,LAN,aB),base=P0[1]-.35,ex=0;
+  for(;ex<=2.4;ex+=.02){
+    var A=base+ex-(P0[1]+P1[1])/2,ok=true;
+    for(var i=0;i<=60&&ok;i++){var s=i/60;if(s>.80)break;
+      var k=flightK(K,s);
+      var pz=P0[0]+(P1[0]-P0[0])*flightZ(s),py=P0[1]+(P1[1]-P0[1])*s+4*s*(1-s)*A;
+      var kz=pz+L1*Math.sin(k.t*r),ky=py-L1*Math.cos(k.t*r);
+      var az=kz+L2*Math.sin(k.s*r),ay=ky-L2*Math.cos(k.s*r);
+      var toez=az+.26*Math.cos(TA),toey=ay-k.hl;
+      if(toez>BZ0-.05&&toey<bt+.03)ok=false;
+      if(kz+.08>BZ0&&ky-.08<bt)ok=false;
+    }
+    if(ok)break;
+  }
+  _cl[key]=ex;return ex;
+}
+function mixK(a,b,u){var o={};for(var k in a)o[k]=a[k]+(b[k]-a[k])*u;return o}
+function ease(x){x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)}
+function stancePelvis(k,ax,ay){var r=Math.PI/180;return [ax-(L1*Math.sin(k.t*r)+L2*Math.sin(k.s*r)),ay+k.hl+L1*Math.cos(k.t*r)+L2*Math.cos(k.s*r)]}   // [z,y]
+function build(k,pz,py,phase){
+  var r=Math.PI/180,J={},pel=[0,py,pz];J.pelvis=pel;
+  J.hipL=add(pel,[-.14,0,0]);J.hipR=add(pel,[.14,0,0]);
+  var kz=pz+L1*Math.sin(k.t*r),ky=py-L1*Math.cos(k.t*r);
+  var az=kz+L2*Math.sin(k.s*r),ay=ky-L2*Math.cos(k.s*r);
+  var kx=AX*(1-k.kin);
+  J.kneeL=[-kx,ky,kz];J.kneeR=[kx,ky,kz];J.ankL=[-AX,ay,az];J.ankR=[AX,ay,az];
+  J.footZ=az;J.hl=k.hl;
+  var l=k.l*r,chest=add(pel,[0,.5*Math.cos(l),.5*Math.sin(l)]),shm=add(chest,[0,.26*Math.cos(l),.26*Math.sin(l)]);
+  var neck=add(chest,[0,.34*Math.cos(l),.34*Math.sin(l)]),l3=l*.6;
+  J.chest=chest;J.neck=neck;J.head=add(neck,[0,.22*Math.cos(l3),.22*Math.sin(l3)]);
+  J.shL=add(shm,[-.27,0,0]);J.shR=add(shm,[.27,0,0]);
+  var al=k.a*r,hv=[0,-ARM*Math.cos(al),ARM*Math.sin(al)];
+  J.haL=add(J.shL,add(hv,[-.04,0,0]));J.haR=add(J.shR,add(hv,[.04,0,0]));
+  J.elL=ik3(J.shL,J.haL,.40,.40,[-.3,0,-.4]);J.elR=ik3(J.shR,J.haR,.40,.40,[.3,0,-.4]);
+  J.lam=k.l*r;J.tt=k.t;J.ss=k.s;J.kin=k.kin;
+  return J;
+}
+// 時間の割り振り：0立つ 1沈む 2踏み切り 3空中 4着地 5箱の上で立つ 6ステップダウン 7床で受ける
+var SEG=[[0,.05],[.05,.18],[.18,.24],[.24,.38],[.38,.43],[.43,.52],[.52,.90],[.90,1]];
+function pose(f,u){
+  var K=keys(f),bt=boxTop(),aF=ANK,aB=bt+.03,ph=1,k,pz,py,pp;
+  if(u<SEG[0][1]){ph=1;k=K.stand;pp=stancePelvis(k,0,aF)}
+  else if(u<SEG[1][1]){ph=2;k=mixK(K.stand,K.dip,ease((u-SEG[1][0])/(SEG[1][1]-SEG[1][0])));pp=stancePelvis(k,0,aF)}
+  else if(u<SEG[2][1]){ph=3;var e=ease((u-SEG[2][0])/(SEG[2][1]-SEG[2][0]));k=mixK(K.dip,K.to,e);pp=stancePelvis(k,0,aF)}
+  else if(u<SEG[3][1]){ph=4;var s=(u-SEG[3][0])/(SEG[3][1]-SEG[3][0]);
+    k=flightK(K,s);
+    var P0=stancePelvis(K.to,0,aF),P1=stancePelvis(K.land,LAN,aB);
+    var apex=P0[1]-.35+clearExtra(f);
+    var A=apex-(P0[1]+P1[1])/2;
+    pp=[P0[0]+(P1[0]-P0[0])*flightZ(s),P0[1]+(P1[1]-P0[1])*s+4*s*(1-s)*A]}
+  else if(u<SEG[4][1]){ph=5;k=mixK(K.land,K.stick,ease((u-SEG[4][0])/(SEG[4][1]-SEG[4][0])));pp=stancePelvis(k,LAN,aB)}
+  else if(u<SEG[5][1]){ph=6;k=mixK(K.stick,K.bstand,ease((u-SEG[5][0])/(SEG[5][1]-SEG[5][0])));pp=stancePelvis(k,LAN,aB)}
+  else if(u<SEG[6][1]){ph=7;var s2=(u-SEG[6][0])/(SEG[6][1]-SEG[6][0]),n=nSteps();
+    if(f==='jumpdown'){
+      var kk=mixK(K.bstand,K.fland,ease(s2)),Q0=stancePelvis(K.bstand,LAN,aB),Q1=stancePelvis(K.fland,stepZ(n),aF);
+      k=kk;pp=[Q0[0]+(Q1[0]-Q0[0])*s2,Q0[1]+(Q1[1]-Q0[1])*(s2*s2)+4*s2*(1-s2)*.10];
+    }else{
+      var si=Math.min(n-1,Math.floor(s2*n)),ss=s2*n-si;                // si段目から si+1段目へ
+      var za=(si===0?LAN:stepZ(si)),ya=(si===0?aB:stepY(si)+.03),zb=stepZ(si+1),yb2=(si+1===n?aF:stepY(si+1)+.03);
+      var Qa=stancePelvis(K.bstand,za,ya),Qb=stancePelvis(K.sdown,zb,yb2);
+      var e2=ease(ss);
+      k=ss<.5?mixK(K.bstand,K.sdown,ease(ss/.5)):mixK(K.sdown,K.bstand,ease((ss-.5)/.5));
+      if(si===n-1&&ss>=.5)k=mixK(K.sdown,K.stand,ease((ss-.5)/.5));
+      // 片側ずつ置くように、骨盤はなめらかに前へ・下へ
+      pp=[Qa[0]+(Qb[0]-Qa[0])*e2,Qa[1]+(Qb[1]-Qa[1])*e2+Math.sin(Math.PI*ss)*.03];
+    }}
+  else{ph=8;var s3=(u-SEG[7][0])/(SEG[7][1]-SEG[7][0]);k=mixK(f==='jumpdown'?K.fland:K.sdown,K.stand,ease(s3));pp=stancePelvis(k,stepZ(nSteps()),aF)}
+  var J=build(k,pp[0],pp[1],ph);J.phase=ph;J.bar=[0,pp[1],pp[0]];return J;
+}
+function mulAdd(a,b){return[(a[0]+b[0])/2,(a[1]+b[1])/2,(a[2]+b[2])/2]}
+function barTrail(f){var r=[];for(var i=0;i<=30;i++){r.push(pose(f,i/30).bar)}return r}
+
+function drawPlane(){
+  var top=boxTop()+2.6,ze=BZ0+BZD+nSteps()*TRD+.5,q=[[0,-1.2,-.8],[0,-1.2,ze],[0,top,ze],[0,top,-.8]].map(proj);
+  g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<4;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
+  g.fillStyle='rgba(246,201,14,.07)';g.fill();g.lineWidth=2;g.strokeStyle='rgba(246,201,14,.55)';g.stroke();
+}
+function drawPlane2(){
+  var a=1.15,z=MIDFOOT,top=boxTop()+2.6,q=[[-a,-1.2,z],[a,-1.2,z],[a,top,z],[-a,top,z]].map(proj);
+  g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<4;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
+  g.fillStyle='rgba(125,211,252,.07)';g.fill();g.lineWidth=2;g.strokeStyle='rgba(125,211,252,.6)';g.stroke();
+}
+function ang2(c,p){return Math.atan2(p[2]-c[2],p[1]-c[1])}
+function wedge(c,pa,pb,col,label){
+  var a1=ang2(c,pa),a2=ang2(c,pb),d=a2-a1;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;
+  var r=.27,pts=[proj(c)];for(var i=0;i<=18;i++){var a=a1+d*i/18;pts.push(proj([c[0],c[1]+r*Math.cos(a),c[2]+r*Math.sin(a)]))}
+  g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();
+  g.fillStyle=col==='#f6c90e'?'rgba(246,201,14,.38)':'rgba(248,113,113,.38)';g.fill();g.lineWidth=3;g.strokeStyle=col;g.stroke();
+  var am=a1+d/2,lp=proj([c[0],c[1]+(r+.2)*Math.cos(am),c[2]+(r+.2)*Math.sin(am)]);
+  g.font='900 '+Math.max(11,W*.017)+'px "Noto Sans JP",sans-serif';g.fillStyle=col;g.textAlign='center';g.fillText(label,lp[0],lp[1]);
+  return Math.round(180-Math.abs(d)*180/Math.PI);
+}
+function line(a,b,w,col){g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineWidth=w;g.strokeStyle=col;g.lineCap='round';g.stroke()}
+function disc(c,r,col){var pts=[];for(var i=0;i<28;i++){var a=i/28*Math.PI*2;pts.push(proj([c[0],c[1]+r*Math.cos(a),c[2]+r*Math.sin(a)]))}
+  g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();g.fillStyle='#0a0e1a';g.fill();g.lineWidth=3;g.strokeStyle=col;g.stroke()}
+
+
+function sub(a,b){return[a[0]-b[0],a[1]-b[1],a[2]-b[2]]}
+function mul(a,k){return[a[0]*k,a[1]*k,a[2]*k]}
+function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]}
+function crs(a,b){return[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]]}
+function len(a){return Math.sqrt(dot(a,a))}
+function nor(a){var l=len(a)||1;return[a[0]/l,a[1]/l,a[2]/l]}
+function lerp(a,b,m){return a+(b-a)*m}
+var items=[],S=1;
+// ---------- 描画部品 ----------
+  var items=[];
+  function seg3(a,b,w,col,zb){var pa=proj(a),pb=proj(b);items.push({z:(pa[2]+pb[2])/2+(zb||0),d:function(){
+    g.strokeStyle=col;g.lineWidth=w*S*(pa[3]+pb[3])/2;g.lineCap='round';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.stroke()}})}
+  function poly(pts,fill,stroke,alphaFn,zb){var q=pts.map(proj),z=0;q.forEach(function(p){z+=p[2]});z/=q.length;items.push({z:z+(zb||0),d:function(){
+    g.globalAlpha=alphaFn?alphaFn():1;g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<q.length;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
+    if(fill){g.fillStyle=fill;g.fill()}if(stroke){g.strokeStyle=stroke;g.lineWidth=2;g.stroke()}g.globalAlpha=1}})}
+  // ---- 滑らかな立体（メッシュ）：断面のリングをつないで面を張る ----
+  var LIGHT=nor([-.35,.75,.55]);
+  function meshDraw(rings,centers,shadow,light){
+    var R=rings.length,N=rings[0].length,pr=rings.map(function(r){return r.map(proj)});
+    for(var i=0;i<R-1;i++){
+      var cc=mul(add(centers[i],centers[i+1]),.5);
+      for(var j=0;j<N;j++){
+        var j2=(j+1)%N,a=pr[i][j],b=pr[i][j2],c=pr[i+1][j2],d=pr[i+1][j];
+        var mid=mul(add(add(rings[i][j],rings[i][j2]),add(rings[i+1][j2],rings[i+1][j])),.25);
+        var nn=nor(sub(mid,cc)),k=Math.max(0,dot(nn,LIGHT)),kk=.18+.82*Math.pow(k,.8);
+        var col='rgb('+Math.round(lerp(shadow[0],light[0],kk))+','+Math.round(lerp(shadow[1],light[1],kk))+','+Math.round(lerp(shadow[2],light[2],kk))+')';
+        (function(a,b,c,d,col){items.push({z:(a[2]+b[2]+c[2]+d[2])/4,d:function(){
+          g.fillStyle=col;g.strokeStyle=col;g.lineWidth=1;g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineTo(c[0],c[1]);g.lineTo(d[0],d[1]);g.closePath();g.fill();g.stroke()}})})(a,b,c,d,col);
+      }
+    }
+  }
+  function densify(pts,rad,k){var P=[],Rr=[];for(var i=0;i<pts.length-1;i++){for(var t=0;t<k;t++){var u=t/k;P.push(add(mul(pts[i],1-u),mul(pts[i+1],u)));Rr.push(lerp(rad[i],rad[i+1],u))}}P.push(pts[pts.length-1]);Rr.push(rad[rad.length-1]);return{P:P,R:Rr}}
+  function tube(pts,rad,col,k,sides){
+    var dd=densify(pts,rad,k||3),P=dd.P,rings=[],u=null;sides=sides||12;
+    for(var i=0;i<P.length;i++){
+      var t=nor(sub(P[Math.min(P.length-1,i+1)],P[Math.max(0,i-1)]));
+      if(!u){var ref=Math.abs(t[1])>.9?[1,0,0]:[0,1,0];u=nor(crs(t,ref))}else{u=nor(sub(u,mul(t,dot(u,t))))}
+      var v=crs(t,u),ring=[];
+      for(var j=0;j<sides;j++){var a=j/sides*6.2832;ring.push(add(P[i],add(mul(u,Math.cos(a)*dd.R[i]),mul(v,Math.sin(a)*dd.R[i]))))}
+      rings.push(ring);
+    }
+    meshDraw(rings,P,col[0],col[1]);
+  }
+  var BODY=[[78,94,122],[236,242,250]],BODY2=[[70,86,114],[222,230,242]],SKIN=0,SKIN2=0,GOLD=['#fff1a8','#f6c90e','#9a7b05'];
+
+  function dashed(a,b,col,w,zb){var pa=proj(a),pb=proj(b);items.push({z:(pa[2]+pb[2])/2+(zb||0),d:function(){
+    g.setLineDash([8,8]);g.strokeStyle=col;g.lineWidth=w;g.lineCap='butt';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.stroke();g.setLineDash([])}})}
+  function diamond(p,r,col){var q=proj(p),R=r*S*q[3];items.push({z:q[2]+3,d:function(){
+    g.fillStyle=col;g.strokeStyle='#0a0e1a';g.lineWidth=2;g.beginPath();g.moveTo(q[0],q[1]-R);g.lineTo(q[0]+R,q[1]);g.lineTo(q[0],q[1]+R);g.lineTo(q[0]-R,q[1]);g.closePath();g.fill();g.stroke()}})}
+  var BODY=[[78,94,122],[236,242,250]],BODY2=[[70,86,114],[222,230,242]];
+    function wAt(t){return lerp(.155,.135,Math.min(1,t/.3))+(t>=.3?lerp(0,.05,Math.min(1,(t-.3)/.45)):0)-(t>.8?(t-.8)*.1:0)}
+  function dAt(t){return t<.3?lerp(.10,.088,t/.3):lerp(.088,.108,Math.min(1,(t-.3)/.45))-(t>.85?(t-.85)*.2:0)}
+function drawBox(){
+  var bt=boxTop(),x=.55,z0=BZ0,z1=BZ0+BZD,fl=-1.07,n=nSteps();
+  function blk(za,zb,top){
+    poly([[-x,top,za],[x,top,za],[x,top,zb],[-x,top,zb]],'#2f5578','#7dd3fc',null,-.2);
+    poly([[-x,fl,za],[x,fl,za],[x,top,za],[-x,top,za]],'#24415f','#3b6a96',null,-.1);
+    poly([[-x,fl,zb],[x,fl,zb],[x,top,zb],[-x,top,zb]],'#24415f','#3b6a96',null,-.1);
+    poly([[x,fl,za],[x,fl,zb],[x,top,zb],[x,top,za]],'#1c3550','#3b6a96',null,-.1);
+    poly([[-x,fl,za],[-x,fl,zb],[-x,top,zb],[-x,top,za]],'#1c3550','#3b6a96',null,-.1);
+  }
+  blk(z0,z1,bt);
+  for(var k=1;k<n;k++)blk(z1+(k-1)*TRD,z1+k*TRD,stepY(k));   // 降りる側は階段
+}
+function frame(ts){
+  if(!last)last=ts;var dt=Math.min(.05,(ts-last)/1000);last=ts;
+  if(playing)t+=dt*(slow?.5:1)/11;
+  if(!dragging){var dyw=tyaw-yaw;dyw=Math.atan2(Math.sin(dyw),Math.cos(dyw));yaw+=dyw*Math.min(1,dt*6);pitch+=(tpitch-pitch)*Math.min(1,dt*6)}
+  var cyc=t-Math.floor(t),u=manual!==null?manual:cyc;
+  if(manual===null){seek.value=Math.round(u*100)}
+  var f=FORMS[form],J=pose(form,u);
+  document.getElementById('seekl').textContent=['','構え','沈み込み','踏み切り','空中','着地','箱の上','階段で降りる','床で受ける'][J.phase];
+  var acc=f.col,col='#e2e8f0',bt=boxTop();
+  g.clearRect(0,0,W,H);
+  var ymax=Math.max(bt+1.6,-.35+clearExtra(form)+2.0,1.7),ymin=-1.15,rng=ymax-ymin,zmin=-.8,zmax=BZ0+BZD+nSteps()*TRD+.7;ZC=(zmin+zmax)/2;
+  S0=Math.min(W*.92/(zmax-zmin),H*.94/rng,W*.40);CX=W*.5;CY=H*.5+S0*((ymax+ymin)/2);
+  var fa=u<.04?u/.04:(u>.96?(1-u)/.04:1);cv.style.opacity=Math.max(0,Math.min(1,fa));
+  MIDFOOT=J.footZ+.06;
+  drawPlane();
+  var fc=[];for(var i=0;i<=40;i++){var th=i/40*Math.PI*2;fc.push(proj([Math.cos(th)*.6,-1.07,Math.sin(th)*.6]))}
+  g.beginPath();fc.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.strokeStyle='rgba(148,163,184,.45)';g.lineWidth=1.5;g.stroke();
+  g.setLineDash([2,8]);g.lineWidth=4;g.strokeStyle=acc;g.lineCap='round';g.beginPath();
+  var trl=[];for(var ti=0;ti<=60;ti++)trl.push(pose(form,ti/60).bar);
+  trl.forEach(function(p,i){var q=proj(p);i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])});g.stroke();g.setLineDash([]);
+  S=S0;items.length=0;
+  drawBox();
+  var badL=(form==='stiff'&&(J.phase===5));
+  ['L','R'].forEach(function(sd){
+    var hp=J['hip'+sd],kn=J['knee'+sd],ak=J['ank'+sd],sg=sd==='L'?-1:1,fd=[sg*Math.sin(TA),0,Math.cos(TA)];
+    tube([hp,kn,ak],[.105,.075,.052],BODY2,4,12);
+    var heel=add(ak,add(mul(fd,-.09),[0,.005-.0,0])),toe=[ak[0]+fd[0]*.26,ak[1]-J.hl-.0+.04-.03,ak[2]+fd[2]*.26];
+    // つま先は着地面に残り、踵が上がる（hl）
+    toe=[ak[0]+fd[0]*.26,ak[1]-J.hl+.005,ak[2]+fd[2]*.26];
+    tube([heel,toe],[.04,.038],BODY2,3,12);
+  });
+  var Pp=J.pelvis,Pn=J.neck,Lv=[1,0,0],NR=18,rr=[],cc=[],Tt=nor(sub(Pn,Pp));
+  for(var ri=0;ri<=NR;ri++){var tt=ri/NR,ctr=add(Pp,mul(sub(Pn,Pp),tt));
+    var Nv=crs(Lv,Tt),w=wAt(Math.min(1,tt*1.08))*1.3,dd=dAt(Math.min(1,tt*1.08))*1.3,ring=[];
+    for(var jj=0;jj<18;jj++){var an=jj/18*6.2832;ring.push(add(add(ctr,mul(Lv,Math.cos(an)*w)),mul(Nv,Math.sin(an)*dd)))}
+    rr.push(ring);cc.push(ctr)}
+  meshDraw(rr,cc,BODY[0],BODY[1]);
+  var hd=J.head,Th=nor(sub(hd,Pn)),Nh=crs(Lv,Th);
+  tube([Pn,add(Pn,mul(sub(hd,Pn),.7))],[.06,.052],BODY,3,12);
+  var hr=[],hcn=[];
+  for(var q=0;q<=10;q++){var lat=-Math.PI/2+Math.PI*q/10,cs=Math.cos(lat),sn=Math.sin(lat),ctr=add(hd,mul(Th,.12*sn)),ring=[];
+    for(var jj=0;jj<14;jj++){var an=jj/14*6.2832;ring.push(add(add(ctr,mul(Lv,Math.cos(an)*.095*cs)),mul(Nh,Math.sin(an)*.11*cs)))}
+    hr.push(ring);hcn.push(hd)}
+  meshDraw(hr,hcn,BODY[0],BODY[1]);
+  [['shL','elL','haL'],['shR','elR','haR']].forEach(function(c){tube([J[c[0]],J[c[1]],J[c[2]]],[.062,.05,.045],BODY,4,12)});
+  diamond(J.pelvis,.03,acc);diamond(J.chest,.03,acc);
+  items.sort(function(a,b){return a.z-b.z});items.forEach(function(it){it.d()});
+  [1,2,3,4,5,6,7,8].forEach(function(k){var e=document.getElementById('ph'+k);if(e)e.classList.toggle('on',J.phase===k)});
+  var kc=[0,J.kneeL[1],J.kneeL[2]],ac=[0,J.ankL[1],J.ankL[2]],hc=[0,J.pelvis[1],J.pelvis[2]],ch=[0,J.chest[1],J.chest[2]];
+  var kf=Math.round(J.tt-J.ss),hf=Math.round(J.tt+J.lam*180/Math.PI);
+  var wc=(form==='ok')?'#f6c90e':'#f87171';
+  if(J.phase===5||J.phase===6||J.phase===2||J.phase===3){wedge(kc,ac,hc,wc,'膝 '+kf+'°');wedge(hc,kc,ch,wc,'股関節 '+hf+'°')}
+  var PHN=['','構え','沈み込み（カウンタームーブメント）','踏み切り（伸び上がり）','空中（膝を引き上げる）','着地（ピタッと吸収）','箱の上で立つ','階段でステップダウン','床で受ける'];
+  var fs=Math.max(12,W*.022);g.font='900 '+fs+'px "Noto Sans JP",sans-serif';g.textAlign='left';
+  g.fillStyle=wc;g.fillText('膝の屈曲　'+kf+'°',W*.04,H*.09);
+  g.fillText('股関節の屈曲　'+hf+'°',W*.04,H*.09+fs*1.5);
+  g.fillStyle='#f6c90e';g.fillText('局面　'+PHN[J.phase],W*.04,H*.09+fs*3);
+  g.fillText('箱の高さ　'+boxH+'cm',W*.04,H*.09+fs*4.5);
+  var land=(J.phase===5||J.phase===6),stf=(form==='stiff'&&land),hbad=(form==='heel'&&land);
+  g.fillStyle=stf?'#f87171':'#f6c90e';g.fillText('着地　'+(land?(stf?'膝が伸びたまま（ガツン）':'膝と股関節で吸収（ピタッ）'):'—'),W*.04,H*.09+fs*6);
+  g.fillStyle=hbad?'#f87171':'#f6c90e';g.fillText('踵　'+(hbad?'浮いている（つま先だけ）':(J.hl>.04?'上がる（つま先で押す）':'残っている')),W*.04,H*.09+fs*7.5);
+  g.fillStyle='#7dd3fc';g.fillText('前額面　足幅　腰幅（つま先は少し外へ）',W*.04,H*.09+fs*9);
+  var kbad=J.kin>.2&&land;
+  g.fillStyle=kbad?'#f87171':'#7dd3fc';g.fillText('前額面　膝　'+(kbad?'足首より内へ（ニーイン）':'足首の真上（グラつきゼロ）'),W*.04,H*.09+fs*10.5);
+  requestAnimationFrame(frame);
+}
+function postH(){try{parent.postMessage({fcH:Math.ceil(document.querySelector('.frame').getBoundingClientRect().height)},'*')}catch(e){}}
+if(window.ResizeObserver)new ResizeObserver(postH).observe(document.querySelector('.frame'));window.addEventListener('load',postH);setInterval(postH,800);
+(function(){var hb=document.getElementById('hbtns');[75,90,105,120,135].forEach(function(h){var b=document.createElement('button');b.className='chip';b.textContent=h+'cm';b.dataset.h=h;b.setAttribute('aria-pressed',h===boxH?'true':'false');b.onclick=function(){boxH=h;[].forEach.call(hb.querySelectorAll('button'),function(x){x.setAttribute('aria-pressed',x.dataset.h==h?'true':'false')})};hb.appendChild(b)})})();
+fit();renderForms();renderCard();setCam('side',false);requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
