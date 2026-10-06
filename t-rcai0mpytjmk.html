@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>デッドリフト｜3D解説</title>
+<title>デッドリフト（ストレートバー）｜3D解説</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -26,6 +26,14 @@ h1{font-size:2.5cqw;font-weight:900;color:var(--fg);line-height:1.25;margin-top:
 .card .en{font-size:1.1cqw;letter-spacing:.2em;font-weight:900;color:var(--pc,var(--gold))}
 .card h2{font-size:2.7cqw;font-weight:900;color:var(--fg);margin:.1em 0 .3em;line-height:1.3}
 .card p{font-size:1.9cqw;line-height:1.7;color:var(--fg)}
+.phasegrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw;margin-top:1.4cqw}
+.phcard{display:flex;gap:1.4cqw;align-items:flex-start;background:var(--bg-3);border:.25cqw solid transparent;border-radius:1cqw;padding:1.6cqw 1.8cqw;position:relative;overflow:hidden;opacity:.55;transition:opacity .25s,border-color .25s,background .25s}
+.phcard.on{opacity:1;background:var(--bg-4)}
+.phcard.p1.on{border-color:#fb923c}.phcard.p2.on{border-color:#f6c90e}
+.phcard .pn{flex:none;font-size:3cqw;font-weight:900;line-height:1}
+.phcard.p1 .pn,.phcard.p1 .pt1{color:#fb923c}.phcard.p2 .pn,.phcard.p2 .pt1{color:#f6c90e}
+.phcard .pt1{font-size:2cqw;font-weight:900;margin-bottom:.4cqw}
+.phcard .pt2{font-size:1.5cqw;line-height:1.65;color:var(--fg)}
 .ptgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw;margin-top:1.2cqw}
 .pt{background:var(--bg-3);border-radius:1cqw;padding:1.6cqw 1.8cqw 1.7cqw 2.6cqw;position:relative;overflow:hidden;min-height:7.5cqw;display:flex;align-items:center}
 .pt::before{content:"";position:absolute;left:0;top:0;bottom:0;width:.7cqw;background:var(--pc,var(--gold))}
@@ -47,7 +55,7 @@ canvas:active{cursor:grabbing}
 @media (max-width:700px){
   .frame{width:96vw;padding:16px}.stagebox{height:104vw}
   .eyebrow{font-size:10px}h1{font-size:22px}.chip{font-size:12px;padding:6px 11px}
-  .chead{padding:16px}.card .en{font-size:10px}.card h2{font-size:22px}.card p{font-size:15px}.ptgrid{grid-template-columns:1fr;gap:10px}.pt{padding:14px 14px 14px 20px;min-height:0}.pt .n{font-size:22px}.pt .tx{font-size:15px}.slider{font-size:12px}
+  .chead{padding:16px}.card .en{font-size:10px}.card h2{font-size:22px}.card p{font-size:15px}.ptgrid{grid-template-columns:1fr;gap:10px}.phasegrid{grid-template-columns:1fr}.phcard{padding:14px}.phcard .pn{font-size:24px}.phcard .pt1{font-size:16px}.phcard .pt2{font-size:13.5px}.pt{padding:14px 14px 14px 20px;min-height:0}.pt .n{font-size:22px}.pt .tx{font-size:15px}.slider{font-size:12px}
   .cams button,.ctrl button{font-size:11px;padding:6px 12px}.cams span,.hint{font-size:10px}
 }
 </style>
@@ -56,8 +64,8 @@ canvas:active{cursor:grabbing}
 <div class="wrap">
 <div class="frame">
   <div class="side">
-    <span class="eyebrow">DEADLIFT</span>
-    <h1>バーは足の真上、背骨はまっすぐです</h1>
+    <span class="eyebrow">DEADLIFT ｜ STRAIGHT BAR</span>
+    <h1>ストレートバー版｜膝の下に踵、バーは足の真上です</h1>
     <div class="row" id="forms" role="group" aria-label="フォームの選択"></div>
   </div>
   <div class="stagebox">
@@ -74,14 +82,18 @@ canvas:active{cursor:grabbing}
     <div class="hint">ドラッグで自由に回せます　／　黄の壁＝矢状面　青の壁＝前額面</div>
   </div>
   <div class="slider"><button class="autob" id="pause" aria-pressed="true">自動</button><button class="autob" id="slow" aria-pressed="false">スロー</button><span>動き</span><input type="range" id="seek" min="0" max="100" value="0" aria-label="動きの位置"><span id="seekl">立位</span></div>
+  <div class="phasegrid">
+    <div class="phcard p1" id="ph1"><span class="pn">1</span><div><div class="pt1">ファーストプル　床〜膝</div><div class="pt2">膝は踵の真上のまま（すねは垂直）。足で床を押して、お尻と肩を同じ速さで上げます。バーはすねをこするように、足の中心の真上を垂直に上がります。</div></div></div>
+    <div class="phcard p2" id="ph2"><span class="pn">2</span><div><div class="pt1">セカンドプル　膝〜ロックアウト</div><div class="pt2">膝の下に踵がある状態を保ったまま、お尻を前へ押し出して背中を起こします。バーは太ももに沿って垂直に上がり、最後にお尻と膝を完全に伸ばします。</div></div></div>
+  </div>
   <div class="card" id="card"></div>
 </div>
 </div>
 <script>
 (function(){
 var FORMS={
- ok:{name:'正しいフォーム',col:'#f6c90e',cam:'side',head:'バーは足の中心の真上を垂直に動きます。背骨はまっすぐなまま、膝とお尻を同時に伸ばして立ちます。',
-   pts:['バーは足の中心の真上で、すねに触れながら垂直に動く','背骨はまっすぐ（丸めない・反らさない）。頭は背骨の延長','肩はバーの真上かやや前。腕はまっすぐ伸ばしたまま','膝と股関節を同時に伸ばす。足裏で床を押し、お尻と太もも裏で立つ']},
+ ok:{name:'正しいフォーム',col:'#f6c90e',cam:'side',head:'これはストレートバー（通常のバーベル）版です。ファーストプルでもセカンドプルでも、膝の下に踵があり、バーは足の中心の真上を垂直に動きます。',
+   pts:['バーは足の中心の真上で、すねに触れながら垂直に動く','膝は踵の真上のまま。ファースト・セカンドとも、膝の下に踵がある（すねは垂直）','背骨はまっすぐ（丸めない・反らさない）。腕もまっすぐ伸ばしたまま','足裏で床を押し、お尻と太もも裏で立つ。肩はバーの真上かやや前']},
  round:{name:'NG：背中が丸まる',col:'#f87171',cam:'side',head:'背骨が丸まり、腰に負担が集中します。肩が前へ出て、バーが体から離れます。',
    pts:['腰が丸まると、腰の椎間板に負担がかかる','肩が前へ落ち、バーとの距離が広がる','対策：胸を張り、肋骨を下げて背骨を一本の柱にする','対策：バーを引く前に脇を締め、体の緊張を作る']},
  hips:{name:'NG：お尻が先に上がる',col:'#f87171',cam:'side',head:'膝が先に伸び、お尻だけが上がります。背中が水平に近づき、腰で引く形になります。',
@@ -126,21 +138,48 @@ function proj(p){var q=ry(p,yaw);q=rx(q,-pitch);var k=D/(D-q[2]);return [CX+q[0]
 
 // u: 0=立位 1=ボトム
 var AX=.15,TA=8*Math.PI/180,MIDFOOT=.12;
-var LA=.80,TL1=.50,TL2=.26,LB=[58,50,76,58]; // 腕の長さ・骨盤〜胸・胸〜肩・床での前傾
+var LA=.80,TL1=.50,TL2=.26,LB=[58,50,76,58];
+var UK=(-.52-(.76-LA))/((-.92)-(.76-LA));   // バーが膝の高さに来る位置（ファースト／セカンドの境目） // 腕の長さ・骨盤〜胸・胸〜肩・床での前傾
 function pose(f,u){
   var ankY=-1.04,rad=Math.PI/180;
-  var lamb={ok:58,round:50,hips:76,bar:58}[f]*rad;
-  var lam=lamb*u,l1=lam,l2=lam;
-  if(f==='round'){l1=lam-20*rad*u;l2=lam+26*rad*u}
   var barz=MIDFOOT+(f==='bar'?.26*u:0);
   var yb=(.76-LA)+((-.92)-(.76-LA))*u;
   var zs=u*(barz+.05);
   var Sz=zs,Sy=yb+Math.sqrt(Math.max(0,LA*LA-(zs-barz)*(zs-barz)));
-  var Hz=Sz-TL1*Math.sin(l1)-TL2*Math.sin(l2),Hy=Sy-TL1*Math.cos(l1)-TL2*Math.cos(l2);
-  var dx=Hz-0,dy=Hy-ankY,d=Math.sqrt(dx*dx+dy*dy);
-  if(d>1.036){Hz=dx*1.036/d;Hy=ankY+dy*1.036/d;d=1.036;dx=Hz;dy=Hy-ankY}
-  var ux=dx/d,uy=dy/d,mh=Math.sqrt(Math.max(0,.52*.52-(d/2)*(d/2)));
-  var Kz=Hz/2+mh*uy,Ky=(ankY+Hy)/2-mh*ux;
+  var l1,l2,Hz,Hy,Kz,Ky;
+  if(f==='hips'){
+    // お尻が先に上がる：膝が先に伸び、すねが前へ傾く（NG）
+    var lamb=76*rad,lam;
+    if(u>=UK){lam=lamb*(1-.08*(1-u)/(1-UK))}else{lam=lamb*.92*Math.sin(Math.PI/2*(u/UK))}
+    l1=lam;l2=lam;
+    Hz=Sz-TL1*Math.sin(l1)-TL2*Math.sin(l2);Hy=Sy-TL1*Math.cos(l1)-TL2*Math.cos(l2);
+    var dx=Hz,dy=Hy-ankY,d=Math.sqrt(dx*dx+dy*dy);
+    if(d>1.036){Hz=dx*1.036/d;Hy=ankY+dy*1.036/d;d=1.036;dx=Hz;dy=Hy-ankY}
+    var ux=dx/d,uy=dy/d,mh=Math.sqrt(Math.max(0,.52*.52-(d/2)*(d/2)));
+    Kz=Hz/2+mh*uy;Ky=(ankY+Hy)/2-mh*ux;
+  }else{
+    // ストレートバー：ファースト・セカンドとも、膝は踵の真上（すねは垂直）
+    Kz=0;Ky=ankY+.52;
+    if(f==='round'){
+      var best=1e9,bl=0;
+      for(var lm=.2;lm<1.45;lm+=.005){
+        var a1=lm-20*rad*u,a2=lm+26*rad*u,hz=Sz-TL1*Math.sin(a1)-TL2*Math.sin(a2),hy=Sy-TL1*Math.cos(a1)-TL2*Math.cos(a2);
+        var e=Math.abs(Math.sqrt((hz-Kz)*(hz-Kz)+(hy-Ky)*(hy-Ky))-.52);
+        if(e<best&&hz<=Kz+.01){best=e;bl=lm}
+      }
+      l1=bl-20*rad*u;l2=bl+26*rad*u;
+      Hz=Sz-TL1*Math.sin(l1)-TL2*Math.sin(l2);Hy=Sy-TL1*Math.cos(l1)-TL2*Math.cos(l2);
+    }else{
+      var cx=Sz-Kz,cy=Sy-Ky,cd=Math.sqrt(cx*cx+cy*cy),r1=.52,r2=TL1+TL2;
+      cd=Math.min(cd,r1+r2-1e-4);
+      var aa=(r1*r1-r2*r2+cd*cd)/(2*cd),hh=Math.sqrt(Math.max(0,r1*r1-aa*aa)),ex=cx/Math.sqrt(cx*cx+cy*cy),ey=cy/Math.sqrt(cx*cx+cy*cy);
+      var mx=Kz+aa*ex,my=Ky+aa*ey;
+      Hz=mx+hh*ey;Hy=my-hh*ex;                       // お尻は後ろ側
+      if(Hz>mx-hh*ey){Hz=mx-hh*ey;Hy=my+hh*ex}
+      var lamc=Math.atan2(Sz-Hz,Sy-Hy);l1=lamc;l2=lamc;
+    }
+  }
+  var lam0=(l1+l2)/2;
   var pel=[0,Hy,Hz],J={pelvis:pel};
   J.hipL=add(pel,[-.14,0,0]);J.hipR=add(pel,[.14,0,0]);
   J.ankL=[-AX,ankY,0];J.ankR=[AX,ankY,0];
@@ -155,7 +194,8 @@ function pose(f,u){
   J.haL=[-.30,yb,barz];J.haR=[.30,yb,barz];
   J.elL=mulAdd(J.shL,J.haL);J.elR=mulAdd(J.shR,J.haR);
   J.bar=[0,yb,barz];
-  J.lam=lam;J.spine=(l2-l1);J.hipGap=Hy-Ky;
+  J.lam=lam0;J.spine=(l2-l1);J.hipGap=Hy-Ky;J.phase=u>=UK?1:2;
+  J.shin=Math.atan2(Kz,Ky-ankY);
   return J;
 }
 function mulAdd(a,b){return[(a[0]+b[0])/2,(a[1]+b[1])/2,(a[2]+b[2])/2]}
@@ -254,8 +294,15 @@ function frame(ts){
   var fc=[];for(var i=0;i<=40;i++){var th=i/40*Math.PI*2;fc.push(proj([Math.cos(th)*.6,-1.07,Math.sin(th)*.6]))}
   g.beginPath();fc.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.strokeStyle='rgba(148,163,184,.45)';g.lineWidth=1.5;g.stroke();
   g.setLineDash([10,8]);line(proj([0,-1.07,MIDFOOT]),proj([0,1.25,MIDFOOT]),2.5,'rgba(248,250,252,.6)');g.setLineDash([]);
-  g.setLineDash([2,8]);g.lineWidth=4;g.strokeStyle=acc;g.lineCap='round';g.beginPath();
-  barTrail(form).forEach(function(p,i){var q=proj(p);i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1])});g.stroke();g.setLineDash([]);
+  var PH1='#fb923c',PH2='#f6c90e',trl=barTrail(form);
+  g.setLineDash([2,8]);g.lineWidth=4;g.lineCap='round';
+  [[0,PH2],[1,PH1]].forEach(function(seg){
+    g.strokeStyle=seg[1];g.beginPath();var st=false;
+    trl.forEach(function(p,i){var uu=i/30,first=uu>=UK-1e-6;if((seg[0]===1)!==first)return;var q=proj(p);st?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);st=true});g.stroke()});
+  g.setLineDash([]);
+  // 膝の高さ（ファースト／セカンドの境目）
+  g.setLineDash([6,6]);line(proj([-.7,-.52,MIDFOOT]),proj([.7,-.52,MIDFOOT]),2.5,'rgba(251,146,60,.9)');g.setLineDash([]);
+  var kl=proj([.7,-.52,MIDFOOT]);g.font='900 '+Math.max(11,W*.015)+'px "Noto Sans JP",sans-serif';g.textAlign='left';g.fillStyle='#fb923c';g.fillText('膝の高さ（ここで切り替わる）',kl[0]+6,kl[1]+4);
   // 前額面のガイド：つま先の向きと足幅
   g.setLineDash([9,7]);
   [-1,1].forEach(function(sg){line(proj([sg*AX-sg*Math.sin(TA)*.15,-1.07,-Math.cos(TA)*.15]),proj([sg*AX+sg*Math.sin(TA)*1.0,-1.07,Math.cos(TA)*1.0]),2.5,'rgba(125,211,252,.85)')});
@@ -303,8 +350,12 @@ function frame(ts){
   g.fillStyle='#f6c90e';g.fillText('背中の傾き　'+lean+'°',W*.04,H*.09+fs*3);
   g.fillStyle=rbad?'#f87171':'#f6c90e';g.fillText('背骨　'+(rbad?'丸まる '+rnd+'°':'まっすぐ'),W*.04,H*.09+fs*4.5);
   g.fillStyle=gapBad?'#f87171':'#f6c90e';g.fillText('バーのズレ　'+(gap>0?'前へ ':gap<0?'後ろへ ':'')+Math.abs(gap)+'cm',W*.04,H*.09+fs*6);
-  g.fillStyle='#7dd3fc';g.fillText('前額面　足幅　腰幅（つま先は少し外へ）',W*.04,H*.09+fs*7.5);
-  g.fillText('前額面　手幅　膝の外側（腕はまっすぐ）',W*.04,H*.09+fs*9);
+  var shd=Math.round(J.shin*180/Math.PI),shbad=Math.abs(shd)>4;
+  g.fillStyle=shbad?'#f87171':'#f6c90e';g.fillText('膝と踵　'+(shbad?'膝が前へ '+Math.abs(shd)+'°（踵の真上から外れる）':'膝の下に踵（すねは垂直）'),W*.04,H*.09+fs*7.5);
+  g.fillStyle=J.phase===1?'#fb923c':'#f6c90e';g.fillText('局面　'+(J.phase===1?'ファーストプル（床〜膝）':'セカンドプル（膝〜ロックアウト）'),W*.04,H*.09+fs*9);
+  g.fillStyle='#7dd3fc';g.fillText('前額面　足幅　腰幅（つま先は少し外へ）',W*.04,H*.09+fs*10.5);
+  g.fillText('前額面　手幅　膝の外側（腕はまっすぐ）',W*.04,H*.09+fs*12);
+  var p1=document.getElementById('ph1'),p2=document.getElementById('ph2');if(p1){p1.classList.toggle('on',J.phase===1);p2.classList.toggle('on',J.phase===2)}
   g.font='700 '+Math.max(10,W*.015)+'px "Noto Sans JP",sans-serif';g.fillStyle='rgba(248,250,252,.75)';
   var mp=proj([0,1.25,MIDFOOT]);g.textAlign='center';g.fillText('足の中心',mp[0],mp[1]-8);
   requestAnimationFrame(frame);
