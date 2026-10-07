@@ -62,7 +62,7 @@ canvas:active{cursor:grabbing}
 .rel{display:inline-block;margin-left:1cqw;background:#f6c90e;color:#0a0e1a;font-weight:900;font-size:1.15cqw;letter-spacing:.08em;padding:.25cqw 1.1cqw;border-radius:999px;vertical-align:.1em}
 .hl{font-size:1.15cqw;font-weight:900;color:var(--fg-sub);align-self:center;margin-right:.4cqw}
 .xnav{display:flex;gap:.8cqw;flex-wrap:wrap;margin-bottom:1.4cqw}.xnav a{font:inherit;font-weight:900;font-size:1.25cqw;text-decoration:none;color:#f8fafc;background:#1a3049;padding:.7cqw 1.6cqw;border-radius:999px}.xnav a.cur{background:#f6c90e;color:#0a0e1a}.xnav a:not(.cur):hover{background:#1e3555}
-</style>
+.hud{margin-top:1cqw;background:var(--bg-3);border-radius:1cqw;padding:1.3cqw 2cqw;display:grid;grid-template-columns:1fr 1fr;gap:.4cqw 2.4cqw;font-weight:900;font-size:1.55cqw;line-height:1.55}.hud div{min-width:0}@media (max-width:700px){.hud{grid-template-columns:1fr;font-size:13px;padding:12px 14px;gap:3px}}</style>
 </head>
 <body>
 <div class="wrap">
@@ -86,6 +86,7 @@ canvas:active{cursor:grabbing}
     </div>
     <div class="hint">ドラッグで自由に回せます　／　青の壁＝前額面　／　金の縦線＝足首・膝・股関節をそろえる線</div>
   </div>
+  <div class="hud" id="hud" aria-live="off"></div>
   <div class="slider"><button class="autob" id="pause" aria-pressed="true">自動</button><button class="autob" id="slow" aria-pressed="false">スロー</button><button class="autob" id="zoomb" aria-pressed="false">股関節アップ</button><span>動き</span><input type="range" id="seek" min="0" max="100" value="0" aria-label="動きの位置"><span id="seekl">構え</span></div>
   <div class="phasegrid">
     <div class="phcard p2 on"><span class="pn">★</span><div><div class="pt1">ヒップロックは、骨盤の挙上</div><div class="pt2">浮いた脚側の骨盤を上げ、軸足側の股関節を外旋させて、体重を乗せた股関節に深くはめ込みます（センタレーション）。骨盤をその上にロックして支点をつくり、背骨を長いまま浮いた脚側へ側屈（コイリング）して回旋の溜めをつくります。</div></div></div>
@@ -224,7 +225,7 @@ var items=[],S=1;
   function dAt(t){return t<.3?lerp(.10,.088,t/.3):lerp(.088,.108,Math.min(1,(t-.3)/.45))-(t>.85?(t-.85)*.2:0)}
 
 var FL=-1.07,AXN=.17,TA=8*Math.PI/180,MIDFOOT=.06,LL=1.03,FS=82;
-var CYC=12,zoom=false;
+var CYC=12,zoom=false,hudHtml='';
 document.getElementById('zoomb').onclick=function(){zoom=!zoom;this.setAttribute('aria-pressed',zoom?'true':'false')};
 function seg(u,a,b){return Math.max(0,Math.min(1,(u-a)/(b-a)))}
 function pose(f,u){
@@ -346,8 +347,8 @@ function frame(ts){
     var tt=.72,c=J.q(tt),yw=J.psi*(1-.6*tt),rl=lerp(J.rollP,J.rollS,tt),Lv=[Math.cos(yw)*Math.cos(rl),Math.sin(rl),-Math.sin(yw)*Math.cos(rl)],Up=nor(sub(J.q(.82),J.q(.62))),bz=[0,0,-.15];
     var shape=[[.04,.11],[.20,.12],[.21,.05],[.13,-.04],[.08,-.16],[.04,-.03]],act=Math.max(0,Math.min(1,J.shDrop/3.5))*J.w;
     g.save();g.globalAlpha=vis;
-    [-1,1].forEach(function(sg){var pts=shape.map(function(q2){return proj(add(add(add(c,mul(Lv,sg*q2[0])),mul(Up,q2[1])),bz))});
-      g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();g.fillStyle=(sg<0&&act>.3)?'rgba(251,146,60,.55)':'rgba(226,232,240,.35)';g.fill();g.lineWidth=2;g.strokeStyle=(sg<0&&act>.3)?'#fb923c':'rgba(226,232,240,.8)';g.stroke()});
+    [-1,1].forEach(function(sg){var pts=shape.map(function(q2){return proj(add(add(add(c,mul(Lv,sg*q2[0]*1.5)),mul(Up,q2[1]*1.5)),bz))});
+      g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();g.fillStyle=(sg<0&&act>.3)?'rgba(251,146,60,.75)':'rgba(226,232,240,.5)';g.fill();g.lineWidth=3;g.strokeStyle=(sg<0&&act>.3)?'#fb923c':'rgba(226,232,240,.8)';g.stroke()});
     if(act>.3){var a0=proj(add(add(add(c,mul(Lv,-.13)),mul(Up,.10)),bz)),a1=proj(add(add(add(c,mul(Lv,-.13)),mul(Up,-.30)),bz));arrow2(a0,a1,'#fb923c',Math.max(4,S0*.03));
       g.font='900 '+Math.max(11,W*.018)+'px "Noto Sans JP",sans-serif';g.fillStyle='#fdba74';g.textAlign='right';g.fillText('肩甲骨の下制',a1[0]-S0*.08,a1[1]+4)}
     g.restore()})();
@@ -402,8 +403,8 @@ function frame(ts){
   L('肩甲骨（挙上側）　'+(show?(J.shDrop>=1?'下制（後ろから見て矢印）':'下制なし'):'—'),J.shDrop>=1?'#fdba74':'#f87171',0);
   L('コイリング（側屈）　'+(show?(sbok?'約 '+sbk+'°（挙上側へ）':'側屈なし'):'—'),sbok?'#a3e635':'#f87171',0);
   if(J.phase===4)L('反対の脚を動かしても、骨盤は動かない','#86efac',1);
-  var fs=Math.max(12,W*(zoom?.02:.022));g.font='900 '+fs+'px "Noto Sans JP",sans-serif';g.textAlign='left';
-  var ln=0;hl.forEach(function(e){if(zoom?!e[2]:e[2]===2)return;g.fillStyle=e[1];g.fillText(e[0],W*.04,H*.09+fs*1.5*ln);ln++});
+  var html='';hl.forEach(function(e){if(zoom?!e[2]:e[2]===2)return;html+='<div style="color:'+e[1]+'">'+e[0]+'</div>'});
+  if(html!==hudHtml){hudHtml=html;document.getElementById('hud').innerHTML=html}
   requestAnimationFrame(frame);
 }
 function postH(){try{parent.postMessage({fcH:Math.ceil(document.querySelector('.frame').getBoundingClientRect().height)},'*')}catch(e){}}
