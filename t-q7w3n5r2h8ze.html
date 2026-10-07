@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>ヒップロック（片脚立ち）｜3D解説</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg-0:#05070d;--bg-1:#0a0e1a;--bg-3:#13253a;--bg-4:#1a3049;--line:#1e3555;--gold:#f6c90e;--ng:#f87171;--fg:#f8fafc;--fg-body:#e2e8f0;--fg-sub:#94a3b8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg-0);font-family:'Noto Sans JP',sans-serif;color:var(--fg-body);-webkit-font-smoothing:antialiased}
+.wrap{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:20px;background:radial-gradient(120% 120% at 50% 0%,#0a1220 0%,#05070d 70%)}
+.frame{container-type:inline-size;width:min(96vw,1240px);background:var(--bg-1);border-radius:14px;overflow:hidden;display:block;position:relative;padding:2.6cqw 2.6cqw 2.8cqw}
+.side{display:block}
+.eyebrow{font-size:1cqw;letter-spacing:.3em;color:var(--gold);font-weight:700}
+h1{font-size:2.5cqw;font-weight:900;color:var(--fg);line-height:1.25;margin-top:.4em}
+.row{display:flex;gap:.45cqw;margin-top:1cqw;flex-wrap:wrap}
+.chip{font:inherit;font-weight:700;font-size:1.2cqw;color:var(--fg-body);background:transparent;border:.12cqw solid var(--line);border-radius:999px;padding:.4cqw .9cqw;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--pc,var(--gold));border-color:var(--pc,var(--gold));color:#0a0e1a}
+.card{margin-top:1.4cqw;position:relative}
+.chead{background:var(--bg-3);border-radius:1cqw;padding:1.8cqw 2.2cqw 1.9cqw;position:relative;overflow:hidden}
+.chead::before{content:"";position:absolute;left:0;top:0;right:0;height:.4cqw;background:var(--pc,var(--gold))}
+.card .en{font-size:1.1cqw;letter-spacing:.2em;font-weight:900;color:var(--pc,var(--gold))}
+.card h2{font-size:2.7cqw;font-weight:900;color:var(--fg);margin:.1em 0 .3em;line-height:1.3}
+.card p{font-size:1.9cqw;line-height:1.7;color:var(--fg)}
+.phasegrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw;margin-top:1.4cqw}
+.phcard{display:flex;gap:1.4cqw;align-items:flex-start;background:var(--bg-3);border:.25cqw solid transparent;border-radius:1cqw;padding:1.6cqw 1.8cqw;position:relative;overflow:hidden;opacity:.55;transition:opacity .25s,border-color .25s,background .25s}
+.phcard.on{opacity:1;background:var(--bg-4)}
+.phcard.p1.on{border-color:#fb923c}.phcard.p2.on{border-color:#f6c90e}.phcard.p3.on{border-color:#7dd3fc}.phcard.p4.on{border-color:#86efac}.phcard.p7.on{border-color:#fda4af}.phcard.p8.on{border-color:#a5b4fc}.phcard.p7 .pn,.phcard.p7 .pt1{color:#fda4af}.phcard.p8 .pn,.phcard.p8 .pt1{color:#a5b4fc}.phcard.p5.on{border-color:#c4b5fd}.phcard.p6.on{border-color:#fda4af}.phcard.p5 .pn,.phcard.p5 .pt1{color:#c4b5fd}.phcard.p6 .pn,.phcard.p6 .pt1{color:#fda4af}.phcard.p3 .pn,.phcard.p3 .pt1{color:#7dd3fc}.phcard.p4 .pn,.phcard.p4 .pt1{color:#86efac}
+.phcard .pn{flex:none;font-size:3cqw;font-weight:900;line-height:1}
+.phcard.p1 .pn,.phcard.p1 .pt1{color:#fb923c}.phcard.p2 .pn,.phcard.p2 .pt1{color:#f6c90e}
+.phcard .pt1{font-size:2cqw;font-weight:900;margin-bottom:.4cqw}
+.phcard .pt2{font-size:1.5cqw;line-height:1.65;color:var(--fg)}
+.ptgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.2cqw;margin-top:1.2cqw}
+.pt{background:var(--bg-3);border-radius:1cqw;padding:1.6cqw 1.8cqw 1.7cqw 2.6cqw;position:relative;overflow:hidden;min-height:7.5cqw;display:flex;align-items:center}
+.pt::before{content:"";position:absolute;left:0;top:0;bottom:0;width:.7cqw;background:var(--pc,var(--gold))}
+.pt .n{flex:none;font-size:2.6cqw;font-weight:900;color:var(--pc,var(--gold));margin-right:1.2cqw;font-variant-numeric:tabular-nums}
+.pt .tx{font-size:1.75cqw;line-height:1.6;font-weight:500;color:var(--fg)}
+.slider{margin-top:1cqw;display:flex;align-items:center;gap:.8cqw;font-size:1.2cqw;color:var(--fg-sub);font-weight:700}
+.slider input{flex:1;accent-color:var(--gold)}
+.autob{font:inherit;font-size:1.3cqw;font-weight:900;color:var(--fg);background:var(--bg-4);border:0;border-radius:999px;padding:.6cqw 1.8cqw;cursor:pointer}
+.autob[aria-pressed="true"]{background:var(--gold);color:#0a0e1a}
+.stagebox{position:relative;min-width:0;height:clamp(440px,56cqw,760px);margin-top:1.4cqw;background:var(--bg-3);border-radius:1cqw;overflow:hidden}
+canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none}
+canvas:active{cursor:grabbing}
+.cams{position:absolute;right:1.6cqw;top:1.4cqw;display:flex;gap:.4cqw;align-items:center;flex-wrap:wrap;justify-content:flex-end;max-width:62%}
+.cams span{font-size:1.1cqw;color:var(--fg-sub);margin-right:.4cqw;font-weight:700}
+.cams button,.ctrl button{font:inherit;font-size:1.2cqw;font-weight:700;color:var(--fg);background:var(--bg-4);border:0;border-radius:999px;padding:.55cqw 1.2cqw;cursor:pointer}
+.cams button[aria-pressed="true"]{background:var(--fg);color:#0a0e1a}
+.hint{position:absolute;left:1.6cqw;bottom:1.4cqw;font-size:1.1cqw;color:var(--fg-sub)}
+.ctrl{position:absolute;right:2.4cqw;bottom:2cqw;display:flex;gap:.4cqw}
+@media (max-width:700px){
+  .frame{width:96vw;padding:16px}.stagebox{height:104vw}
+  .eyebrow{font-size:10px}h1{font-size:22px}.chip{font-size:12px;padding:6px 11px}
+  .chead{padding:16px}.card .en{font-size:10px}.card h2{font-size:22px}.card p{font-size:15px}.ptgrid{grid-template-columns:1fr;gap:10px}.phasegrid{grid-template-columns:1fr}.phcard{padding:14px}.phcard .pn{font-size:24px}.phcard .pt1{font-size:16px}.phcard .pt2{font-size:13.5px}.pt{padding:14px 14px 14px 20px;min-height:0}.pt .n{font-size:22px}.pt .tx{font-size:15px}.slider{font-size:12px}
+  .cams button,.ctrl button{font-size:11px;padding:6px 12px}.cams span,.hint{font-size:10px}
+}
+.wrap{min-height:0;padding:0}html,body{height:auto}
+.rel{display:inline-block;margin-left:1cqw;background:#f6c90e;color:#0a0e1a;font-weight:900;font-size:1.15cqw;letter-spacing:.08em;padding:.25cqw 1.1cqw;border-radius:999px;vertical-align:.1em}
+.hl{font-size:1.15cqw;font-weight:900;color:var(--fg-sub);align-self:center;margin-right:.4cqw}
+.xnav{display:flex;gap:.8cqw;flex-wrap:wrap;margin-bottom:1.4cqw}.xnav a{font:inherit;font-weight:900;font-size:1.25cqw;text-decoration:none;color:#f8fafc;background:#1a3049;padding:.7cqw 1.6cqw;border-radius:999px}.xnav a.cur{background:#f6c90e;color:#0a0e1a}.xnav a:not(.cur):hover{background:#1e3555}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="frame">
+  <div class="side">
+    <div class="xnav"><a class="cur">ヒップロック（片脚立ち）</a><a href="t-zt0ah87mffvx.html" target="_top">ランドマインプレス（ヒップロック＆コイリング）</a></div>
+    <span class="eyebrow">HIP LOCK ｜ 体修塾トレーニング理論 3-6</span><span class="rel">軸足の股関節を支点にする</span>
+    <h1>軸足の股関節に深くはめ込み、骨盤をロックして支点をつくります</h1>
+    <div class="row" id="forms" role="group" aria-label="フォームの選択"></div>
+  </div>
+  <div class="stagebox">
+    <canvas id="cv" aria-label="ヒップロックの3D図"></canvas>
+    <div class="cams" id="cams"><span>カメラ</span>
+      <button data-c="obl" aria-pressed="false">斜め前</button>
+      <button data-c="side" aria-pressed="false">横</button>
+      <button data-c="front" aria-pressed="true">正面</button>
+      <button data-c="oblb" aria-pressed="false">斜め後ろ</button>
+      <button data-c="back" aria-pressed="false">後ろ</button>
+      <button data-c="top" aria-pressed="false">真上</button>
+      <button data-c="low" aria-pressed="false">ローアングル</button>
+    </div>
+    <div class="hint">ドラッグで自由に回せます　／　青の壁＝前額面　／　金の縦線＝足首・膝・股関節をそろえる線</div>
+  </div>
+  <div class="slider"><button class="autob" id="pause" aria-pressed="true">自動</button><button class="autob" id="slow" aria-pressed="false">スロー</button><button class="autob" id="zoomb" aria-pressed="false">股関節アップ</button><span>動き</span><input type="range" id="seek" min="0" max="100" value="0" aria-label="動きの位置"><span id="seekl">構え</span></div>
+  <div class="phasegrid">
+    <div class="phcard p2 on"><span class="pn">★</span><div><div class="pt1">ヒップロックは、骨盤の挙上</div><div class="pt2">浮いた脚側の骨盤を上げ、軸足側の股関節を外旋させて、体重を乗せた股関節に深くはめ込みます（センタレーション）。骨盤をその上にロックして支点をつくり、背骨を長いまま浮いた脚側へ側屈（コイリング）して回旋の溜めをつくります。</div></div></div>
+    <div class="phcard p3 on"><span class="pn">★</span><div><div class="pt1">足 → 股関節 → 背骨を一本の柱に</div><div class="pt2">軸足の足首・膝・股関節が前から見て縦に一直線。その上に、背骨が長く伸びたまま乗ります。「伸びた背骨＋股関節ロック」が、回旋の溜め（コイル）の土台です。</div></div></div>
+    <div class="phcard p7 on"><span class="pn">！</span><div><div class="pt1">野球への接続</div><div class="pt2">投球の踏み込み脚、打撃の後ろ脚、走塁の切り返し。どれも、このロックした股関節が土台になります。</div></div></div>
+  </div>
+  <div class="phasegrid">
+    <div class="phcard p1" id="ph1"><span class="pn">1</span><div><div class="pt1">構え</div><div class="pt2">足幅は腰幅、つま先は正面。背骨を長く伸ばして立ちます。</div></div></div>
+    <div class="phcard p2" id="ph2"><span class="pn">2</span><div><div class="pt1">体重を移して片脚に</div><div class="pt2">体重を軸足へ移し、反対の脚を持ち上げます。上体を軸足の股関節の上へ運びながら、浮いた脚側の骨盤を上げていきます。</div></div></div>
+    <div class="phcard p3" id="ph3"><span class="pn">3</span><div><div class="pt1">ヒップロック　はめ込む</div><div class="pt2">浮いた脚側の骨盤を上げ（赤い骨盤ラインが傾く）、同じ側の肩を下げて背骨を側屈（黄緑の線がコイリング）、軸足の股関節を外旋（橙の矢印）させて、深くはめ込みます。足首・膝・股関節が一直線に重なり、背骨は長いまま。ここが支点です。</div></div></div>
+    <div class="phcard p4" id="ph4"><span class="pn">4</span><div><div class="pt1">支点を保ったまま脚を動かす</div><div class="pt2">反対の脚を前後に動かしても、骨盤は流れず、軸足は動きません。「ロックできている」の確認になります。</div></div></div>
+    <div class="phcard p5" id="ph5"><span class="pn">5</span><div><div class="pt1">戻す</div><div class="pt2">脚を下ろして、構えに戻ります。</div></div></div>
+  </div>
+  <div style="margin-top:2cqw"><span class="eyebrow">GLUTEUS MEDIUS</span><h1 style="font-size:2.1cqw">軸足の中臀筋｜活性化と外転</h1></div>
+  <div class="phasegrid">
+    <div class="phcard p1 on"><span class="pn">1</span><div><div class="pt1">どこにある筋肉？</div><div class="pt2">中臀筋は、骨盤の外側（腸骨の外側面）から、太ももの付け根の外側の出っぱり（大転子）についています。お尻の横、ポケットの上あたりの筋肉で、股関節を外へ開く（外転する）筋肉です。図の赤い扇形が、軸足の中臀筋です。「股関節アップ」を押したときにだけ、表示されます。</div></div></div>
+    <div class="phcard p2 on"><span class="pn">2</span><div><div class="pt1">片脚立ちで、何をしている？</div><div class="pt2">片脚で立つと、体重で、浮いた脚側の骨盤が下へ落ちようとします。これを、軸足の中臀筋が引き止めます。体重を支えながら、骨盤を水平以上に保つ働きです。働くと、扇形が赤く濃くなり、少し縮みます。</div></div></div>
+    <div class="phcard p3 on"><span class="pn">3</span><div><div class="pt1">骨盤の挙上　＝　軸足の股関節の外転</div><div class="pt2">浮いた脚側の骨盤を上げると、軸足の股関節では、大腿骨に対して骨盤が外転の方向へ動きます（橙の扇形が、外転の角度です）。中臀筋が縮んで、骨盤を引き上げるので、ヒップロックの「骨盤の挙上」は、軸足の中臀筋が活性化して、股関節が外転している状態です。</div></div></div>
+    <div class="phcard p4 on"><span class="pn">4</span><div><div class="pt1">外旋とのつながり</div><div class="pt2">中臀筋の後ろ側の線維は、股関節の外旋にも働きます。外旋には、大臀筋や股関節の深層の外旋筋群も働きます。体修塾理論の4 Anchorsでは、足の裏で紙を外に破るような力（大腿骨外旋）で大臀筋を活性化し、外旋トルクで股関節をセントレートして、ニーインを防ぐとしています。外転（中臀筋）と外旋（大臀筋など）が合わさって、股関節が深くはまります。</div></div></div>
+    <div class="phcard p5 on"><span class="pn">5</span><div><div class="pt1">働いているときの合図</div><div class="pt2">骨盤の横（腸骨の外側、大転子の少し上）が硬くなります。浮いた脚側の骨盤が上がり、同じ側の肩が下がります。膝が足首の真上にとどまり、ニーインしません。足の裏の3点（母指球・小指球・踵）で、床を捉えています。</div></div></div>
+    <div class="phcard p7 on"><span class="pn">！</span><div><div class="pt1">働かないと、どうなる？</div><div class="pt2">浮いた脚側へ骨盤が落ちます（NG「骨盤が落ちる」）。膝が内に入り、骨盤が横へ流れます（NGの図）。支点が動いて、回旋や並進の力が漏れます。外転の角度が、プラスからマイナス（内転）に変わるのが、目安です。</div></div></div>
+    <div class="phcard p8 on"><span class="pn">6</span><div><div class="pt1">野球での出番</div><div class="pt2">体修塾理論では、投球の局面①（〜AC）で「軸足の股関節の外転・外旋」、打撃では「軸足股関節の外転・外旋・屈曲」が、動作のアトラクターとして挙げられています。</div></div></div>
+  </div>
+  <p style="margin-top:1cqw;font-size:1.15cqw;color:var(--fg-sub);line-height:1.7">※ 筋肉の付着部と働きは、一般的な解剖学の内容です。体修塾トレーニング理論には、中臀筋そのものの記述はなく、「軸足の股関節の外転・外旋」「足の裏で紙を外に破るような力で大臀筋を活性化」の記述に基づいて、まとめています。</p>
+  <div class="card" id="card"></div>
+</div>
+</div>
+<script>
+(function(){
+var FORMS={
+ ok:{name:'正しいフォーム',col:'#f6c90e',cam:'front',head:'片脚立ちのヒップロックです。浮いた脚側の骨盤を上げ（挙上）、同じ側の肩を下げて背骨を側屈（コイリング）し、軸足側の股関節を外旋させて、軸足の股関節に深くはめ込みます。足首・膝・股関節が前から見て縦に一直線に重なり、背骨は長く伸びたまま。反対の脚を動かしても、骨盤と軸足は動きません。',
+   pts:['浮いた脚側の骨盤を上げ、同じ側の肩は下げる（背骨が浮いた脚側へ側屈＝コイリング）','軸足側の股関節を外旋させて、深くはめ込む','足首・膝・股関節を縦に一直線にし、骨盤を真上へ（横へ流さない）','背骨は長く伸ばしたまま。反対の脚を動かしても、骨盤と軸足は動かない']},
+ drop:{name:'NG：骨盤が落ちる',col:'#f87171',cam:'front',head:'浮いた脚側の骨盤が下がり、軸足の股関節も外旋していません。骨盤の挙上がなく、股関節にはまらないので、支点が崩れます。',
+   pts:['浮いた脚側の骨盤が落ちて、軸足の股関節にはまらない','軸足の股関節が外旋せず、骨盤が固定点にならない','対策：浮いた脚側の骨盤を引き上げる','対策：軸足の股関節を外へ回すように、床を押す']},
+ sway:{name:'NG：骨盤が横へ流れる',col:'#f87171',cam:'front',head:'軸足から骨盤が外へ逃げています。股関節が足首の真上から外れ、はまっていません。支点にならず、力が漏れます。',
+   pts:['股関節が足首の外へずれて、はまっていない','支点が動くので、回旋や並進の力を生めない','対策：骨盤を軸足の股関節の真上へ戻す','対策：足裏で床を押して、股関節を足首の上に積む']},
+ kneein:{name:'NG：膝が内に入る（ニーイン）',col:'#f87171',cam:'front',head:'軸足の膝が内に入っています。股関節が深くはまらず、足首・膝・股関節の線が崩れます。',
+   pts:['膝が内に入ると、股関節がはまらない','足首・膝・股関節の縦の線が崩れる','対策：膝を足首の真上、つま先と同じ向きへ','対策：足裏の3点（母指球・小指球・踵）で床を捉える']},
+ collapse:{name:'NG：背骨が潰れる',col:'#f87171',cam:'front',head:'側屈で背骨が折れて、短く潰れています。エロンゲーション（軸の伸長）が保てていません。',
+   pts:['背骨が潰れると、力が漏れる','股関節に体重が乗らず、支点が不安定になる','対策：骨盤後傾・胸椎伸展・軸伸長・顎引きで、背骨を長く保つ','対策：頭の先を天井へ伸ばすつもりで']}
+};
+var FORDER=['ok','drop','sway','kneein','collapse'];
+var CAMS={obl:{yaw:-.62,pitch:.28},front:{yaw:0,pitch:.04},side:{yaw:-Math.PI/2,pitch:.04},oblb:{yaw:Math.PI+.62,pitch:.28},back:{yaw:Math.PI,pitch:.04},top:{yaw:-Math.PI/2,pitch:1.5},low:{yaw:-.5,pitch:-.32}};
+var form='ok', playing=true, t=0, last=0, manual=null;
+var yaw=CAMS.front.yaw,pitch=CAMS.front.pitch,tyaw=yaw,tpitch=pitch,camLock=false,dragging=false,lx=0,ly=0;
+var cv=document.getElementById('cv'),g=cv.getContext('2d'),W=0,H=0,dpr=1;
+
+function setCam(n,user){tyaw=CAMS[n].yaw;tpitch=CAMS[n].pitch;
+  document.querySelectorAll('#cams button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.c===n?'true':'false')});if(user)camLock=true}
+function renderForms(){
+  var el=document.getElementById('forms');el.innerHTML='';
+  FORDER.forEach(function(k){var f=FORMS[k],b=document.createElement('button');b.className='chip';b.textContent=f.name;
+    b.style.setProperty('--pc',f.col);b.setAttribute('aria-pressed',k===form?'true':'false');
+    b.onclick=function(){form=k;camLock=false;renderForms();renderCard();setCam(f.cam,false)};el.appendChild(b)});
+}
+function renderCard(){var f=FORMS[form],c=document.getElementById('card');c.style.setProperty('--pc',f.col);
+  c.innerHTML='<div class="chead"><span class="en">'+(form==='ok'?'CHECK POINTS':'COMMON MISTAKE')+'</span><h2>'+f.name+'</h2><p>'+f.head+'</p></div><div class="ptgrid">'+f.pts.map(function(x,i){return '<div class="pt"><span class="n">'+(i+1)+'</span><span class="tx">'+x+'</span></div>'}).join('')+'</div>'}
+document.querySelectorAll('#cams button').forEach(function(b){b.onclick=function(){setCam(b.dataset.c,true)}});
+var pauseB=document.getElementById('pause'),slowB=document.getElementById('slow'),slow=false;
+function syncAuto(){pauseB.setAttribute('aria-pressed',playing?'true':'false')}
+pauseB.onclick=function(){playing=!playing;if(playing)manual=null;syncAuto()};
+slowB.onclick=function(){slow=!slow;slowB.setAttribute('aria-pressed',slow?'true':'false')};
+var seek=document.getElementById('seek');
+seek.oninput=function(){playing=false;syncAuto();manual=seek.value/100};
+function fit(){var r=cv.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;g.setTransform(dpr,0,0,dpr,0,0)}
+window.addEventListener('resize',fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(cv);
+cv.addEventListener('pointerdown',function(e){dragging=true;lx=e.clientX;ly=e.clientY;camLock=true;document.querySelectorAll('#cams button').forEach(function(b){b.setAttribute('aria-pressed','false')});cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',function(e){if(!dragging)return;yaw+=(e.clientX-lx)*.008;pitch=Math.max(-.6,Math.min(1.55,pitch+(e.clientY-ly)*.006));tyaw=yaw;tpitch=pitch;lx=e.clientX;ly=e.clientY});
+cv.addEventListener('pointerup',function(){dragging=false});cv.addEventListener('pointercancel',function(){dragging=false});
+function rx(p,a){var c=Math.cos(a),s=Math.sin(a);return [p[0],p[1]*c-p[2]*s,p[1]*s+p[2]*c]}
+function ry(p,a){var c=Math.cos(a),s=Math.sin(a);return [p[0]*c+p[2]*s,p[1],-p[0]*s+p[2]*c]}
+function add(a,b){return [a[0]+b[0],a[1]+b[1],a[2]+b[2]]}
+var S0,CX,CY,D=5;
+var ZC=.6;
+function proj(p){p=[p[0],p[1],p[2]-ZC];var q=ry(p,yaw);q=rx(q,-pitch);var k=D/(D-q[2]);return [CX+q[0]*S0*k,CY-q[1]*S0*k,q[2],k]}
+var ANK=-1.04,L1=.52,L2=.52,TLN=.76,ARM=.80;
+function ik3(h,a,l1,l2,pole){var dv=sub(a,h),dl=Math.min(len(dv),l1+l2-.002),dn=nor(dv),aa=(l1*l1-l2*l2+dl*dl)/(2*dl),hh=Math.sqrt(Math.max(0,l1*l1-aa*aa)),pn=nor(sub(pole,mul(dn,dot(pole,dn))));return add(add(h,mul(dn,aa)),mul(pn,hh))}
+function mixK(a,b,u){var o={};for(var k in a)o[k]=a[k]+(b[k]-a[k])*u;return o}
+function ease(x){x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)}
+function line(a,b,w,col){g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineWidth=w;g.strokeStyle=col;g.lineCap='round';g.stroke()}
+function disc(c,r,col){var pts=[];for(var i=0;i<28;i++){var a=i/28*Math.PI*2;pts.push(proj([c[0],c[1]+r*Math.cos(a),c[2]+r*Math.sin(a)]))}
+  g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();g.fillStyle='#0a0e1a';g.fill();g.lineWidth=3;g.strokeStyle=col;g.stroke()}
+
+
+function sub(a,b){return[a[0]-b[0],a[1]-b[1],a[2]-b[2]]}
+function mul(a,k){return[a[0]*k,a[1]*k,a[2]*k]}
+function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]}
+function crs(a,b){return[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]]}
+function len(a){return Math.sqrt(dot(a,a))}
+function nor(a){var l=len(a)||1;return[a[0]/l,a[1]/l,a[2]/l]}
+function lerp(a,b,m){return a+(b-a)*m}
+var items=[],S=1;
+// ---------- 描画部品 ----------
+  var items=[];
+  function seg3(a,b,w,col,zb){var pa=proj(a),pb=proj(b);items.push({z:(pa[2]+pb[2])/2+(zb||0),d:function(){
+    g.strokeStyle=col;g.lineWidth=w*S*(pa[3]+pb[3])/2;g.lineCap='round';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.stroke()}})}
+  function poly(pts,fill,stroke,alphaFn,zb){var q=pts.map(proj),z=0;q.forEach(function(p){z+=p[2]});z/=q.length;items.push({z:z+(zb||0),d:function(){
+    g.globalAlpha=alphaFn?alphaFn():1;g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<q.length;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
+    if(fill){g.fillStyle=fill;g.fill()}if(stroke){g.strokeStyle=stroke;g.lineWidth=2;g.stroke()}g.globalAlpha=1}})}
+  // ---- 滑らかな立体（メッシュ）：断面のリングをつないで面を張る ----
+  var LIGHT=nor([-.35,.75,.55]);
+  function meshDraw(rings,centers,shadow,light){
+    var R=rings.length,N=rings[0].length,pr=rings.map(function(r){return r.map(proj)});
+    for(var i=0;i<R-1;i++){
+      var cc=mul(add(centers[i],centers[i+1]),.5);
+      for(var j=0;j<N;j++){
+        var j2=(j+1)%N,a=pr[i][j],b=pr[i][j2],c=pr[i+1][j2],d=pr[i+1][j];
+        var mid=mul(add(add(rings[i][j],rings[i][j2]),add(rings[i+1][j2],rings[i+1][j])),.25);
+        var nn=nor(sub(mid,cc)),k=Math.max(0,dot(nn,LIGHT)),kk=.18+.82*Math.pow(k,.8);
+        var col='rgb('+Math.round(lerp(shadow[0],light[0],kk))+','+Math.round(lerp(shadow[1],light[1],kk))+','+Math.round(lerp(shadow[2],light[2],kk))+')';
+        (function(a,b,c,d,col){items.push({z:(a[2]+b[2]+c[2]+d[2])/4,d:function(){
+          g.fillStyle=col;g.strokeStyle=col;g.lineWidth=1;g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.lineTo(c[0],c[1]);g.lineTo(d[0],d[1]);g.closePath();g.fill();g.stroke()}})})(a,b,c,d,col);
+      }
+    }
+  }
+  function densify(pts,rad,k){var P=[],Rr=[];for(var i=0;i<pts.length-1;i++){for(var t=0;t<k;t++){var u=t/k;P.push(add(mul(pts[i],1-u),mul(pts[i+1],u)));Rr.push(lerp(rad[i],rad[i+1],u))}}P.push(pts[pts.length-1]);Rr.push(rad[rad.length-1]);return{P:P,R:Rr}}
+  function tube(pts,rad,col,k,sides){
+    var dd=densify(pts,rad,k||3),P=dd.P,rings=[],u=null;sides=sides||12;
+    for(var i=0;i<P.length;i++){
+      var t=nor(sub(P[Math.min(P.length-1,i+1)],P[Math.max(0,i-1)]));
+      if(!u){var ref=Math.abs(t[1])>.9?[1,0,0]:[0,1,0];u=nor(crs(t,ref))}else{u=nor(sub(u,mul(t,dot(u,t))))}
+      var v=crs(t,u),ring=[];
+      for(var j=0;j<sides;j++){var a=j/sides*6.2832;ring.push(add(P[i],add(mul(u,Math.cos(a)*dd.R[i]),mul(v,Math.sin(a)*dd.R[i]))))}
+      rings.push(ring);
+    }
+    meshDraw(rings,P,col[0],col[1]);
+  }
+  var BODY=[[78,94,122],[236,242,250]],BODY2=[[70,86,114],[222,230,242]],SKIN=0,SKIN2=0,GOLD=['#fff1a8','#f6c90e','#9a7b05'];
+
+  function dashed(a,b,col,w,zb){var pa=proj(a),pb=proj(b);items.push({z:(pa[2]+pb[2])/2+(zb||0),d:function(){
+    g.setLineDash([8,8]);g.strokeStyle=col;g.lineWidth=w;g.lineCap='butt';g.beginPath();g.moveTo(pa[0],pa[1]);g.lineTo(pb[0],pb[1]);g.stroke();g.setLineDash([])}})}
+  function diamond(p,r,col){var q=proj(p),R=r*S*q[3];items.push({z:q[2]+3,d:function(){
+    g.fillStyle=col;g.strokeStyle='#0a0e1a';g.lineWidth=2;g.beginPath();g.moveTo(q[0],q[1]-R);g.lineTo(q[0]+R,q[1]);g.lineTo(q[0],q[1]+R);g.lineTo(q[0]-R,q[1]);g.closePath();g.fill();g.stroke()}})}
+  var BODY=[[78,94,122],[236,242,250]],BODY2=[[70,86,114],[222,230,242]];
+    function wAt(t){return lerp(.155,.135,Math.min(1,t/.3))+(t>=.3?lerp(0,.05,Math.min(1,(t-.3)/.45)):0)-(t>.8?(t-.8)*.1:0)}
+  function dAt(t){return t<.3?lerp(.10,.088,t/.3):lerp(.088,.108,Math.min(1,(t-.3)/.45))-(t>.85?(t-.85)*.2:0)}
+
+var FL=-1.07,AXN=.17,TA=8*Math.PI/180,MIDFOOT=.06,LL=1.03,FS=82;
+var CYC=12,zoom=false;
+document.getElementById('zoomb').onclick=function(){zoom=!zoom;this.setAttribute('aria-pressed',zoom?'true':'false')};
+function seg(u,a,b){return Math.max(0,Math.min(1,(u-a)/(b-a)))}
+function pose(f,u){
+  var sway=f==='sway',kin=f==='kneein',col=f==='collapse',drop=f==='drop';
+  var w=ease(seg(u,.10,.30))*(1-ease(seg(u,.80,.92)));
+  var lf=ease(seg(u,.12,.30))*(1-ease(seg(u,.80,.92)));
+  var ph=u<.10?1:u<.30?2:u<.45?3:u<.80?4:u<.92?5:1;
+  var hike=(drop?-.05:.05)*w,psi=(drop?0:16)*w*Math.PI/180;   // 浮いた脚側の骨盤の挙上、軸足側の股関節の外旋（骨盤が軸足を中心に回る）
+  var px=.03*w+(sway?.22*w:0),hx=px+.14,dxh=hx-AXN,yh=ANK+Math.sqrt(LL*LL-dxh*dxh);
+  var J={};J.hipR=[hx,yh,0];J.hipL=[hx-.28*Math.cos(psi),yh+hike,-.28*Math.sin(psi)];
+  J.pelvis=[(J.hipL[0]+J.hipR[0])/2,(J.hipL[1]+J.hipR[1])/2,(J.hipL[2]+J.hipR[2])/2];
+  J.ankR=[AXN,ANK,0];
+  var kn=ik3(J.hipR,J.ankR,L1,L2,[0,0,1]);if(kin)kn=[kn[0]-.16*w,kn[1],kn[2]];J.kneeR=kn;
+  var x=seg(u,.45,.80),sw=Math.sin(Math.PI*x),r=Math.PI/180;
+  var fh=(70-45*sw)*lf,kk=(95-20*sw)*lf,hL=J.hipL;
+  var kl=[hL[0],hL[1]-L1*Math.cos(fh*r),hL[2]+L1*Math.sin(fh*r)],sa=(fh-kk)*r;
+  var al=[kl[0],kl[1]-L2*Math.cos(sa),kl[2]+L2*Math.sin(sa)];
+  if(al[1]<ANK)al[1]=ANK;
+  J.kneeL=kl;J.ankL=al;J.ankL[0]=lerp(-AXN,kl[0],lf);
+  J.hl=0;J.psi=psi;
+  var P=J.pelvis,nx=sway?.10*w:(col?.34*w:.17*w),TL=.84*(1-(col?.20:0)*w),dx=nx-P[0];
+  var N=[nx,P[1]+Math.sqrt(Math.max(.01,TL*TL-dx*dx)),0],mid=[(P[0]+N[0])/2+(col?.14*w:(drop?0:.06*w)),(P[1]+N[1])/2,P[2]/2];
+  function q(t){var a=(1-t)*(1-t),b=2*(1-t)*t,c=t*t;return [a*P[0]+b*mid[0]+c*N[0],a*P[1]+b*mid[1]+c*N[1],a*P[2]+b*mid[2]+c*N[2]]}
+  J.q=q;J.neck=N;J.mid=mid;J.chest=q(.6);var shm=q(.82),tl=(col?.07*w:(drop?0:-.045*w)),sy=psi*.4;
+  var lv=[Math.cos(sy),0,-Math.sin(sy)];
+  J.shL=[shm[0]-.27*lv[0],shm[1]+tl,shm[2]-.27*lv[2]];J.shR=[shm[0]+.27*lv[0],shm[1]-tl,shm[2]+.27*lv[2]];
+  var hv=sub(N,q(.9));J.head=add(N,mul(nor(hv),.26));
+  J.haL=add(J.shL,[-.04,-ARM,.05]);J.haR=add(J.shR,[.04,-ARM,.05]);
+  J.elL=ik3(J.shL,J.haL,.40,.40,[-.3,0,-.4]);J.elR=ik3(J.shR,J.haR,.40,.40,[.3,0,-.4]);
+  J.rollP=Math.atan2(J.hipR[1]-J.hipL[1],.28);J.rollS=Math.atan2(J.shR[1]-J.shL[1],.54);J.sideBend=(J.rollS-J.rollP)/r;J.shDrop=(J.shR[1]-J.shL[1])*FS/2;
+  J.abd=(-J.rollP/r)+Math.atan2(J.kneeR[0]-J.hipR[0],J.hipR[1]-J.kneeR[1])/r;
+  J.phase=ph;J.w=w;J.footZ=0;
+  J.hipDev=(J.hipR[0]-AXN)*FS;J.kneeDev=(AXN-J.kneeR[0])*FS;J.hikeCm=(J.hipL[1]-J.hipR[1])*FS;J.erDeg=psi/r;
+  J.spine=len(sub(N,P))/.84;
+  return J;
+}
+function arrow2(a,b,col,wid){var ad=Math.atan2(b[1]-a[1],b[0]-a[0]),hl=Math.max(9,wid*3.2);g.save();g.strokeStyle=col;g.fillStyle=col;g.lineWidth=wid;g.lineCap='round';g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0]-Math.cos(ad)*hl*.6,b[1]-Math.sin(ad)*hl*.6);g.stroke();
+  g.beginPath();g.moveTo(b[0],b[1]);g.lineTo(b[0]-Math.cos(ad-.5)*hl,b[1]-Math.sin(ad-.5)*hl);g.lineTo(b[0]-Math.cos(ad+.5)*hl,b[1]-Math.sin(ad+.5)*hl);g.closePath();g.fill();g.restore()}
+function torsoSide(J,t,k){   // 体幹の、浮いた脚側（左）の表面の点。k=外側(1)〜内側(0.45)
+  var yw=J.psi*(1-.6*t),rl=lerp(J.rollP,J.rollS,t),Lv=[Math.cos(yw)*Math.cos(rl),Math.sin(rl),-Math.sin(yw)*Math.cos(rl)],hw=wAt(Math.min(1,t*1.08))*1.3;
+  return sub(J.q(t),mul(Lv,hw*k))}
+function drawPlane(){   // 前額面の壁（青）：体を前後に分ける面
+  var a=1.15,top=1.9,q=[[-a,-1.2,0],[a,-1.2,0],[a,top,0],[-a,top,0]].map(proj);
+  g.beginPath();g.moveTo(q[0][0],q[0][1]);for(var i=1;i<4;i++)g.lineTo(q[i][0],q[i][1]);g.closePath();
+  g.fillStyle='rgba(125,211,252,.07)';g.fill();g.lineWidth=2;g.strokeStyle='rgba(125,211,252,.6)';g.stroke();
+}
+function frame(ts){
+  if(!last)last=ts;var dt=Math.min(.05,(ts-last)/1000);last=ts;
+  if(playing)t+=dt*(slow?.5:1)/CYC;
+  if(!dragging){var dyw=tyaw-yaw;dyw=Math.atan2(Math.sin(dyw),Math.cos(dyw));yaw+=dyw*Math.min(1,dt*6);pitch+=(tpitch-pitch)*Math.min(1,dt*6)}
+  var cyc=t-Math.floor(t),u=manual!==null?manual:cyc;
+  if(manual===null){seek.value=Math.round(u*100)}
+  var f=FORMS[form],J=pose(form,u),okf=(form==='ok'),acc=f.col;
+  document.getElementById('seekl').textContent=['','構え','体重を移して片脚に','ヒップロック（はめ込む）','支点を保ったまま脚を動かす','戻す'][J.phase];
+  g.clearRect(0,0,W,H);
+  var ymax=1.75,ymin=-1.15,rng=ymax-ymin,zmin=-.95,zmax=.95;ZC=0;
+  if(zoom){ymax=.62;ymin=-.62;rng=ymax-ymin;zmin=-.75;zmax=.75}
+  S0=Math.min(W*.92/(zmax-zmin),H*.94/rng,zoom?1e9:W*.40);CX=W*.5;CY=H*.5+S0*((ymax+ymin)/2);if(zoom)CX=W*.5-S0*(AXN-.05);
+  var fa=u<.03?u/.03:(u>.97?(1-u)/.03:1);cv.style.opacity=Math.max(0,Math.min(1,fa));
+  drawPlane();
+  var fc=[];for(var i=0;i<=40;i++){var th=i/40*Math.PI*2;fc.push(proj([Math.cos(th)*.7,FL,Math.sin(th)*.7]))}
+  g.beginPath();fc.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.strokeStyle='rgba(148,163,184,.45)';g.lineWidth=1.5;g.stroke();
+  // 金の縦線：軸足の足首の真上
+  var v1=proj([AXN,FL,0]),v2=proj([AXN,1.6,0]);g.setLineDash([8,8]);g.lineWidth=2.5;g.strokeStyle='rgba(246,201,14,.8)';g.beginPath();g.moveTo(v1[0],v1[1]);g.lineTo(v2[0],v2[1]);g.stroke();g.setLineDash([]);
+  if(J.w>.5){var rc=[];for(var i2=0;i2<=30;i2++){var th2=i2/30*Math.PI*2;rc.push(proj([AXN+Math.cos(th2)*.3,FL,.1+Math.sin(th2)*.3]))}
+    g.beginPath();rc.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.fillStyle='rgba(251,146,60,.28)';g.fill();g.lineWidth=3;g.strokeStyle='#fb923c';g.stroke()}
+  S=S0;items.length=0;
+  [['L','hipL','kneeL','ankL',-1],['R','hipR','kneeR','ankR',1]].forEach(function(c){
+    var hp=J[c[1]],kn=J[c[2]],ak=J[c[3]],sg=c[4],fd=[sg*Math.sin(TA),0,Math.cos(TA)];
+    tube([hp,kn,ak],[.105,.075,.052],BODY2,4,12);
+    var heel=add(ak,add(mul(fd,-.09),[0,.005,0])),toe=[ak[0]+fd[0]*.26,ak[1]+.005,ak[2]+fd[2]*.26];
+    tube([heel,toe],[.04,.038],BODY2,3,12);
+  });
+  var Pp=J.pelvis,Pn=J.neck,NR=18,rr=[],cc=[];
+  for(var ri=0;ri<=NR;ri++){var tt=ri/NR,ctr=J.q(tt),ta=J.q(Math.min(1,tt+.02)),tb=J.q(Math.max(0,tt-.02)),Tt=nor(sub(ta,tb));
+    var yw=J.psi*(1-.6*tt),rl=lerp(J.rollP,J.rollS,tt),Lv=[Math.cos(yw)*Math.cos(rl),Math.sin(rl),-Math.sin(yw)*Math.cos(rl)],Nv=crs(Lv,Tt),w2=wAt(Math.min(1,tt*1.08))*1.3,dd=dAt(Math.min(1,tt*1.08))*1.3,ring=[];
+    for(var jj=0;jj<18;jj++){var an=jj/18*6.2832;ring.push(add(add(ctr,mul(Lv,Math.cos(an)*w2)),mul(Nv,Math.sin(an)*dd)))}
+    rr.push(ring);cc.push(ctr)}
+  meshDraw(rr,cc,BODY[0],BODY[1]);
+  var rh=J.rollS*.6,Lv=[Math.cos(J.psi*.4)*Math.cos(rh),Math.sin(rh),-Math.sin(J.psi*.4)*Math.cos(rh)],hd=J.head,Th=nor(sub(hd,Pn)),Nh=crs(Lv,Th);
+  tube([Pn,add(Pn,mul(sub(hd,Pn),.7))],[.06,.052],BODY,3,12);
+  var hr=[],hcn=[];
+  for(var q2=0;q2<=10;q2++){var lat=-Math.PI/2+Math.PI*q2/10,cs=Math.cos(lat),sn=Math.sin(lat),ctr=add(hd,mul(Th,.12*sn)),ring=[];
+    for(var jj=0;jj<14;jj++){var an=jj/14*6.2832;ring.push(add(add(ctr,mul(Lv,Math.cos(an)*.095*cs)),mul(Nh,Math.sin(an)*.11*cs)))}
+    hr.push(ring);hcn.push(hd)}
+  meshDraw(hr,hcn,BODY[0],BODY[1]);
+  [['shL','elL','haL'],['shR','elR','haR']].forEach(function(c){tube([J[c[0]],J[c[1]],J[c[2]]],[.062,.05,.045],BODY,4,12)});
+  diamond(J.pelvis,.03,acc);diamond(J.chest,.03,acc);
+  items.sort(function(a,b){return a.z-b.z});items.forEach(function(it){it.d()});
+  // 両股関節（骨盤）を結んだ赤いライン
+  (function(){var a=proj(J.hipL),b=proj(J.hipR),dx=b[0]-a[0],dy=b[1]-a[1],m=Math.hypot(dx,dy)||1,ex=dx/m*S0*.10,ey=dy/m*S0*.10;
+    g.save();g.lineCap='round';g.strokeStyle='#ef4444';g.lineWidth=Math.max(4,S0*.035);
+    g.beginPath();g.moveTo(a[0]-ex,a[1]-ey);g.lineTo(b[0]+ex,b[1]+ey);g.stroke();
+    g.fillStyle='#ef4444';g.strokeStyle='#0a0e1a';g.lineWidth=2;[a,b].forEach(function(p){g.beginPath();g.arc(p[0],p[1],Math.max(5,S0*.035),0,6.2832);g.fill();g.stroke()});
+    g.font='900 '+Math.max(11,W*.017)+'px "Noto Sans JP",sans-serif';g.fillStyle='#fca5a5';g.textAlign='center';g.fillText('骨盤ライン',(a[0]+b[0])/2,Math.min(a[1],b[1])-S0*.09);g.restore()})();
+  if(J.erDeg>2){var C=J.hipR,pts=[];for(var ai=0;ai<=16;ai++){var aa=J.psi*ai/16;pts.push(proj([C[0]-.34*Math.cos(aa),C[1]-.02,C[2]-.34*Math.sin(aa)]))}
+    g.save();g.strokeStyle='#fb923c';g.lineWidth=Math.max(3,S0*.025);g.lineCap='round';g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.stroke();
+    var e1=pts[pts.length-1],e0=pts[pts.length-3],ad=Math.atan2(e1[1]-e0[1],e1[0]-e0[0]),hl=Math.max(8,S0*.05);g.fillStyle='#fb923c';g.beginPath();g.moveTo(e1[0]+Math.cos(ad)*hl*.8,e1[1]+Math.sin(ad)*hl*.8);g.lineTo(e1[0]+Math.cos(ad+2.5)*hl,e1[1]+Math.sin(ad+2.5)*hl);g.lineTo(e1[0]+Math.cos(ad-2.5)*hl,e1[1]+Math.sin(ad-2.5)*hl);g.closePath();g.fill();
+    g.font='900 '+Math.max(11,W*.017)+'px "Noto Sans JP",sans-serif';g.textAlign='left';g.fillText('外旋',pts[8][0]+8,pts[8][1]+14);g.restore()}
+  // 両肩を結んだラインと、その傾き
+  (function(){var a=proj(J.shL),b=proj(J.shR),dx=b[0]-a[0],dy=b[1]-a[1],m=Math.hypot(dx,dy)||1,ex=dx/m*S0*.08,ey=dy/m*S0*.08;
+    g.save();g.lineCap='round';g.strokeStyle='#0a0e1a';g.lineWidth=Math.max(4,S0*.035)+4;g.beginPath();g.moveTo(a[0]-ex,a[1]-ey);g.lineTo(b[0]+ex,b[1]+ey);g.stroke();
+    g.strokeStyle='#f472b6';g.lineWidth=Math.max(4,S0*.035);g.beginPath();g.moveTo(a[0]-ex,a[1]-ey);g.lineTo(b[0]+ex,b[1]+ey);g.stroke();
+    g.fillStyle='#f472b6';g.strokeStyle='#0a0e1a';g.lineWidth=2;[a,b].forEach(function(p){g.beginPath();g.arc(p[0],p[1],Math.max(5,S0*.035),0,6.2832);g.fill();g.stroke()});
+    g.font='900 '+Math.max(11,W*(zoom?.02:.017))+'px "Noto Sans JP",sans-serif';g.fillStyle='#fbcfe8';g.textAlign='center';g.fillText('肩ライン '+Math.round(J.rollS*180/Math.PI)+'°',(a[0]+b[0])/2,Math.min(a[1],b[1])-S0*.07);g.restore()})();
+  // 挙上側の脇腹の収縮（股関節アップのとき）
+  if(zoom){(function(){var act=Math.max(0,Math.min(1,J.sideBend/20))*J.w,t0=.05+.03*act,t1=.44-.03*act,n=8,e1=[],e2=[];
+    for(var i=0;i<=n;i++){var t=t0+(t1-t0)*i/n;e1.push(proj(torsoSide(J,t,1.02)));e2.push(proj(torsoSide(J,t,.35)))}
+    var mc=function(c0,c1){return Math.round(lerp(c0,c1,act))};
+    g.save();g.globalAlpha=.30+.5*act;g.beginPath();e1.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});for(var i=n;i>=0;i--)g.lineTo(e2[i][0],e2[i][1]);g.closePath();
+    g.fillStyle='rgb('+mc(148,251)+','+mc(163,113)+','+mc(184,133)+')';g.fill();g.globalAlpha=.9;g.lineWidth=Math.max(1.5,S0*.012);g.strokeStyle='rgba(255,255,255,.55)';g.stroke();
+    g.strokeStyle='rgba(136,19,55,'+(.35+.5*act)+')';for(var i=0;i<n;i++){g.beginPath();g.moveTo(e1[i][0],e1[i][1]);g.lineTo(e2[i+1][0],e2[i+1][1]);g.stroke()}
+    g.restore();
+    if(act>.3){var up=proj(torsoSide(J,t1+.14,1.35)),up2=proj(torsoSide(J,t1+.02,1.35)),dn=proj(torsoSide(J,t0-.07,1.35)),dn2=proj(torsoSide(J,t0+.05,1.35));
+      arrow2(up,up2,'#f8fafc',Math.max(3,S0*.022));arrow2(dn,dn2,'#f8fafc',Math.max(3,S0*.022))}
+    var lb=proj(torsoSide(J,(t0+t1)/2,1.0));g.save();g.font='900 '+Math.max(11,W*.021)+'px "Noto Sans JP",sans-serif';g.textAlign='right';g.fillStyle=act>.5?'#fecdd3':'#cbd5e1';g.fillText(act>.5?'脇腹（挙上側）収縮':'脇腹（働かない）',lb[0]-S0*.22,lb[1]+4);g.restore()})()}
+  // 後ろから見たときの肩甲骨の下制（挙上側の肩）
+  (function(){var vis=Math.max(0,Math.min(1,(-Math.cos(yaw)-.2)/.5));if(vis<=.02||zoom)return;
+    var tt=.72,c=J.q(tt),yw=J.psi*(1-.6*tt),rl=lerp(J.rollP,J.rollS,tt),Lv=[Math.cos(yw)*Math.cos(rl),Math.sin(rl),-Math.sin(yw)*Math.cos(rl)],Up=nor(sub(J.q(.82),J.q(.62))),bz=[0,0,-.15];
+    var shape=[[.04,.11],[.20,.12],[.21,.05],[.13,-.04],[.08,-.16],[.04,-.03]],act=Math.max(0,Math.min(1,J.shDrop/3.5))*J.w;
+    g.save();g.globalAlpha=vis;
+    [-1,1].forEach(function(sg){var pts=shape.map(function(q2){return proj(add(add(add(c,mul(Lv,sg*q2[0])),mul(Up,q2[1])),bz))});
+      g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();g.fillStyle=(sg<0&&act>.3)?'rgba(251,146,60,.55)':'rgba(226,232,240,.35)';g.fill();g.lineWidth=2;g.strokeStyle=(sg<0&&act>.3)?'#fb923c':'rgba(226,232,240,.8)';g.stroke()});
+    if(act>.3){var a0=proj(add(add(add(c,mul(Lv,-.13)),mul(Up,.10)),bz)),a1=proj(add(add(add(c,mul(Lv,-.13)),mul(Up,-.30)),bz));arrow2(a0,a1,'#fb923c',Math.max(4,S0*.03));
+      g.font='900 '+Math.max(11,W*.018)+'px "Noto Sans JP",sans-serif';g.fillStyle='#fdba74';g.textAlign='right';g.fillText('肩甲骨の下制',a1[0]-S0*.08,a1[1]+4)}
+    g.restore()})();
+  // 軸足の中臀筋：骨盤の外側から大転子へ。働くと赤く、縮む
+  (function(){var act=Math.max(0,Math.min(1,J.abd/10))*J.w,rp=J.rollP,Lp=[Math.cos(rp),Math.sin(rp),0],Up=[-Math.sin(rp),Math.cos(rp),0],Hh=J.hipR;
+    var T=add(Hh,add(mul(Lp,.12),mul(Up,-.07))),O=[];
+    for(var k=0;k<=6;k++){var a=k/6,o=add(Hh,add(mul(Lp,.20-.24*a),mul(Up,.17+.07*Math.sin(Math.PI*a))));O.push(add(T,mul(sub(o,T),1.35*(1-.12*act))))}
+    if(zoom){var pts=[T].concat(O).map(proj),mc=function(c0,c1){return Math.round(lerp(c0,c1,act))},col2='rgb('+mc(148,239)+','+mc(163,68)+','+mc(184,68)+')';
+    g.save();g.globalAlpha=.30+.5*act;g.beginPath();pts.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();g.fillStyle=col2;g.fill();
+    g.globalAlpha=.9;g.lineWidth=Math.max(1.5,S0*.012);g.strokeStyle='rgba(255,255,255,.55)';g.stroke();
+    g.strokeStyle='rgba(127,29,29,'+(.35+.5*act)+')';for(var k2=1;k2<pts.length;k2++){g.beginPath();g.moveTo(pts[0][0],pts[0][1]);g.lineTo(pts[k2][0],pts[k2][1]);g.stroke()}
+    g.globalAlpha=1;g.font='900 '+Math.max(11,W*(zoom?.022:.016))+'px "Noto Sans JP",sans-serif';g.textAlign='left';g.fillStyle=act>.5?'#fecaca':'#cbd5e1';
+    var lp=pts[4];g.fillText(act>.5?'中臀筋（活性化）':'中臀筋（働かない）',lp[0]+S0*.12,lp[1]-S0*.02);g.restore()}
+    // 外転の角度：骨盤ラインに垂直な線（中立）から、大腿骨の向きまで
+    var a1=Math.atan2(-Math.cos(rp),Math.sin(rp)),kv=sub(J.kneeR,Hh),a2=Math.atan2(kv[1],kv[0]),d=a2-a1;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;
+    if(J.w>.3&&Math.abs(d)>.03){var sp=[proj(Hh)],R2=.30;for(var i3=0;i3<=14;i3++){var aa=a1+d*i3/14;sp.push(proj([Hh[0]+R2*Math.cos(aa),Hh[1]+R2*Math.sin(aa),Hh[2]]))}
+      g.save();g.beginPath();sp.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.closePath();g.fillStyle='rgba(251,146,60,.35)';g.fill();g.lineWidth=2.5;g.strokeStyle='#fb923c';g.stroke();
+      var am=a1+d/2,lq=proj([Hh[0]+(R2+.10)*Math.cos(am),Hh[1]+(R2+.10)*Math.sin(am),Hh[2]]);g.font='900 '+Math.max(11,W*(zoom?.022:.016))+'px "Noto Sans JP",sans-serif';g.fillStyle='#fdba74';g.textAlign='center';g.fillText((J.abd>=0?'外転 ':'内転 ')+Math.abs(Math.round(J.abd))+'°',lq[0],lq[1]);g.restore()}
+    // 浮いた脚側の骨盤を引き上げる矢印
+    if(J.hikeCm>1&&J.w>.3){var h0=proj(add(J.hipL,[0,.03,0])),h1=proj(add(J.hipL,[0,.26,0]));g.save();g.strokeStyle='#f8fafc';g.fillStyle='#f8fafc';g.lineWidth=Math.max(3,S0*.025);g.lineCap='round';g.beginPath();g.moveTo(h0[0],h0[1]);g.lineTo(h1[0],h1[1]);g.stroke();
+      var hl2=Math.max(8,S0*.05);g.beginPath();g.moveTo(h1[0],h1[1]-hl2*.9);g.lineTo(h1[0]-hl2*.7,h1[1]+hl2*.2);g.lineTo(h1[0]+hl2*.7,h1[1]+hl2*.2);g.closePath();g.fill();
+      g.font='900 '+Math.max(11,W*.016)+'px "Noto Sans JP",sans-serif';g.textAlign='right';g.fillText('挙上',h1[0]-hl2,h1[1]+4);g.restore()}
+  })();
+  // 軸足の足首・膝・股関節・背骨をつなぐ線と、股関節のリング
+  if(J.w>.35){
+    var chain=[J.ankR,J.kneeR,J.hipR].map(proj),spn=[];for(var si=0;si<=20;si++)spn.push(proj(J.q(si/20)));
+    g.save();g.globalAlpha=Math.min(1,J.w*1.2);g.lineWidth=Math.max(3,S0*.03);g.lineJoin='round';g.lineCap='round';g.strokeStyle=okf?'#f6c90e':'#f87171';
+    g.beginPath();chain.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.stroke();
+    var lw0=g.lineWidth;g.strokeStyle='#0a0e1a';g.lineWidth=lw0+5;g.beginPath();spn.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.stroke();
+    g.strokeStyle=okf?'#a3e635':'#f87171';g.lineWidth=lw0+1;g.beginPath();spn.forEach(function(p,i){i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])});g.stroke();g.lineWidth=lw0;g.strokeStyle=okf?'#f6c90e':'#f87171';
+    var hp2=proj(J.hipR),R=.14*S0*hp2[3];g.beginPath();g.arc(hp2[0],hp2[1],R,0,6.2832);g.lineWidth=Math.max(3,R*.25);if(!okf)g.setLineDash([R*.5,R*.4]);g.stroke();g.setLineDash([]);
+    g.font='900 '+Math.max(11,W*.018)+'px "Noto Sans JP",sans-serif';g.fillStyle=okf?'#f6c90e':'#f87171';g.textAlign='left';g.fillText(okf?'ヒップロック':'はまっていない',hp2[0]+R+6,hp2[1]+4);
+    if(J.sideBend>3||!okf){var sp3=spn[10];g.fillStyle=okf?'#a3e635':'#f87171';g.fillText(okf?'コイリング（側屈）':'背骨',sp3[0]+S0*.12,sp3[1])}
+    g.restore()}
+  [1,2,3,4,5].forEach(function(k){var e=document.getElementById('ph'+k);if(e)e.classList.toggle('on',J.phase===k)});
+  var show=J.w>.5,wc=okf?'#f6c90e':'#f87171',hl=[];
+  var hd2=Math.round(J.hipDev),kd=Math.round(J.kneeDev),sp=J.spine,hk=Math.round(J.hikeCm*10)/10;
+  var PHN=['','構え','体重を移して片脚に','ヒップロック（はめ込む）','支点を保ったまま脚を動かす','戻す'];
+  var hok=Math.abs(hd2)<5,kok=Math.abs(kd)<5,sok=sp>.93,hkok=hk>=2,erok=J.erDeg>=8,sbk=Math.round(J.sideBend),sbok=sbk>=8&&J.shDrop>=1,abd=Math.round(J.abd),abok=abd>=6;
+  function L(t,c,z){hl.push([t,show||t.indexOf('局面')===0?c:'#94a3b8',z])}
+  L('局面　'+PHN[J.phase],'#f6c90e',1);
+  L('股関節　'+(show?(hok?'足首の真上（ロック）':'外へ '+hd2+'cm ずれている'):'—'),hok?'#f6c90e':'#f87171',0);
+  L('膝　'+(show?(kok?'足首の真上':(kd>0?'内へ ':'外へ ')+Math.abs(kd)+'cm ずれている'):'—'),kok?'#f6c90e':'#f87171',0);
+  L('背骨　'+(show?(sok?'長く伸びている':'潰れている（'+Math.round(sp*100)+'%）'):'—'),sok?'#f6c90e':'#f87171',0);
+  L('軸足　足首・膝・股関節　'+(show?(hok&&kok?'一直線':'ずれている'):'—'),hok&&kok?'#f6c90e':'#f87171',0);
+  L('骨盤ライン　'+(show?(hkok?'浮いた脚側が '+hk+'cm 上がっている（傾き '+Math.round(-J.rollP*180/Math.PI)+'°）':(hk<=-2?'浮いた脚側が落ちている':'水平のまま（挙上なし）')):'—'),hkok?'#fca5a5':'#f87171',1);
+  L('軸足の股関節　'+(show?(abd>=0?'外転 ':'内転 ')+Math.abs(abd)+'°':'—'),abok?'#fb923c':'#f87171',1);
+  L('軸足の股関節　'+(show?(erok?'外旋 '+Math.round(J.erDeg)+'°':'外旋なし'):'—'),erok?'#fb923c':'#f87171',1);
+  L('軸足の中臀筋　'+(show?(abok?'活性化（骨盤を引き上げて支える）':'働いていない'):'—'),abok?'#fecaca':'#f87171',2);
+  L('肩ライン　'+(show?(J.shDrop>=1?'骨盤挙上側の肩が '+(Math.round(J.shDrop*10)/10)+'cm 下がっている（傾き '+Math.round(J.rollS*180/Math.PI)+'°）':(J.shDrop<=-1?'挙上側の肩が上がっている（逆）':'水平のまま')):'—'),J.shDrop>=1?'#a3e635':'#f87171',0);
+  L('脇腹（挙上側）　'+(show?(J.sideBend>=8?'収縮して縮む（約 '+Math.round(J.sideBend)+'°側屈）':'収縮なし'):'—'),J.sideBend>=8?'#fecdd3':'#f87171',2);
+  L('肩甲骨（挙上側）　'+(show?(J.shDrop>=1?'下制（後ろから見て矢印）':'下制なし'):'—'),J.shDrop>=1?'#fdba74':'#f87171',0);
+  L('コイリング（側屈）　'+(show?(sbok?'約 '+sbk+'°（挙上側へ）':'側屈なし'):'—'),sbok?'#a3e635':'#f87171',0);
+  if(J.phase===4)L('反対の脚を動かしても、骨盤は動かない','#86efac',1);
+  var fs=Math.max(12,W*(zoom?.02:.022));g.font='900 '+fs+'px "Noto Sans JP",sans-serif';g.textAlign='left';
+  var ln=0;hl.forEach(function(e){if(zoom?!e[2]:e[2]===2)return;g.fillStyle=e[1];g.fillText(e[0],W*.04,H*.09+fs*1.5*ln);ln++});
+  requestAnimationFrame(frame);
+}
+function postH(){try{parent.postMessage({fcH:Math.ceil(document.querySelector('.frame').getBoundingClientRect().height)},'*')}catch(e){}}
+if(window.ResizeObserver)new ResizeObserver(postH).observe(document.querySelector('.frame'));window.addEventListener('load',postH);setInterval(postH,800);
+fit();renderForms();renderCard();setCam('front',false);requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
