@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
-<title>ボックスジャンプ｜3D解説</title>
+<title>ボックスジャンプ（ノンカウンター）｜3D解説</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -68,14 +68,14 @@ canvas:active{cursor:grabbing}
 <div class="wrap">
 <div class="frame">
   <div class="side">
-    <div class="xnav"><a class="cur">反動あり（カウンタームーブメント）</a><a href="t-gjriym44va07.html" target="_top">反動なし（ノンカウンター）</a></div>
-    <span class="eyebrow">BOX JUMP</span><span class="rel">プライオメトリクス（跳躍）</span>
-    <h1>腕を振って伸び上がり、箱の上にピタッと着地します</h1>
+    <div class="xnav"><a href="t-yhbk3habpo2u.html" target="_top">反動あり（カウンタームーブメント）</a><a class="cur">反動なし（ノンカウンター）</a></div>
+    <span class="eyebrow">BOX JUMP ｜ NON-COUNTER</span><span class="rel">反動なし（SSCなし）</span>
+    <h1>しゃがんで静止、反動を使わずに箱へ跳びます</h1>
     <div class="row" id="forms" role="group" aria-label="フォームの選択"></div>
     <div class="row" id="hbtns" role="group" aria-label="箱の高さ"><span class="hl">箱の高さ</span></div>
   </div>
   <div class="stagebox">
-    <canvas id="cv" aria-label="ボックスジャンプの3D図"></canvas>
+    <canvas id="cv" aria-label="ノンカウンターのボックスジャンプの3D図"></canvas>
     <div class="cams" id="cams"><span>カメラ</span>
       <button data-c="obl" aria-pressed="false">斜め前</button>
       <button data-c="side" aria-pressed="true">横</button>
@@ -89,13 +89,14 @@ canvas:active{cursor:grabbing}
   </div>
   <div class="slider"><button class="autob" id="pause" aria-pressed="true">自動</button><button class="autob" id="slow" aria-pressed="false">スロー</button><span>動き</span><input type="range" id="seek" min="0" max="100" value="0" aria-label="動きの位置"><span id="seekl">立位</span></div>
   <div class="phasegrid">
-    <div class="phcard p2 on"><span class="pn">★</span><div><div class="pt1">遅いSSCを習得するのに最適</div><div class="pt2">沈み込みから踏み切りまで、時間をかけて伸ばされ、縮む動きです。接地時間が長いSSC（伸張－短縮サイクル）を、ゆっくり正確に身につけられます。</div></div></div>
-    <div class="phcard p3 on"><span class="pn">★</span><div><div class="pt1">着地衝撃が大きいから、箱を使う</div><div class="pt2">ジャンプ系は、着地の衝撃が大きい種目です。着地を高い箱の上にすると、落下する距離が小さくなり、衝撃を小さくできます。降りるときも、階段状にします。</div></div></div>
+    <div class="phcard p7 on"><span class="pn">！</span><div><div class="pt1">注意：しゃがんだ姿勢で、必ず2〜3秒止まる</div><div class="pt2">跳ぶ直前の姿勢で、2〜3秒しっかり止まります。止まらずにすぐ跳ぶと、沈み込みの反動が入ってしまい、ノンカウンターになりません。</div></div></div>
+    <div class="phcard p2 on"><span class="pn">★</span><div><div class="pt1">反動を使わない（SSCなし）</div><div class="pt2">静止した姿勢から跳ぶので、沈み込みの反動（伸張－短縮サイクル）が使えません。筋力そのもので、床を押して跳ぶ力を鍛えます。</div></div></div>
+    <div class="phcard p3 on"><span class="pn">★</span><div><div class="pt1">反動ありとの差を見る</div><div class="pt2">同じ箱の高さで、反動あり（上のリンク）と反動なしを比べます。差が大きいほど、反動（SSC・弾性）をうまく使えていることになります。着地を箱の上にして衝撃を小さくし、降りるときも階段にする点は、反動ありと同じです。</div></div></div>
   </div>
   <div class="phasegrid">
     <div class="phcard p1" id="ph1"><span class="pn">1</span><div><div class="pt1">構え</div><div class="pt2">箱の前に、足幅は腰幅で立ちます。つま先は少し外へ。腕は体の横に下ろします。</div></div></div>
-    <div class="phcard p2" id="ph2"><span class="pn">2</span><div><div class="pt1">沈み込み　カウンタームーブメント</div><div class="pt2">腕を後ろへ振りながら、股関節と膝を同時に曲げて沈みます。ばねをためます。</div></div></div>
-    <div class="phcard p3" id="ph3"><span class="pn">3</span><div><div class="pt1">踏み切り　伸び上がり</div><div class="pt2">足裏で床を強く押し、股関節・膝・足首を一気に伸ばします。腕を前上へ振り上げます。</div></div></div>
+    <div class="phcard p2" id="ph2"><span class="pn">2</span><div><div class="pt1">しゃがんで静止　沈み込みなし</div><div class="pt2">ゆっくりしゃがんで、跳ぶ直前の姿勢で、2〜3秒止まります。ここから、さらに沈まず、反動をつけずに跳びます。腕は前に置いたままです。</div></div></div>
+    <div class="phcard p3" id="ph3"><span class="pn">3</span><div><div class="pt1">踏み切り　沈まずに伸び上がり</div><div class="pt2">静止した姿勢から、そのまま足裏で床を強く押し、股関節・膝・足首を一気に伸ばします。腕は前から振り上げます。</div></div></div>
     <div class="phcard p4" id="ph4"><span class="pn">4</span><div><div class="pt1">空中　膝を引き上げる</div><div class="pt2">膝を胸へ引き上げて、足全体を箱の上へ運びます。</div></div></div>
     <div class="phcard p5" id="ph5"><span class="pn">5</span><div><div class="pt1">着地　ピタッと吸収</div><div class="pt2">足裏全体で、箱の中央に着地。膝と股関節を曲げて衝撃を吸収します。ニーイン・グラつきゼロ。踵を残します。</div></div></div>
     <div class="phcard p6" id="ph6"><span class="pn">6</span><div><div class="pt1">箱の上で立つ</div><div class="pt2">股関節を伸ばし切って、まっすぐ立ちます。姿勢を整えます。</div></div></div>
@@ -108,8 +109,10 @@ canvas:active{cursor:grabbing}
 <script>
 (function(){
 var FORMS={
- ok:{name:'正しいフォーム',col:'#f6c90e',cam:'side',head:'プライオメトリクス（跳躍）の代表種目で、遅いSSCを習得するのに最適です。腕を振って沈み、股関節・膝・足首を一気に伸ばして跳び、箱の上に「ピタッ」と着地します。10回連続で跳べる高さが、到達指標になります。',
-   pts:['腕を後ろへ振って沈み、前上へ振り上げて跳ぶ（腕の振りも力になる）','足裏で床を強く押し、股関節・膝・足首を一気に伸ばす','膝を引き上げ、足全体を箱の上へ運ぶ','ピタッと着地。膝と股関節で吸収し、ニーイン・グラつきゼロ。踵を残す']},
+ ok:{name:'正しいフォーム',col:'#f6c90e',cam:'side',head:'反動なし（ノンカウンター）のボックスジャンプです。跳ぶ直前の姿勢まで、ゆっくりしゃがんで2〜3秒静止し、そこから沈み込まずに、一気に股関節・膝・足首を伸ばして跳びます。箱の上には「ピタッ」と着地します。',
+   pts:['注意：ゆっくりしゃがんで、跳ぶ直前の姿勢で必ず2〜3秒止まる（沈み込みの反動を使わない）','静止した姿勢から、沈まずに足裏で床を押し、一気に伸び上がる','腕は前から振り上げる（後ろへ引かない）','ピタッと着地。膝と股関節で吸収し、ニーイン・グラつきゼロ。踵を残す']},
+ dipcheat:{name:'NG：沈んで反動をつける',col:'#f87171',cam:'side',head:'静止した姿勢から、跳ぶ直前にもう一度沈み込み、腕を後ろへ引いて反動をつけています。これではノンカウンターになりません。',
+   pts:['沈み込む反動が入ると、反動なしの力を測れない','反動ありの記録と比べても、差が分からなくなる','対策：静止した姿勢から、そのまま上へ跳ぶ','対策：腕は前に置いたまま、後ろへ引かない']},
  kneein:{name:'NG：着地でニーイン',col:'#f87171',cam:'front',head:'着地で膝が内に入ります。正面から確認します。',
    pts:['膝が内に入ると、膝と股関節に負担がかかる','着地でグラつくのは、足が眠っているサイン','対策：足裏で箱を外へ押し、大臀筋を使う','対策：足の3点（母指球・小指球・踵）で踏む']},
  stiff:{name:'NG：着地が硬い',col:'#f87171',cam:'side',head:'着地で膝が伸びたまま、衝撃を受けます。「ガツン」と音が出ます。',
@@ -119,7 +122,7 @@ var FORMS={
  heel:{name:'NG：踵が浮く',col:'#f87171',cam:'side',head:'着地でつま先だけが箱につき、踵が浮きます。',
    pts:['踵が浮くと、ふくらはぎとアキレス腱に負担が集中する','バランスが崩れ、後ろへ落ちやすい','対策：踵を箱に残す（背屈）','対策：足裏全体で箱を押さえる']}
 };
-var FORDER=['ok','kneein','stiff','heel','jumpdown'];
+var FORDER=['ok','dipcheat','kneein','stiff','heel','jumpdown'];
 var CAMS={obl:{yaw:-.62,pitch:.28},front:{yaw:0,pitch:.04},side:{yaw:-Math.PI/2,pitch:.04},oblb:{yaw:Math.PI+.62,pitch:.28},back:{yaw:Math.PI,pitch:.04},top:{yaw:-Math.PI/2,pitch:1.5},low:{yaw:-.5,pitch:-.32}};
 var form='ok', playing=true, t=0, last=0, manual=null;
 var yaw=CAMS.side.yaw,pitch=CAMS.side.pitch,tyaw=yaw,tpitch=pitch,camLock=false,dragging=false,lx=0,ly=0;
@@ -168,7 +171,8 @@ function ik3(h,a,l1,l2,pole){var dv=sub(a,h),dl=Math.min(len(dv),l1+l2-.002),dn=
 function keys(f){
   var K={
     stand:{t:0,s:0,l:0,a:0,hl:0,kin:0},
-    dip:{t:62,s:-35,l:40,a:-55,hl:0,kin:0},
+    dip:{t:62,s:-35,l:40,a:22,hl:0,kin:0},
+    dip2:{t:82,s:-46,l:50,a:-55,hl:0,kin:0},
     to:{t:3,s:-3,l:-3,a:150,hl:.12,kin:0},
     tuck:{t:134,s:-10,l:36,a:55,hl:.10,kin:0},
     land:{t:92,s:-38,l:42,a:40,hl:0,kin:0},
@@ -227,12 +231,12 @@ function build(k,pz,py,phase){
   return J;
 }
 // 時間の割り振り：0立つ 1沈む 2踏み切り 3空中 4着地 5箱の上で立つ 6ステップダウン 7床で受ける
-var SEG=[[0,.05],[.05,.18],[.18,.24],[.24,.38],[.38,.43],[.43,.52],[.52,.90],[.90,1]];
+var SEG=[[0,.04],[.04,.33],[.33,.39],[.39,.52],[.52,.57],[.57,.65],[.65,.93],[.93,1]];
 function pose(f,u){
   var K=keys(f),bt=boxTop(),aF=ANK,aB=bt+.03,ph=1,k,pz,py,pp;
   if(u<SEG[0][1]){ph=1;k=K.stand;pp=stancePelvis(k,0,aF)}
-  else if(u<SEG[1][1]){ph=2;k=mixK(K.stand,K.dip,ease((u-SEG[1][0])/(SEG[1][1]-SEG[1][0])));pp=stancePelvis(k,0,aF)}
-  else if(u<SEG[2][1]){ph=3;var e=ease((u-SEG[2][0])/(SEG[2][1]-SEG[2][0]));k=mixK(K.dip,K.to,e);pp=stancePelvis(k,0,aF)}
+  else if(u<SEG[1][1]){ph=2;var sq=(u-SEG[1][0])/(SEG[1][1]-SEG[1][0]);k=mixK(K.stand,K.dip,ease(Math.min(1,sq/.28)));pp=stancePelvis(k,0,aF)}   // ゆっくりしゃがんで、そこで静止
+  else if(u<SEG[2][1]){ph=3;var e=ease((u-SEG[2][0])/(SEG[2][1]-SEG[2][0]));k=(f==='dipcheat')?(e<.4?mixK(K.dip,K.dip2,ease(e/.4)):mixK(K.dip2,K.to,ease((e-.4)/.6))):mixK(K.dip,K.to,e);pp=stancePelvis(k,0,aF)}
   else if(u<SEG[3][1]){ph=4;var s=(u-SEG[3][0])/(SEG[3][1]-SEG[3][0]);
     k=flightK(K,s);
     var P0=stancePelvis(K.to,0,aF),P1=stancePelvis(K.land,LAN,aB);
@@ -352,12 +356,12 @@ function drawBox(){
 }
 function frame(ts){
   if(!last)last=ts;var dt=Math.min(.05,(ts-last)/1000);last=ts;
-  if(playing)t+=dt*(slow?.5:1)/11;
+  if(playing)t+=dt*(slow?.5:1)/12;
   if(!dragging){var dyw=tyaw-yaw;dyw=Math.atan2(Math.sin(dyw),Math.cos(dyw));yaw+=dyw*Math.min(1,dt*6);pitch+=(tpitch-pitch)*Math.min(1,dt*6)}
   var cyc=t-Math.floor(t),u=manual!==null?manual:cyc;
   if(manual===null){seek.value=Math.round(u*100)}
   var f=FORMS[form],J=pose(form,u);
-  document.getElementById('seekl').textContent=['','構え','沈み込み','踏み切り','空中','着地','箱の上','階段で降りる','床で受ける'][J.phase];
+  document.getElementById('seekl').textContent=['','構え','しゃがんで静止','踏み切り','空中','着地','箱の上','階段で降りる','床で受ける'][J.phase];
   var acc=f.col,col='#e2e8f0',bt=boxTop();
   g.clearRect(0,0,W,H);
   var ymax=Math.max(bt+1.6,-.35+clearExtra(form)+2.0,1.7),ymin=-1.15,rng=ymax-ymin,zmin=-.8,zmax=BZ0+BZD+nSteps()*TRD+.7;ZC=(zmin+zmax)/2;
@@ -402,7 +406,7 @@ function frame(ts){
   var kf=Math.round(J.tt-J.ss),hf=Math.round(J.tt+J.lam*180/Math.PI);
   var wc=(form==='ok')?'#f6c90e':'#f87171';
   if(J.phase===5||J.phase===6||J.phase===2||J.phase===3){wedge(kc,ac,hc,wc,'膝 '+kf+'°');wedge(hc,kc,ch,wc,'股関節 '+hf+'°')}
-  var PHN=['','構え','沈み込み（カウンタームーブメント）','踏み切り（伸び上がり）','空中（膝を引き上げる）','着地（ピタッと吸収）','箱の上で立つ','階段でステップダウン','床で受ける'];
+  var PHN=['','構え','しゃがんで静止（沈み込みなし）','踏み切り（伸び上がり）','空中（膝を引き上げる）','着地（ピタッと吸収）','箱の上で立つ','階段でステップダウン','床で受ける'];
   var fs=Math.max(12,W*.022);g.font='900 '+fs+'px "Noto Sans JP",sans-serif';g.textAlign='left';
   g.fillStyle=wc;g.fillText('膝の屈曲　'+kf+'°',W*.04,H*.09);
   g.fillText('股関節の屈曲　'+hf+'°',W*.04,H*.09+fs*1.5);
@@ -411,6 +415,7 @@ function frame(ts){
   var land=(J.phase===5||J.phase===6),stf=(form==='stiff'&&land),hbad=(form==='heel'&&land);
   g.fillStyle=stf?'#f87171':'#f6c90e';g.fillText('着地　'+(land?(stf?'膝が伸びたまま（ガツン）':'膝と股関節で吸収（ピタッ）'):'—'),W*.04,H*.09+fs*6);
   g.fillStyle=hbad?'#f87171':'#f6c90e';g.fillText('踵　'+(hbad?'浮いている（つま先だけ）':(J.hl>.04?'上がる（つま先で押す）':'残っている')),W*.04,H*.09+fs*7.5);
+  if(J.phase===2){var sqq=(u-SEG[1][0])/(SEG[1][1]-SEG[1][0]);g.fillStyle='#fb923c';g.fillText('静止　2〜3秒止まる'+(sqq>.28?'（いま '+((sqq-.28)*(SEG[1][1]-SEG[1][0])*12).toFixed(1)+'秒）':'（しゃがんでいます）'),W*.04,H*.09+fs*12)}
   g.fillStyle='#7dd3fc';g.fillText('前額面　足幅　腰幅（つま先は少し外へ）',W*.04,H*.09+fs*9);
   var kbad=J.kin>.2&&land;
   g.fillStyle=kbad?'#f87171':'#7dd3fc';g.fillText('前額面　膝　'+(kbad?'足首より内へ（ニーイン）':'足首の真上（グラつきゼロ）'),W*.04,H*.09+fs*10.5);
